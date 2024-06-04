@@ -1,0 +1,61 @@
+{
+  "taskListUID": "8e8c0fda-cd4d-11ed-afa1-0242ac120002",
+  "taskListName": "Default Experiment",
+  "communicationMethod": {
+    "type": "MQTT",
+    "host": "localhost",
+    "port": "8083"
+  },
+  "loggingMethod": {
+    "type": "local",
+    "logFormater": "default"
+  },
+  "stylingFile": "sadas.css",
+  "taskStack": [
+    [
+      {
+        "type": "CODE",
+        "module": "ClearEventStorage",
+        "props": { "functionInput": null, "runType": "onUnload" }
+      },
+      {
+        "type": "CODE",
+        "module": "SetTaskIndex",
+        "props": { "functionInput": 1, "runType": "onLoad" }
+      }
+    ],
+    [  
+      {
+        "type": "COMPONENT",
+        "module": "MarenStartExperiment",
+        "props": { 
+          "operatorStationLabels": ["Operator 1","Operator 2", "Supervisor"],
+          "operatorMetaClick": {"function": "SetMetaData"},
+          "onclick": [
+            {"function": "SetExperimentStartTimestamp"},
+            {"function": "SetTaskIndex", "value": 2}
+          ]
+        }
+      }
+    ],
+    [
+      {
+        "type": "COMPONENT",
+        "module": "BuzzResponse",
+        "props": {
+          "onclick": { "function": "SetTaskIndex", "value": 3 },
+          "timeoutThreshold": 20,
+          "blackoutTime": 3,
+          "taskRepetitions": 2
+        }
+      }
+    ],
+    [
+      {
+        "type": "CODE",
+        "module": "DownloadLogEvents",
+        "props": { "runType": "onLoad" }
+      }
+    ]
+  ]
+}
