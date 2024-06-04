@@ -9,25 +9,25 @@ type Props = {
     lazyProps : any,
 };
 
-let startTimestamp = Date.now()
+//let startTimestamp = Date.now()
 
 export default function Button({lazyProps}: Props): ReactElement {
     const buttonClickClass = useSignal("font-normal")
 
     let scriptsMap:null|Map<string, any> = null
-    if(!experimentObjectSignal.value){
-        return(<></>)
+    if (!experimentObjectSignal.value) {
+        return (<></>);
     }
 
-    scriptsMap = experimentObjectSignal.value.scriptsMap
+    scriptsMap = (experimentObjectSignal.value as { scriptsMap: Map<string, any> }).scriptsMap;
 
-    useEffect(() =>{
+    useEffect(() => {
         //if(scriptsMap){
-            startTimestamp = Date.now()
-            // Bubble up the component information for logging purposes
-            scriptsMap.get("AddComponentData").default(lazyProps.label)
+        //startTimestamp = Date.now()
+        // Bubble up the component information for logging purposes
+        scriptsMap.get("AddComponentData").default(lazyProps.label);
         //}
-      }, [])
+    }, []);
 
     const buttonOnClick = () => {    
 

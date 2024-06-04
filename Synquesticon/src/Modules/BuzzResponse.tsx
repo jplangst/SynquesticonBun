@@ -18,7 +18,7 @@ type Props = {
 let startTimestamp = new Date()
 let buzzTimestamp = new Date()
 let lastBuzzStimulusDuration = -1
-let timer = 0
+let timer:number = 0
 
 //Used to control the stimuli rendering and the number of repetitions
 const repetitionsSignal = signal(0)
@@ -48,7 +48,8 @@ const onBuzzButtonClick = (response:string,lazyProps:any) => {
             console.log("Caught by guard")
             return
         }
-        const scriptsMap = experimentObjectSignal.value.scriptsMap
+        //const scriptsMap = experimentObjectSignal.value.scriptsMap 
+        const scriptsMap = (experimentObjectSignal.value as { scriptsMap: Map<string, any> }).scriptsMap;
         const onclickFunction = scriptsMap.get(lazyProps.onclick.function)
         onclickFunction.default(lazyProps.onclick.value);
     }
@@ -84,7 +85,8 @@ const writeBuzzEvent = (lazyProps:any, responseIn:string) => {
     }
 
     // Write the event to file
-    const scriptsMap = experimentObjectSignal.value.scriptsMap
+    const scriptsMap = (experimentObjectSignal.value as { scriptsMap: Map<string, any> }).scriptsMap;
+    //const scriptsMap = experimentObjectSignal.value.scriptsMap
     scriptsMap.get("WriteEvent").default(event)
 }
 
@@ -115,10 +117,10 @@ function BuzzResponse({lazyProps}: Props):ReactElement {
     }
     else{
         // From the rendering of the stimuli to the response there is a timeout threshold
-        timer = setTimeout(() => {
+        timer = Number(setTimeout(() => {
             const timeoutResponse = "TIMED OUT"
             onBuzzButtonClick(timeoutResponse, lazyProps)
-        }, lazyProps.timeoutThreshold*1000);
+        }, lazyProps.timeoutThreshold*1000));
 
         let buttonClassString = "w-1/2 h-screen bg-sky-500 hover:bg-sky-700 text-white font-bold py-2 px-4 rounded m-1"
         const shortResponse = "SHORT"

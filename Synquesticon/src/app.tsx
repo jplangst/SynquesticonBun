@@ -12,13 +12,18 @@ const experimentDataSignal = signal(null)
 await fetchExperiment(experimentDataSignal, experimentName)
 export const experimentObjectSignal = signal(null)
 
+
 if(experimentDataSignal.value){
-    await fetchData(experimentObjectSignal, experimentDataSignal) 
-    //console.log(experimentObjectSignal.value)
-    if(experimentDataSignal.communicationMethod){
-        //comms.connect(experimentData.communicationMethod)
-    }
+  await fetchData(experimentObjectSignal, experimentDataSignal) 
+
+  //console.log(experimentObjectSignal.value)
+  //if(experimentDataSignal.value && experimentDataSignal.value.communicationMethod){
+      //comms.connect(experimentData.communicationMethod)
+  //}
 }
+
+
+
 
 export function App() {
   return (

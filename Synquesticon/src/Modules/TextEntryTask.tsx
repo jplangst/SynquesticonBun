@@ -11,9 +11,10 @@ export default function TextEntry({lazyProps}: Props): ReactElement {
     let textFieldSize = lazyProps.EntryFieldOptions; // NB the text field size is not used now.
     textFieldSize = textFieldSize.split("size=")[1].split(',').map(Number)
     const onChange = (e: ChangeEvent<HTMLTextAreaElement>)=> {
+        const target = e.target as HTMLTextAreaElement
         //addToLogObject("Text entry", lazyProps.taskIndex, e.target.value)
-        if(e.target){
-            console.log(e.target.value)
+        if(target){
+            console.log(target.value)
         }
     }
 

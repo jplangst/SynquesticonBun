@@ -7,4 +7,9 @@ export default defineConfig({
     port: 8080
   },
   plugins: [preact()],
+  esbuild: {
+    supported: {
+      'top-level-await': true
+    },
+  },
 })

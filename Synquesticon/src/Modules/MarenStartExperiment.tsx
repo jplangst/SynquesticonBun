@@ -1,14 +1,14 @@
 //External imports
 import type {ReactElement} from "react";
 import {ChangeEvent} from 'react';
-import { signal, batch } from "@preact/signals";
+import { signal } from "@preact/signals";
 import { v4 as uuidv4 } from 'uuid';
 
 // Our imports
 import { experimentObjectSignal } from "../app";
 import { handleMapFunctions } from "../Utils/Utils";
 
-const runNumber = signal(0)
+const runNumber = signal("0")
 const operatorStation = signal("")
 
 type Props = {
@@ -19,8 +19,9 @@ function TextEntry({lazyProps}: Props): ReactElement {
     //const defaultTextValue = lazyProps.DefaultValue;
     let textFieldSize = lazyProps.EntryFieldOptions; 
     const onChange = (e: ChangeEvent<HTMLTextAreaElement>)=> {
-        if(e.target){
-            runNumber.value= e.target.value
+        const target = e.target as HTMLTextAreaElement
+        if(target){
+            runNumber.value= target.value
         }
     }
 
@@ -38,7 +39,8 @@ function MarenStartExperiment({lazyProps}: Props):ReactElement {
         return(<></>)
     }
 
-    scriptsMap = experimentObjectSignal.value.scriptsMap
+    scriptsMap = (experimentObjectSignal.value as { scriptsMap: Map<string, any> }).scriptsMap;
+    //scriptsMap = experimentObjectSignal.value.scriptsMap
     
     const buttonOnClick = () => {    
         if (!scriptsMap) 
