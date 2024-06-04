@@ -17,6 +17,9 @@
     "preact": "^10.19.6",
     "uuid": "^9.0.1"
   },
+  "optionalDependencies": {
+    "@rollup/rollup-linux-x64-gnu": "4.6.1"
+  },
   "devDependencies": {
     "@preact/preset-vite": "^2.8.2",
     "autoprefixer": "^10.4.19",
