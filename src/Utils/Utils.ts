@@ -12,9 +12,9 @@ import getExperimentData from '../GetExperimentData';
 export async function fetchExperiment(experimentSignal:any,filepath:string|null){
     let response;
     if(filepath) 
-        response = await fetch("Experiments/"+filepath+".json");
+        response = await fetch("experiments/"+filepath+".json");
     else
-        response = await fetch("Experiments/defaultExperiment.json");
+        response = await fetch("experiments/defaultExperiment.json");
 
     const data = await response.text();
     let parsedData = JSON.parse(data);
