@@ -88,6 +88,9 @@ async function parseModules(tasks:any, taskIndex:number, dynamicScriptsMap:any, 
             return
         }        
     })
+
+    console.log(renderModules)
+
     return renderModules
 }
 
