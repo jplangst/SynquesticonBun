@@ -9,6 +9,8 @@ async function loadScriptFromFile(dynamicScriptPromises:any, elementModules:any,
 }
 
 async function parseModules(tasks:any, taskIndex:number, dynamicScriptsMap:any, moduleMap:any, codeModulesMap:any){ 
+    console.log("Parse modules")
+
     const renderModules:any = [] 
 
     let dynamicScriptPromises:any = []
@@ -66,7 +68,9 @@ async function parseModules(tasks:any, taskIndex:number, dynamicScriptsMap:any, 
     console.log(dynamicScriptsMap)
 
     // Creates render component modules using the map, passing props from the json file in the process// Create the experiment object
-    tasks.forEach(async (element:any) =>{   
+    tasks.forEach(async (element:any) =>{  
+        console.log("Element:")
+        console.log(element) 
         if(element.type == "COMPONENT"){
             element.props.taskIndex = taskIndex;
             const Component = moduleMap.get(element.module);
