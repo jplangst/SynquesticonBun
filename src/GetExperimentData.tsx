@@ -43,9 +43,6 @@ async function parseModules(tasks:any, taskIndex:number, dynamicScriptsMap:any, 
             }
             else if(element.type == "CODE"){ 
                 try{
-                    //const dynamicScriptPromise = import(`./Scripts/${element.module}.tsx`)
-                    //dynamicScriptPromises.push(dynamicScriptPromise)
-                    //elementModules.push(element.module)
                     console.log(element.module)
                     loadScriptFromFile(dynamicScriptPromises, elementModules, element.module)
                 }
@@ -64,6 +61,9 @@ async function parseModules(tasks:any, taskIndex:number, dynamicScriptsMap:any, 
     for (let i = 0; i < dynamicScriptPromises.length; i++){
         dynamicScriptsMap.set(elementModules[i], dynamicScriptPromises[i])
     }
+
+    console.log("Dynamic scripts map:")
+    console.log(dynamicScriptsMap)
 
     // Creates render component modules using the map, passing props from the json file in the process// Create the experiment object
     tasks.forEach(async (element:any) =>{   
@@ -89,6 +89,7 @@ async function parseModules(tasks:any, taskIndex:number, dynamicScriptsMap:any, 
         }        
     })
 
+    console.log("Render modules:")
     console.log(renderModules)
 
     return renderModules
@@ -101,6 +102,7 @@ export default async function getExperimentData(jsonTaskList:any){
     let codeModulesMap = new Map()
 
     let componentModules:any = <div>No tasks provided or error loading the tasks</div>; 
+    console.log("json task list:")
     console.log(jsonTaskList)
     if(jsonTaskList){
         componentModules = ( jsonTaskList.map(async (tasks:any, taskListIndex:number) => {
