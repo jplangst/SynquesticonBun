@@ -56,15 +56,18 @@ async function parseModules(tasks:any, taskIndex:number, dynamicScriptsMap:any, 
         } 
     })
 
+    console.log("Dynamic scripts map:")
     //Resolve any promises that are not resolved yet
     dynamicScriptPromises = await Promise.all(dynamicScriptPromises)
+
+    console.log("Awaiting promises")
 
     //Add the resolved promises to the map
     for (let i = 0; i < dynamicScriptPromises.length; i++){
         dynamicScriptsMap.set(elementModules[i], dynamicScriptPromises[i])
     }
 
-    console.log("Dynamic scripts map:")
+    
     console.log(dynamicScriptsMap)
 
     // Creates render component modules using the map, passing props from the json file in the process// Create the experiment object
