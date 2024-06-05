@@ -101,6 +101,7 @@ export default async function getExperimentData(jsonTaskList:any){
     let codeModulesMap = new Map()
 
     let componentModules:any = <div>No tasks provided or error loading the tasks</div>; 
+    console.log(jsonTaskList)
     if(jsonTaskList){
         componentModules = ( jsonTaskList.map(async (tasks:any, taskListIndex:number) => {
             return(
