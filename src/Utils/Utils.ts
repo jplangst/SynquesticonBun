@@ -20,6 +20,7 @@ export async function fetchExperiment(experimentSignal:any,filepath:string|null)
     let parsedData = JSON.parse(data);
     parsedData.UUID = uuidv4();
     setUUID(parsedData.UUID )
+    console.log(parsedData)
     experimentSignal.value=parsedData;
 }
 
