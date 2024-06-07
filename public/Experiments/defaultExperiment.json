@@ -1,5 +1,5 @@
 {
-  "taskListUID": "8e8c0fda-cd4d-11ed-afa1-0242ac120002",
+  "taskListUID": "8e8c0fda-cd4d-11ed-afa1-0242ac120003",
   "taskListName": "Default Experiment",
   "communicationMethod": {
     "type": "MQTT",
@@ -8,7 +8,8 @@
   },
   "loggingMethod": {
     "type": "local",
-    "logFormater": "default"
+    "logFormater": "default",
+    "logInOneLine": true
   },
   "stylingFile": "sadas.css",
   "taskStack": [
@@ -33,28 +34,190 @@
           "operatorMetaClick": {"function": "SetMetaData"},
           "onclick": [
             {"function": "SetExperimentStartTimestamp"},
-            {"function": "SetTaskIndex", "value": 2}
+            {"function": "SetTaskIndex"}
           ]
         }
       }
     ],
-    [
+    [  
       {
         "type": "COMPONENT",
-        "module": "BuzzResponse",
-        "props": {
-          "onclick": { "function": "SetTaskIndex", "value": 3 },
-          "timeoutThreshold": 20,
-          "blackoutTime": 3,
-          "taskRepetitions": 2
+        "module": "SliderTask",
+        "props": { 
+          "questionLogKey": "Var1",
+          "title": "Mental demand",
+          "questionText": "How mentally demanding was the scenario?",
+          "lowSliderText": "Very low",
+          "highSliderText": "Very high",
+          "buttonLabel":"Answer",
+          "onclick": 
+            {"function": "SetTaskIndex"}
         }
       }
     ],
+    [  
+      {
+        "type": "COMPONENT",
+        "module": "SliderTask",
+        "props": { 
+          "questionLogKey": "Var2",
+          "title": "Physical demand",
+          "questionText": "How physically demanding was the scenario?",
+          "lowSliderText": "Very low",
+          "highSliderText": "Very high",
+          "buttonLabel":"Answer",
+          "onclick": 
+            {"function": "SetTaskIndex"}
+        }
+      }
+    ],
+    [  
+      {
+        "type": "COMPONENT",
+        "module": "SliderTask",
+        "props": { 
+          "questionLogKey": "Var3",
+          "title": "Temporal demand",
+          "questionText": "How hurried or rushed was the pace of the scenario?",
+          "lowSliderText": "Very low",
+          "highSliderText": "Very high",
+          "buttonLabel":"Answer",
+          "onclick": 
+            {"function": "SetTaskIndex"}
+        }
+      }
+    ],
+    [  
+      {
+        "type": "COMPONENT",
+        "module": "SliderTask",
+        "props": { 
+          "questionLogKey": "Var4",
+          "title": "Performance",
+          "questionText": "How successful were you in accomplishing what you were asked to do?",
+          "lowSliderText": "Perfect",
+          "highSliderText": "Failure",
+          "buttonLabel":"Answer",
+          "onclick": 
+            {"function": "SetTaskIndex"}
+        }
+      }
+    ],
+    [  
+      {
+        "type": "COMPONENT",
+        "module": "SliderTask",
+        "props": { 
+          "questionLogKey": "Var5",
+          "title": "Effort",
+          "questionText": "How hard did you have to work to accomplish your level of performance?",
+          "lowSliderText": "Very low",
+          "highSliderText": "Very high",
+          "buttonLabel":"Answer",
+          "onclick": 
+            {"function": "SetTaskIndex"}
+        }
+      }
+    ],
+    [  
+      {
+        "type": "COMPONENT",
+        "module": "SliderTask",
+        "props": { 
+          "questionLogKey": "Var6",
+          "title": "Frustration level",
+          "questionText": "How insecure, discouraged, irritated, stressed, and annoyed were you?",
+          "lowSliderText": "Very low",
+          "highSliderText": "Very high",
+          "buttonLabel":"Answer",
+          "onclick": 
+            {"function": "SetTaskIndex"}
+        }
+      }
+    ],
+    [  
+      {
+        "type": "COMPONENT",
+        "module": "SliderTask",
+        "props": { 
+          "roleConditional":"Operator 1",
+          "questionLogKey": "Var7",
+          "title": "Mental demand",
+          "questionText": "How mentally demanding was the scenario for <u>operator 1</u>?",
+          "lowSliderText": "Very low",
+          "highSliderText": "Very high",
+          "buttonLabel":"Answer",
+          "onclick": 
+            {"function": "SetTaskIndex"}
+        }
+      }
+    ],
+    [  
+      {
+        "type": "COMPONENT",
+        "module": "SliderTask",
+        "props": { 
+          "roleConditional":"Operator 2",
+          "questionLogKey": "Var8",
+          "title": "Mental demand",
+          "questionText": "How mentally demanding was the scenario for <u>operator 2</u>?",
+          "lowSliderText": "Very low",
+          "highSliderText": "Very high",
+          "buttonLabel":"Answer",
+          "onclick": 
+            {"function": "SetTaskIndex"}
+        }
+      }
+    ],
+    [  
+      {
+        "type": "COMPONENT",
+        "module": "SliderTask",
+        "props": { 
+          "roleConditional":"Supervisor",
+          "questionLogKey": "Var9",
+          "title": "Mental demand",
+          "questionText": "How mentally demanding was the scenario for the <u>shift supervisor</u>?",
+          "lowSliderText": "Very low",
+          "highSliderText": "Very high",
+          "buttonLabel":"Answer",
+          "onclick": 
+            {"function": "SetTaskIndex"}
+        }
+      }
+    ],  
+    [  
+      {
+        "type": "COMPONENT",
+        "module": "TextItemTask",
+        "props": { 
+          "label":"The experiment is over, please hand the device back to Halden staff.\n"
+        }
+      },
+      {
+        "type": "COMPONENT",
+        "module": "Button",
+        "props": { 
+          "label":"Finish",
+          "onclick": {"function": "SetTaskIndex"}
+        }
+      }
+    ],     
     [
+      {
+        "type": "COMPONENT",
+        "module": "TextItemTask",
+        "props": { 
+          "label":"Data file downloaded, refresh to start again."
+        }
+      },
       {
         "type": "CODE",
         "module": "DownloadLogEvents",
-        "props": { "runType": "onLoad" }
+        "props": { 
+          "runType": "onLoad",
+          "functionInput": "eventLogSignal"
+        }
       }
     ]
   ]

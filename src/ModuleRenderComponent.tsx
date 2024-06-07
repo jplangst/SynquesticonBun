@@ -4,7 +4,8 @@ import {useEffect, Suspense} from 'react';
 import { callScript } from './Utils/Utils';
 
 export const experimentStartTimestampSignal = signal(new Date())
-export const metaDataSignal = signal("Operator 1")
+export const metaDataSignal = signal({runNumber:1,role:"Operator 1"})
+export const logEventSignal = signal({header:"",data:""})
 
 export const taskIndexSignal = signal(0)
 const moduleToRenderSignal = signal(null)
@@ -38,7 +39,7 @@ function ModuleRenderComponent({experimentObject}:any) {
     return (
         <>
             <Suspense fallback={<></>}>
-            <div className="flex h-screen w-screen bg-sky-100 items-center justify-center whitespace-pre">{moduleToRenderSignal.value}</div>
+            <div className="flex flex-col h-screen w-screen bg-sky-100 items-center justify-center whitespace-pre">{moduleToRenderSignal.value}</div>
             </Suspense>
         </>
     )

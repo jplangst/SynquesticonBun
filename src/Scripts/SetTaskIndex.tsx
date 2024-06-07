@@ -1,12 +1,17 @@
 import {taskIndexSignal} from '../ModuleRenderComponent';
 
 export default function SetTaskIndex(newIndex:number|null){
+
+    
+
+    // Set the task index to the provided index
     if(newIndex){
-        //console.log("Updating index from: "+taskIndexSignal.value+" to newIndex:"+newIndex)
+        console.log("Setting new index: " + newIndex)
         taskIndexSignal.value = newIndex
     }  
+    // If no new index is provided, increment the current index by 1
     else{
-        //console.log("Updating index to old index+1:"+taskIndexSignal.value+1)
         taskIndexSignal.value = taskIndexSignal.value+1
+        console.log("Setting new index: " + taskIndexSignal.value)
     }
 }

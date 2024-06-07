@@ -1,5 +1,4 @@
 import type { ReactElement} from "react";
-import {useEffect} from "react";
 import { useSignal} from "@preact/signals"
 
 import { experimentObjectSignal } from "../app";
@@ -14,26 +13,19 @@ type Props = {
 export default function Button({lazyProps}: Props): ReactElement {
     const buttonClickClass = useSignal("font-normal")
 
-    let scriptsMap:null|Map<string, any> = null
     if (!experimentObjectSignal.value) {
         return (<></>);
     }
 
-    scriptsMap = (experimentObjectSignal.value as { scriptsMap: Map<string, any> }).scriptsMap;
-
-    useEffect(() => {
-        //if(scriptsMap){
-        //startTimestamp = Date.now()
-        // Bubble up the component information for logging purposes
-        scriptsMap.get("AddComponentData").default(lazyProps.label);
-        //}
-    }, []);
-
     const buttonOnClick = () => {    
-
         buttonClickClass.value = " font-bold"
 
-        if (!scriptsMap) return
+        let scriptsMap:null|Map<string, any> = null
+        if(!experimentObjectSignal.value){
+            return(<></>)
+        }
+    
+        scriptsMap = (experimentObjectSignal.value as { scriptsMap: Map<string, any> }).scriptsMap;
 
         //Write log event
         //const absoluteTimestamp = Date.now()

@@ -2,15 +2,12 @@ import { lazy } from 'react'
 import { v4 as uuidv4 } from 'uuid';
 
 async function loadScriptFromFile(dynamicScriptPromises:any, elementModules:any, elementModule:any){
-    console.log(`./Scripts/${elementModule}.tsx`)
     const dynamicScriptPromise = import(`./Scripts/${elementModule}.tsx`)
     dynamicScriptPromises.push(dynamicScriptPromise)
     elementModules.push(elementModule)
 }
 
 async function parseModules(tasks:any, taskIndex:number, dynamicScriptsMap:any, moduleMap:any, codeModulesMap:any){ 
-    console.log("Parse modules")
-
     const renderModules:any = [] 
 
     let dynamicScriptPromises:any = []
@@ -30,7 +27,6 @@ async function parseModules(tasks:any, taskIndex:number, dynamicScriptsMap:any, 
                         for(let i = 0; i < functions.length; i++){
                             const singleFunction = functions[i]
                             if(!dynamicScriptsMap.has(singleFunction.function)){
-                                console.log()
                                 loadScriptFromFile(dynamicScriptPromises, elementModules, singleFunction.function)
                             }
                         }
@@ -45,7 +41,6 @@ async function parseModules(tasks:any, taskIndex:number, dynamicScriptsMap:any, 
             }
             else if(element.type == "CODE"){ 
                 try{
-                    console.log(element.module)
                     loadScriptFromFile(dynamicScriptPromises, elementModules, element.module)
                 }
                 catch(e){
@@ -56,24 +51,16 @@ async function parseModules(tasks:any, taskIndex:number, dynamicScriptsMap:any, 
         } 
     })
 
-    console.log("Dynamic scripts map:")
     //Resolve any promises that are not resolved yet
     dynamicScriptPromises = await Promise.all(dynamicScriptPromises)
-
-    console.log("Awaiting promises")
 
     //Add the resolved promises to the map
     for (let i = 0; i < dynamicScriptPromises.length; i++){
         dynamicScriptsMap.set(elementModules[i], dynamicScriptPromises[i])
     }
 
-    
-    console.log(dynamicScriptsMap)
-
     // Creates render component modules using the map, passing props from the json file in the process// Create the experiment object
     tasks.forEach(async (element:any) =>{  
-        console.log("Element:")
-        console.log(element) 
         if(element.type == "COMPONENT"){
             element.props.taskIndex = taskIndex;
             const Component = moduleMap.get(element.module);
@@ -96,9 +83,6 @@ async function parseModules(tasks:any, taskIndex:number, dynamicScriptsMap:any, 
         }        
     })
 
-    console.log("Render modules:")
-    console.log(renderModules)
-
     return renderModules
 }
 
@@ -109,8 +93,6 @@ export default async function getExperimentData(jsonTaskList:any){
     let codeModulesMap = new Map()
 
     let componentModules:any = <div>No tasks provided or error loading the tasks</div>; 
-    console.log("json task list:")
-    console.log(jsonTaskList)
     if(jsonTaskList){
         componentModules = ( jsonTaskList.map(async (tasks:any, taskListIndex:number) => {
             return(

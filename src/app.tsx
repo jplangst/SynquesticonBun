@@ -12,7 +12,6 @@ const experimentDataSignal = signal(null)
 await fetchExperiment(experimentDataSignal, experimentName)
 export const experimentObjectSignal = signal(null)
 
-
 if(experimentDataSignal.value){
   await fetchData(experimentObjectSignal, experimentDataSignal) 
 

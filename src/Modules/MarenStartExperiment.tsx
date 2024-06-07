@@ -5,27 +5,31 @@ import { signal } from "@preact/signals";
 import { v4 as uuidv4 } from 'uuid';
 
 // Our imports
+import {logEventSignal} from "../ModuleRenderComponent";
+
 import { experimentObjectSignal } from "../app";
 import { handleMapFunctions } from "../Utils/Utils";
 
-const runNumber = signal("0")
+const runNumber = signal("1")
 const operatorStation = signal("")
 
 type Props = {
     lazyProps : any,
 };
 
+let rowNumber = "1"
 function TextEntry({lazyProps}: Props): ReactElement {
     //const defaultTextValue = lazyProps.DefaultValue;
     let textFieldSize = lazyProps.EntryFieldOptions; 
     const onChange = (e: ChangeEvent<HTMLTextAreaElement>)=> {
         const target = e.target as HTMLTextAreaElement
         if(target){
-            runNumber.value= target.value
+            //runNumber.value= target.value
+            rowNumber = target.value
         }
     }
-
-    return <span className={lazyProps.ClassName} key={uuidv4()}><textarea  placeholder={runNumber.value.toString()} rows={textFieldSize[1]} cols={textFieldSize[0]} onChange={onChange}></textarea></span>
+    //{runNumber.value.toString()}
+    return <textarea autofocus className={lazyProps.ClassName} value={rowNumber} placeholder={lazyProps.DefaultValue} key={uuidv4()} rows={textFieldSize[1]} cols={textFieldSize[1]} onChange={onChange} />
 }
 
 // Called when any of the buttons are pressed
@@ -48,7 +52,13 @@ function MarenStartExperiment({lazyProps}: Props):ReactElement {
     
         //Update the metadate for the station
         const updateMetaData = scriptsMap.get(lazyProps.operatorMetaClick.function)
-        updateMetaData.default(runNumber.value, operatorStation.value);
+        updateMetaData.default({runNumber:runNumber.value, role:operatorStation.value});
+
+        // Add the run number and operator role to the log
+        let logObject = logEventSignal.value
+        logObject.header = logObject.header + "Run Number;Operator Role;"
+        logObject.data = logObject.data + runNumber.value + ";" + operatorStation.value +";"
+        logEventSignal.value = logObject
 
         // If there is a on click prop call the corresponding function with the provided parameters
         if(lazyProps.onclick){ 
@@ -56,15 +66,15 @@ function MarenStartExperiment({lazyProps}: Props):ReactElement {
         }     
     } 
 
-    let buttonClassString = "bg-sky-500 hover:bg-sky-700 text-white font-bold py-2 px-4 rounded m-1"
+    let buttonClassString =  "bg-sky-500 hover:bg-sky-700 text-white font-bold py-2 px-4 rounded m-1"
     
-    const stationButtons = lazyProps.operatorStationLabels.map((label:string) => {
+    const stationButtons = lazyProps.operatorStationLabels.map((label:string, index:number) => {
         let selectedClass = ""
         if(label === operatorStation.value){
             selectedClass = " ring-2 ring-blue-900"
         }
         return (
-            <button type="button" className={buttonClassString+selectedClass} onClick={() => onStationButtonClick(label)}>
+            <button type="button" className={buttonClassString+selectedClass+" row-start-2 col-start-"+(index+1)} onClick={() => onStationButtonClick(label)}>
                 {label}
             </button>
         )
@@ -73,12 +83,12 @@ function MarenStartExperiment({lazyProps}: Props):ReactElement {
     return (
         <>
         <div className="grid grid-cols-3 grid-rows-3 gap-20">
-            <p>Run number: </p>
-            <TextEntry lazyProps={{ClassName:"col-span-2", DefaultValue:"0",EntryFieldOptions:[10,2]}}/>
+            <p className="row-start-1">Run number: </p>
+            <TextEntry lazyProps={{ClassName:"row-start-1 col-start-2 col-span-1 resize-none", DefaultValue:"1",EntryFieldOptions:[1,1]}}/>
 
             {stationButtons}
 
-            <button type="button" className={buttonClassString+" col-start-2"} 
+            <button type="button" className={buttonClassString+"row-start-3 col-start-2"} 
                 onClick={buttonOnClick}>{lazyProps.label}
                 Start Experiment
             </button>      

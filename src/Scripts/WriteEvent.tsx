@@ -9,6 +9,8 @@ export default function writeEvent(eventData:any){
     
     console.log(eventData.onsetTimestamp)
 
+    //TODO finish the meta data field data and header
+
     //Parse the event into a csv line
     // metadata | taskCount | loadTimestamp (Absolute) | onsetDelay | onsetTimestamp (relative or absolute?) | 
     // stimulusDuration | responseTime (relative) | response | Accuracy
