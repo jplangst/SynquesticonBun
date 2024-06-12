@@ -35,10 +35,10 @@ export default function Slider({lazyProps}: Props): ReactElement {
     },[])
     
     //NB these values can be moved to the experiment config if more flexibility is needed
-    const minValue = 0
-    const maxValue = 100
-    const step = 5
-    const defaultValue = 50
+    const minValue = lazyProps.minValue ? lazyProps.minValue : 0
+    const maxValue = lazyProps.maxValue ? lazyProps.maxValue : 100
+    const step = lazyProps.step ? lazyProps.step : 5
+    const defaultValue = lazyProps.defaultValue ? lazyProps.defaultValue : 50
 
     let sliderValue = defaultValue
 
@@ -61,12 +61,18 @@ export default function Slider({lazyProps}: Props): ReactElement {
             positionString = "text-center"
         }
 
-        const classString = "text-gray-500 dark:text-gray-400 " + positionString
-        return <span class={classString}>|</span>
+        const classString = "text-black-500 dark:text-white-400 text-lg font-bold" + positionString
+
+        const tickSymbol = lazyProps.displayTickNumbers ? index+1 : "|"
+        return <div class={classString}>{tickSymbol}</div>
     })
 
     const onSliderChange = (e: any) => {
         sliderValue = e.target.value
+
+        if(lazyProps.onSliderChange){
+            lazyProps.onSliderChange(e, lazyProps.questionLogKey)
+        }    
     }
 
     const buttonOnClick = () => {    
@@ -86,22 +92,27 @@ export default function Slider({lazyProps}: Props): ReactElement {
         }     
     } 
 
+    const title = lazyProps.title ? <p class="font-bold mb-6 text-lg"> {lazyProps.title} </p> : null
+    const answerButton = lazyProps.buttonLabel ? 
+        <button type="button" onClick={buttonOnClick}
+        className="w-1/4 bg-sky-500 hover:bg-sky-700 text-white py-2 px-4 rounded m-1">
+            {lazyProps.buttonLabel}
+        </button> : null
+
     return <>
     <div key={uuidv4()} class="w-full flex flex-col items-center">
-    <div class="w-9/12 relative mb-6 w-">
-        <p class="font-bold">{lazyProps.title}</p>
-        <label for="labels-range-input"  class="block mb-2 text-sm font-medium text-gray-900 dark:text-black" 
+    <div class="w-11/12 relative mb-6 w-">
+        {title}
+        <label for="labels-range-input"  class="block mb-2 text-xl font-medium text-gray-900 dark:text-black" 
             dangerouslySetInnerHTML={{ __html: lazyProps.questionText}} />
         <input id="labels-range-input"  type="range" value={defaultValue} min={minValue} max={maxValue} 
             step={step} class="w-full h-3 bg-gray-200  appearance-none cursor-pointer  dark:bg-gray-700" 
             onChange={onSliderChange}/>
         <div class="px-1 flex justify-between mt-0 text-xs text-gray-600">{tickMarks}</div>
         <span class="text-sm text-gray-500 dark:text-gray-400 absolute start-0 -bottom-6">{lazyProps.lowSliderText}</span>
-        <span class="text-sm text-gray-500 dark:text-gray-400 absolute end-0 -bottom-6">{lazyProps.highSliderText}</span>
-        
+        <span class="text-sm text-gray-500 dark:text-gray-400 absolute end-0 -bottom-6">{lazyProps.highSliderText}</span>  
     </div>
-    <button type="button" className="w-1/4 bg-sky-500 hover:bg-sky-700 text-white py-2 px-4 rounded m-1" 
-            onClick={buttonOnClick}>{lazyProps.buttonLabel}</button>
+    {answerButton}
     </div>
     </>
 }

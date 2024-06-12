@@ -10,7 +10,16 @@ import {logEventSignal} from "../ModuleRenderComponent";
 import { experimentObjectSignal } from "../app";
 import { handleMapFunctions } from "../Utils/Utils";
 
+
+//TODO create the master buzz controller
+
+
+
 const operatorStation = signal("")
+
+
+
+
 
 type Props = {
     lazyProps : any,
@@ -34,7 +43,7 @@ const onStationButtonClick = (response:string) => {
     operatorStation.value = response
 }
 
-function MarenStartExperiment({lazyProps}: Props):ReactElement {
+function MarenMasterBuzz({lazyProps}: Props):ReactElement {
     let scriptsMap:null|Map<string, any> = null
     if(!experimentObjectSignal.value){
         return(<></>)
@@ -93,4 +102,4 @@ function MarenStartExperiment({lazyProps}: Props):ReactElement {
     )
 }
 
-export default MarenStartExperiment
+export default MarenMasterBuzz

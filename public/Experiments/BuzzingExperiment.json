@@ -29,7 +29,11 @@
         "type": "COMPONENT",
         "module": "MarenStartExperiment",
         "props": { 
-          "operatorStationLabels": ["Operator 1","Operator 2", "Supervisor"],
+          "operatorStationObjects":[
+            {"label": "Operator 1", "metaKey": "Op1"},
+            {"label": "Operator 2", "metaKey": "Op2"},
+            {"label": "Supervisor", "metaKey": "SS"}
+          ],
           "operatorMetaClick": {"function": "SetMetaData"},
           "onclick": [
             {"function": "SetExperimentStartTimestamp"},
@@ -44,6 +48,8 @@
         "module": "BuzzResponse",
         "props": {
           "onclick": { "function": "SetTaskIndex", "value": 3 },
+          "longVibrationDuration": 1500,
+          "shortVibrationDuration": 500,
           "timeoutThreshold": 20,
           "blackoutTime": 3,
           "taskRepetitions": 2

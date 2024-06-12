@@ -21,9 +21,6 @@ if(experimentDataSignal.value){
   //}
 }
 
-
-
-
 export function App() {
   return (
     <>

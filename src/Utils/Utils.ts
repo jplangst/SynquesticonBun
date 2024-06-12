@@ -47,7 +47,7 @@ export async function fetchData(experimentObjectSignal:any, experimentDataSignal
 
 // Calls a function script that was dynamically loaded if the task index exists in the code modules list and the run type is correct
 export function callScript(experimentObject:any, taskIndex:number, runType:string){
-    console.log("Hello from callScript function! " + runType)
+    //console.log("Hello from callScript function! " + runType)
     const codeModulesMap = experimentObject.codeModulesMap
     if(codeModulesMap.has(taskIndex)){
         const codeModules = codeModulesMap.get(taskIndex)
@@ -55,7 +55,6 @@ export function callScript(experimentObject:any, taskIndex:number, runType:strin
             
             const codeModule = codeModules[codeModuleIndex]
             if(codeModule.props.runType === runType){
-                console.log("Calling onLoad script: " + codeModule.module)
                 //console.log("Calling script: " + codeModule.module + " with run type: " + runType + " and task index: " + taskIndex)
                 let dynFunction = experimentObject.scriptsMap.get(codeModule.module).default
 

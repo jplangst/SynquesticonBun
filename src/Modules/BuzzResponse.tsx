@@ -6,9 +6,10 @@ import { signal, batch } from "@preact/signals";
 // Our imports
 import { experimentObjectSignal } from "../app";
 import { experimentStartTimestampSignal } from "../ModuleRenderComponent";
+import {metaDataSignal} from '../ModuleRenderComponent';
 import { getHHMMSSMSMS, getTimeDifference } from "../Utils/Utils";
 
-const taskCountSignal = signal(0)
+const taskCountSignal = signal(1)
 
 type Props = {
     lazyProps : any,
@@ -61,7 +62,7 @@ const writeBuzzEvent = (lazyProps:any, responseIn:string) => {
         return
     }
 
-    const metaData = "Test-Participant2-Station3"
+    const metaDataObject = metaDataSignal.value
 
     const responseTimestamp = new Date()
     const timeDifference = getTimeDifference(experimentStartTimestampSignal.value,buzzTimestamp)
@@ -71,7 +72,8 @@ const writeBuzzEvent = (lazyProps:any, responseIn:string) => {
 
     //Prepare the event object payload
     const event = {
-        metaData:metaData,
+        runNumber:metaDataObject.runNumber,
+        role:metaDataObject.role,
         taskCount:taskCountSignal.value,
         //Actual time e.g. 08:30:500 (mm:ss:msms)
         loadTimestamp:getHHMMSSMSMS(startTimestamp),
@@ -86,7 +88,6 @@ const writeBuzzEvent = (lazyProps:any, responseIn:string) => {
 
     // Write the event to file
     const scriptsMap = (experimentObjectSignal.value as { scriptsMap: Map<string, any> }).scriptsMap;
-    //const scriptsMap = experimentObjectSignal.value.scriptsMap
     scriptsMap.get("WriteEvent").default(event)
 }
 
@@ -105,7 +106,7 @@ function BuzzResponse({lazyProps}: Props):ReactElement {
             blankScreen.value = false;
             // Execute buzzing
             let vibrationType = Math.random() > .5 ? "short" : "long"
-            lastBuzzStimulusDuration = vibrationType === "long" ? 1500 : 500
+            lastBuzzStimulusDuration = vibrationType === "long" ? lazyProps.longVibrationDuration : lazyProps.shortVibrationDuration
             buzzTimestamp = new Date()
             window.navigator.vibrate(lastBuzzStimulusDuration)
         }, lazyProps.blackoutTime*1000);

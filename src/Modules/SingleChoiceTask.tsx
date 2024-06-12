@@ -7,25 +7,31 @@ type Props = {
 
 export default function SingleChoice({lazyProps}: Props): ReactElement {
     const handleChange = (e:any) => {
-        //addToLogObject("Single choice",lazyProps.taskIndex,label); 
-        console.log(e.target.value)
+        lazyProps.onClick(e, lazyProps.questionLogKey)
     };
-    
+
     const singleChoiceLabels = lazyProps.choices.split(',');
     const inputName = singleChoiceLabels[0];
     return(
+        <>
         <form>
-            {
+            <div class="flex flex-col"> 
+            <p>{lazyProps.questionText}</p>   
+            <div class="flex flex-row">
+            {         
                 singleChoiceLabels.map((choiceLabel:string, choiceIndex:number) => {
                     const labelId = choiceLabel+{choiceIndex}
                     return(
-                        <li key={uuidv4()}>      
+                        <span class="flex flex-col" key={uuidv4()}>      
                             <input onClick={handleChange} type='radio' name={inputName} value={choiceLabel}/>
                             <label htmlFor={labelId}>{choiceLabel}</label> 
-                        </li>
+                        </span>
                     )
-                }) 
+                })    
             }
+            </div>
+            </div>
         </form>    
+        </>
     );
 }
