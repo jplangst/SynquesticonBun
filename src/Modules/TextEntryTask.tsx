@@ -18,5 +18,5 @@ export default function TextEntry({lazyProps}: Props): ReactElement {
         }
     }
 
-    return <textarea  key={uuidv4()} placeholder={defaultTextValue}  rows={textFieldSize[1]} cols={textFieldSize[0]} onChange={onChange}></textarea>
+    return <textarea disabled={lazyProps.disabled} key={uuidv4()} placeholder={defaultTextValue}  rows={textFieldSize[1]} cols={textFieldSize[0]} onChange={onChange}></textarea>
 }

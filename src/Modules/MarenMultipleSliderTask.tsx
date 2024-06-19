@@ -70,8 +70,8 @@ export default function Slider({lazyProps}: Props): ReactElement {
     let buttonClass = disabled ? disabledClass : enabledClass
 
     return <>
-    <div key={uuidv4()} class="w-full flex flex-col items-center">
-    <div class="w-11/12 relative mb-6 font-bold text-lg">
+    <div key={uuidv4()} class="w-full flex flex-col items-center overflow-y">
+    <div class="w-11/12 relative mb-6 font-bold text-lg overflow-y">
         {title}
         {singleChoiceSliderElements}
         <span class="text-lg text-gray-500 dark:text-gray-400 absolute start-0 -bottom-6">{lazyProps.lowSliderText}</span>

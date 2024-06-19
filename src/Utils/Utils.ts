@@ -58,7 +58,7 @@ export function callScript(experimentObject:any, taskIndex:number, runType:strin
                 //console.log("Calling script: " + codeModule.module + " with run type: " + runType + " and task index: " + taskIndex)
                 let dynFunction = experimentObject.scriptsMap.get(codeModule.module).default
 
-                if(codeModule.props.functionInput){
+                if(codeModule.props.functionInput !== undefined || codeModule.props.functionInput !== null){
                     dynFunction(codeModule.props.functionInput)
                 }
                 else{

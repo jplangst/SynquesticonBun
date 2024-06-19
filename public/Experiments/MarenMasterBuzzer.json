@@ -1,0 +1,66 @@
+{
+  "taskListUID": "8e8c0fda-cd4d-11ed-afa1-0242ac120003",
+  "taskListName": "Default Experiment",
+  "communicationMethod": {
+    "type": "MQTT",
+    "host": "192.168.0.100",
+    "port": "8080"
+  },
+  "loggingMethod": {
+    "type": "local",
+    "logFormater": "default",
+    "logInOneLine": true
+  },
+  "stylingFile": "sadas.css",
+  "taskStack": [
+    [
+      {
+        "type": "CODE",
+        "module": "ClearEventStorage",
+        "props": { "functionInput": null, "runType": "onUnload" }
+      },
+      {
+        "type": "CODE",
+        "module": "SetTaskIndex",
+        "props": { "functionInput": 1, "runType": "onLoad" }
+      }
+    ],
+
+    [  
+      {
+        "type": "COMPONENT",
+        "module": "MarenMasterBuzz",
+        "props": { 
+          "operatorStationObjects":[
+            {"label": "Operator 1", "metaKey": "Op1"},
+            {"label": "Operator 2", "metaKey": "Op2"},
+            {"label": "Supervisor", "metaKey": "SS"}
+          ],
+          "operatorMetaClick": {"function": "SetMetaData"},
+          "onclick": [
+            {"function": "SetExperimentStartTimestamp"},
+            {"function": "SetTaskIndex"}
+          ]
+        }
+      }
+    ],
+        
+    [
+      {
+        "type": "COMPONENT",
+        "module": "TextItemTask",
+        "props": { 
+          "label":"Data file downloaded, refresh to start again."
+        }
+      },
+      {
+        "type": "CODE",
+        "module": "DownloadLogEvents",
+        "props": { 
+          "runType": "onLoad",
+          "functionInput": "eventLogSignal"
+        }
+      }
+    ]
+  ]
+}

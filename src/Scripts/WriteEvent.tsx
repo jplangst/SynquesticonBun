@@ -8,7 +8,7 @@ export default function writeEvent(eventData:any){
     //Parse the event into a csv line
     // metadata | taskCount | loadTimestamp (Absolute) | onsetDelay | onsetTimestamp (relative or absolute?) | 
     // stimulusDuration | responseTime (relative) | response | Accuracy
-    const csvLine = `${eventData.runNumber};${eventData.role};${eventData.taskCount};${eventData.loadTimestamp};`+
+    const csvLine = `${eventData.runNumber};${eventData.role};${eventData.taskCount};${eventData.loadTimestamp};${eventData.relativeExperimentStartLoadTimestamp};`+
                     `${eventData.onsetDelay};${eventData.onsetTimestamp};${eventData.stimulusDuration};`+
                     `${eventData.responseTime};${eventData.response};${eventData.accuracy}\n`
                     
@@ -22,7 +22,7 @@ export default function writeEvent(eventData:any){
         //Otherwise write the header and the first event
         // metadata | taskCount | loadTimestamp (Absolute) | onsetDelay | onsetTimestamp (relative or absolute?) | 
         // stimulusDuration | responseTime (relative) | response
-        const header = `Run;Role;Task Count;Load Timestamp(hh:mm:ss:msms);Onset Delay(s);Onset Timestamp;Stimulus Duration(ms);Response Time(ms);Response;Accuracy\n`;
+        const header = `Run;Role;Task Count;Load Timestamp(hh:mm:ss:msms);Relative Load Timestamp(mm:ss:msms);Onset Delay(s);Onset Timestamp;Stimulus Duration(ms);Response Time(ms);Response;Accuracy\n`;
         eventLog = header+csvLine
     }
 

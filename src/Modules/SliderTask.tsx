@@ -92,7 +92,7 @@ export default function Slider({lazyProps}: Props): ReactElement {
         }     
     } 
 
-    const title = lazyProps.title ? <p class="font-bold mb-6 text-lg"> {lazyProps.title} </p> : null
+    const title = lazyProps.title ? <p class="text-wrap font-bold mb-6 text-lg"> {lazyProps.title} </p> : null
     const answerButton = lazyProps.buttonLabel ? 
         <button type="button" onClick={buttonOnClick}
         className="w-1/4 bg-sky-500 hover:bg-sky-700 text-white py-2 px-4 rounded m-1">
@@ -101,9 +101,9 @@ export default function Slider({lazyProps}: Props): ReactElement {
 
     return <>
     <div key={uuidv4()} class="w-full flex flex-col items-center">
-    <div class="w-11/12 relative mb-6 w-">
+    <div class="w-11/12 relative mb-6">
         {title}
-        <label for="labels-range-input"  class="block mb-2 text-xl font-medium text-gray-900 dark:text-black" 
+        <label for="labels-range-input"  class="block mb-2 text-xl text-wrap font-medium text-gray-900 dark:text-black" 
             dangerouslySetInnerHTML={{ __html: lazyProps.questionText}} />
         <input id="labels-range-input"  type="range" value={defaultValue} min={minValue} max={maxValue} 
             step={step} class="w-full h-3 bg-gray-200  appearance-none cursor-pointer  dark:bg-gray-700" 

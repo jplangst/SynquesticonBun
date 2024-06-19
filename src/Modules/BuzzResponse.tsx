@@ -8,7 +8,7 @@ import { experimentObjectSignal } from "../app";
 import { experimentStartTimestampSignal } from "../ModuleRenderComponent";
 import {metaDataSignal} from '../ModuleRenderComponent';
 import { getHHMMSSMSMS, getTimeDifference } from "../Utils/Utils";
-
+import {commsMessageSignal} from '../Communication/communicationModule';
 const taskCountSignal = signal(1)
 
 type Props = {
@@ -25,6 +25,18 @@ let timer:number = 0
 const repetitionsSignal = signal(0)
 const blankScreen = signal(true)
 
+const stopBuzzExperiment = (lazyProps:any) => {
+    //Guard against potential null value
+    if(!experimentObjectSignal.value){
+        console.log("Caught by guard")
+        return
+    }
+    //const scriptsMap = experimentObjectSignal.value.scriptsMap 
+    const scriptsMap = (experimentObjectSignal.value as { scriptsMap: Map<string, any> }).scriptsMap;
+    const onclickFunction = scriptsMap.get(lazyProps.onclick.function)
+    onclickFunction.default(lazyProps.onclick.value);
+}
+
 // Called when any of the buttons are pressed
 const onBuzzButtonClick = (response:string,lazyProps:any) => {
     //Clear the timeout if a natural button press
@@ -38,21 +50,28 @@ const onBuzzButtonClick = (response:string,lazyProps:any) => {
     // Increment the task count
     taskCountSignal.value = taskCountSignal.value + 1
 
-    // If there are more repetitions repeat the same task
-    if(repetitionsSignal.value < lazyProps.taskRepetitions){ 
-        onRepetitionButtonClick()
-    }
-    //Otherwise call the provided onclick function from the experiment file
-    else{    
-        //Guard against potential null value
-        if(!experimentObjectSignal.value){
-            console.log("Caught by guard")
-            return
+    // Check if the component is MQTT controlled
+    if(lazyProps.mqttControlled){
+        if(commsMessageSignal.value && commsMessageSignal.value.topic==="commands"){
+            const experimentStarted = commsMessageSignal.value.message.experimentStarted
+            if(experimentStarted){
+                console.log("Repeating")
+                onRepetitionButtonClick()
+            }
+            else{
+                stopBuzzExperiment(lazyProps)
+            }
         }
-        //const scriptsMap = experimentObjectSignal.value.scriptsMap 
-        const scriptsMap = (experimentObjectSignal.value as { scriptsMap: Map<string, any> }).scriptsMap;
-        const onclickFunction = scriptsMap.get(lazyProps.onclick.function)
-        onclickFunction.default(lazyProps.onclick.value);
+    }
+    else{ //Otherwise it is repetition based
+        // If there are more repetitions repeat the same task
+        if(repetitionsSignal.value < lazyProps.taskRepetitions){ 
+            onRepetitionButtonClick()
+        }
+        //Otherwise call the provided onclick function from the experiment file
+        else{    
+            stopBuzzExperiment(lazyProps)
+        }
     }
 }
 
@@ -65,9 +84,8 @@ const writeBuzzEvent = (lazyProps:any, responseIn:string) => {
     const metaDataObject = metaDataSignal.value
 
     const responseTimestamp = new Date()
-    const timeDifference = getTimeDifference(experimentStartTimestampSignal.value,buzzTimestamp)
-    console.log(timeDifference)
-
+    const relativeTimeDifference = getTimeDifference(experimentStartTimestampSignal.value,buzzTimestamp) //Time difference relative to experiment start
+    const timeDifference = getTimeDifference(startTimestamp,buzzTimestamp) //Time difference relative to module start timestamp
     const accuracy = (lastBuzzStimulusDuration==500 && responseIn=="SHORT") || (lastBuzzStimulusDuration==1500 && responseIn=="LONG")
 
     //Prepare the event object payload
@@ -77,6 +95,7 @@ const writeBuzzEvent = (lazyProps:any, responseIn:string) => {
         taskCount:taskCountSignal.value,
         //Actual time e.g. 08:30:500 (mm:ss:msms)
         loadTimestamp:getHHMMSSMSMS(startTimestamp),
+        relativeExperimentStartLoadTimestamp:relativeTimeDifference,
         onsetDelay:lazyProps.blackoutTime*1000, //Convert from seconds to ms
         //Relative since start of experiment e.g. 05:00:100 (mm:ss:msms)
         onsetTimestamp:timeDifference,
@@ -128,7 +147,7 @@ function BuzzResponse({lazyProps}: Props):ReactElement {
         const longResponse = "LONG"
         return (
             <>
-            <div class="size-full">
+            <div class="size-full flex">
                 <button type="button" className={buttonClassString} onClick={() => onBuzzButtonClick(shortResponse, lazyProps)}>
                         {shortResponse}
                 </button>

@@ -34,6 +34,8 @@ function ModuleRenderComponent({experimentObject}:any) {
         } else if (elem.webkitRequestFullscreen) { // Chrome, Safari, and Opera
           elem.webkitRequestFullscreen();
         }
+
+        screen.orientation.lock("landscape");
       };
 
       //TODO consider moving this to a script and calling at the end of the experiment
@@ -77,7 +79,7 @@ function ModuleRenderComponent({experimentObject}:any) {
             <div className="h-screen w-screen overflow-y" ref={moduleRef}>
             <Suspense fallback={<></>}> 
                 <div  className="flex flex-col h-full w-full bg-sky-100 
-                items-center justify-center whitespace-pre">
+                items-center justify-center  overflow-y-auto">
                     {moduleToRenderSignal.value}   
                 </div>     
             </Suspense>
