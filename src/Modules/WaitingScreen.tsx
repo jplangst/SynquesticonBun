@@ -1,8 +1,5 @@
 //External imports
 import type {ReactElement} from "react";
-import {ChangeEvent} from 'react';
-import { signal } from "@preact/signals";
-import { v4 as uuidv4 } from 'uuid';
 
 // Our imports
 import {logEventSignal} from "../ModuleRenderComponent";
@@ -10,21 +7,13 @@ import {logEventSignal} from "../ModuleRenderComponent";
 import { experimentObjectSignal, roleSignal } from "../app";
 import { handleMapFunctions } from "../Utils/Utils";
 import { commsMessageSignal } from "../Communication/communicationModule";
+import SetExperimentStartTimestampExternal from "../Scripts/SetExperimentTimestampExternal";
 
-
-//TODO This shall be set via mqtt message
 let runNumber = "1"
 
 type Props = {
     lazyProps : any,
 };
-
-//TODO use the role=operator station from the url instead. 
-//We can save the webpage with the correct url for one station per phone. 
-//Create a shortcut on the start screen of the phone.
-//Create a waiting module that waits for the start experiment signal, a text field shows the role 
-//and instructions, e.g. you will be prompted with a long or short vibration throughout the operator process, you should tap the short or long button depending on the length of the vibration.
-//Please await until the process starts. 
 
 function WaitingScreen({lazyProps}: Props):ReactElement {
     let scriptsMap:null|Map<string, any> = null
@@ -57,6 +46,7 @@ function WaitingScreen({lazyProps}: Props):ReactElement {
 
     if(commsMessageSignal.value && commsMessageSignal.value.topic==="commands"){
         runNumber = commsMessageSignal.value.message.runNumber
+        SetExperimentStartTimestampExternal(commsMessageSignal.value.message.startTimestamp)
 
         if(commsMessageSignal.value.message.experimentStarted){
             buttonOnClick()
@@ -65,11 +55,11 @@ function WaitingScreen({lazyProps}: Props):ReactElement {
 
     return (
         <>
-        <div className="flex text-wrap flex-col items-center justify-center w-screen h-screen">
-        <div class="w-11/12 relative mb-6">
-            <p className="w-full text-wrap text-3xl mb-20">Your role is: {roleSignal.value}.</p>
-            <div className="w-full text-wrap text-3xl mb-20" dangerouslySetInnerHTML={{ __html: lazyProps.instruction}}/>
-            <p className="w-full text-3xl text-wrap mb-20">Please "Enter fullscreen" and wait for the experimenter to start the experiment.</p>
+        <div className="flex text-wrap flex-col items-center justify-center w-full h-full">
+        <div class="w-11/12 h-full relative mt-10">
+            <p className="w-full text-wrap text-3xl mb-10">Your role is: {roleSignal.value}.</p>
+            <div className="w-full text-wrap text-3xl mb-10" dangerouslySetInnerHTML={{ __html: lazyProps.instruction}}/>
+            <p className="w-full text-3xl text-wrap">Please "Enter fullscreen" and wait for the experimenter to start the experiment.</p>
         </div>
         </div>
         </>

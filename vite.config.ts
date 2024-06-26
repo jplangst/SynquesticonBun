@@ -3,11 +3,12 @@ import preact from '@preact/preset-vite'
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  base: '/',
+  base: '/app',
   build: {
     outDir: 'dist'
   },
   server: {
+    host: true, 
     port: 5173
   },
   plugins: [preact()],

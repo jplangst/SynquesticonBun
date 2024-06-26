@@ -1,0 +1,11 @@
+/*Hack to hide the slider before user interactswith it.  Can try to do this inline later so we don't need the css file*/
+.slider{
+    & input[type="range"]::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        height: 0px;
+        width: 0px;
+        border-radius: 50%;
+        background: #000;
+    }
+}

@@ -5,6 +5,6 @@ type Props = {
 };
 export default function TextItem({lazyProps}:Props): ReactElement {
     return(
-        <span className={"w-11/12 text-wrap" + lazyProps.classString} dangerouslySetInnerHTML={{ __html: lazyProps.label}}/>
+        <span className={"w-11/12 text-wrap text-xl font-medium" + lazyProps.classString} dangerouslySetInnerHTML={{ __html: lazyProps.label}}/>
     );
 }

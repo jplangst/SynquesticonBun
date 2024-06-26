@@ -1,9 +1,9 @@
 {
-  "taskListUID": "8e8c0fda-cd4d-11ed-afa1-0242ac120003",
+  "taskListUID": "8e8c0fda-cd4d-11ed-afa1-0242ac120004",
   "taskListName": "Default Experiment",
   "communicationMethod": {
     "type": "MQTT",
-    "host": "192.168.0.100",
+    "host": "127.0.0.1",
     "port": "8080"
   },
   "loggingMethod": {
@@ -38,7 +38,6 @@
           ],
           "operatorMetaClick": {"function": "SetMetaData"},
           "onclick": [
-            {"function": "SetExperimentStartTimestamp"},
             {"function": "SetTaskIndex"}
           ]
         }

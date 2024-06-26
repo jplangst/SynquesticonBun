@@ -10,6 +10,7 @@ import {logEventSignal} from "../ModuleRenderComponent";
 import { experimentObjectSignal } from "../app";
 import { handleMapFunctions } from "../Utils/Utils";
 import { commsMessageSignal } from "../Communication/communicationModule";
+import SetExperimentStartTimestampExternal from "../Scripts/SetExperimentTimestampExternal";
 
 const operatorStation = signal("")
 
@@ -17,16 +18,9 @@ type Props = {
     lazyProps : any,
 };
 
-//TODO use the role=operator station from the url instead. 
-//We can save the webpage with the correct url for one station per phone. 
-//Create a shortcut on the start screen of the phone.
-//Create a waiting module that waits for the start experiment signal, a text field shows the role 
-//and instructions, e.g. you will be prompted with a long or short vibration throughout the operator process, you should tap the short or long button depending on the length of the vibration.
-//Please await until the process starts. 
-
 let runNumber = "1"
+
 function TextEntry({lazyProps}: Props): ReactElement {
-    //const defaultTextValue = lazyProps.DefaultValue;
     let textFieldSize = lazyProps.EntryFieldOptions; 
     const onChange = (e: ChangeEvent<HTMLTextAreaElement>)=> {
         const target = e.target as HTMLTextAreaElement
@@ -60,21 +54,26 @@ function MarenStartExperiment({lazyProps}: Props):ReactElement {
 
         // Add the run number and operator role to the log
         let logObject = logEventSignal.value
-        logObject.header = logObject.header + "Run;Role;"
-        logObject.data = logObject.data + runNumber + ";" + operatorStation.value +";"
+        logObject.header = logObject.header + "Run;Role;StartTime;"
+        logObject.data = logObject.data + runNumber + ";" + operatorStation.value +";" + new Date().toLocaleString() + ";"
         logEventSignal.value = logObject
 
         // If there is a on click prop call the corresponding function with the provided parameters
         if(lazyProps.onclick){ 
+            for(let i in lazyProps.onclick){
+                console.log(lazyProps.onclick[i])
+            }
+
             handleMapFunctions(scriptsMap, lazyProps.onclick)
         }     
     } 
 
     if(commsMessageSignal.value && commsMessageSignal.value.topic==="commands"){
-        runNumber = commsMessageSignal.value.message.runNumber
         console.log("commsMessageSignal")
         console.log(commsMessageSignal.value)
 
+        runNumber = commsMessageSignal.value.message.runNumber
+        SetExperimentStartTimestampExternal(commsMessageSignal.value.message.startTimestamp)
         if(commsMessageSignal.value.message.experimentStarted){
             buttonOnClick()
         }

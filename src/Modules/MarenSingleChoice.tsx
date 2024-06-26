@@ -1,10 +1,8 @@
 import type {ReactElement} from "react";
-import {useEffect} from 'react';
 //import {ChangeEvent} from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
 import { experimentObjectSignal } from "../app";
-import { logEventSignal, metaDataSignal } from "../ModuleRenderComponent";
 
 //NB currently not used
 
@@ -29,7 +27,6 @@ export default function MarenSingleChoice({lazyProps}: Props): ReactElement {
         console.log(selectedValue, questionKey)
     }
 
-    //TODO enforce selections on all questions before button becomes available
     const buttonOnClick = () => {    
         if(!scriptsMap){
             console.log("Could not call function. Scripts map is null.")

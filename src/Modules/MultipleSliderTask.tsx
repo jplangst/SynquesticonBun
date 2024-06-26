@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { useSignal } from "@preact/signals";
 
 import { experimentObjectSignal } from "../app";
-import { logEventSignal, metaDataSignal } from "../ModuleRenderComponent";
+import { logEventSignal } from "../ModuleRenderComponent";
 
 type Props = {
     lazyProps : any,
@@ -13,7 +13,7 @@ import { handleMapFunctions } from "../Utils/Utils";
 import SliderTask from "./SliderTask";
 
 
-export default function Slider({lazyProps}: Props): ReactElement {
+export default function MultipleSliderTask({lazyProps}: Props): ReactElement {
     const answerMap = useSignal(new Map<string, any>())
 
     let scriptsMap:null|Map<string, any> = null
@@ -23,7 +23,6 @@ export default function Slider({lazyProps}: Props): ReactElement {
     }
     scriptsMap = (experimentObjectSignal.value as { scriptsMap: Map<string, any> }).scriptsMap;
 
-    //TODO disable answer button for 1sec or so at start of task (For all tasks)
     const buttonOnClick = () => {    
         if(!scriptsMap){
             console.log("Could not call function. Scripts map is null.")
@@ -58,7 +57,7 @@ export default function Slider({lazyProps}: Props): ReactElement {
         //Add the default value to the answer map, this helps keep the order of the answers
         answerMap.value.set(question.questionLogKey, lazyProps.sliderProps.defaultValue)
         //Create the react element for the slider and return it
-        const singleChoiceProps = {...question, ...lazyProps.sliderProps, onSliderChange:onSliderChange}
+        const singleChoiceProps = {...question, ...lazyProps.sliderProps, onSliderChange:onSliderChange, mb:"mb-5"}
         return <SliderTask lazyProps={singleChoiceProps}/>
     });
 

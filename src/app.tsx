@@ -4,14 +4,21 @@ import ModuleRenderComponent from "./ModuleRenderComponent";
 import { fetchExperiment, fetchData } from "./Utils/Utils";
 import { CommunicationsObject } from "./Communication/communicationModule";
 
-//TODO setup so that the timestamp can be synced using the master clock 
+//TODO due to safety reasons it is not possible to auto enter fullscreen. Could add a module that only 
+//  has a fullscreen button that goes fullscreen and then moves to next task...
+
+//TODO make it so that you can create a set of experiments, e.g. 
+//    experiments:[MarenBuzz(from json), CodeModule:download and clear (from the file itself), 
+//    MarenQuestionnaire(fromjson), CodeModule:download and clear (from the file itself)]
 
 // Get any parameters encoded in the url
 const queryParameters = new URLSearchParams(window.location.search)
 const experimentName = queryParameters.get("exp") //Extract the experiment name
-//TODO add mqtt ip address to the url parameters
-//TODO use the role signal for the questionnaire as well? Can also use the run number. If they can answer on the phone the buzz and questionnaire can be chained.
+//TODO add mqtt ip address to the url parameters (We might use a stiatic IP to the raspberry pie instead)
+
+
 export const roleSignal = signal(queryParameters.get("role")) //Extract the role from the url if it exists
+export const skipSignal = signal(queryParameters.get("skip")) //Signal to skip the current module
 // Load the experiment json file on start
 export const experimentDataSignal = signal(null)
 await fetchExperiment(experimentDataSignal, experimentName)

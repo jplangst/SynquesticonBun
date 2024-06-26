@@ -1,5 +1,5 @@
 {
-  "taskListUID": "8e8c0fda-cd4d-11ed-afa1-0242ac120003",
+  "taskListUID": "8e8c0fda-cd4d-11ed-afa1-0242ac120006",
   "taskListName": "Default Experiment",
   "communicationMethod": {
     "type": "MQTT",
@@ -50,7 +50,7 @@
         "type": "COMPONENT",
         "module": "TextItemTask",
         "props": { 
-            "label": "You will be presented with a series of 4 items to rate assessing your own performance in this scenario. Please rate how much you agree with each of the statements.",
+            "label": "You will be asked to answer several items. Please choose the number that fits best with your experience according to each scale.",
             "classString":"relative w-11/12 text-wrap mb-20"
         }
       },
@@ -65,23 +65,24 @@
         }
       }
     ],
-    
+
     [  
       {
         "type": "COMPONENT",
         "module": "SliderTask",
         "props": { 
           "questionLogKey": "Var1",
-          "questionText": "In this scenario my <b>performance</b> was:",
-          "lowSliderText": "Very poor",
-          "highSliderText": "Very good",
+          "questionText": "How often have you <b>used</b> the overview display in this scenario",
+          "lowSliderText": "Not at all",
+          "highSliderText": "Very often",
           "buttonLabel":"Answer",
           "onclick": {"function": "SetTaskIndex"},
           "minValue": 1,
           "maxValue": 7,
           "defaultValue": 4,
+          "mb":"mb-5",
           "step": 1,
-          "displayTickNumbers": true
+          "displayTickNumbers": false
         }
       }
     ],
@@ -91,54 +92,17 @@
         "module": "SliderTask",
         "props": { 
           "questionLogKey": "Var2",
-          "questionText": "In this scenario my <b>teamwork</b> was:",
-          "lowSliderText": "Very poor",
-          "highSliderText": "Very good",
+          "questionText": "How <b>helpful</b> was the overview display in this scenario",
+          "lowSliderText": "Not at all",
+          "highSliderText": "Very helpful",
           "buttonLabel":"Answer",
           "onclick": {"function": "SetTaskIndex"},
           "minValue": 1,
           "maxValue": 7,
           "defaultValue": 4,
+          "mb":"mb-5",
           "step": 1,
-          "displayTickNumbers": true
-        }
-      }
-    ],
-    [  
-      {
-        "type": "COMPONENT",
-        "module": "SliderTask",
-        "props": { 
-          "questionLogKey": "Var3",
-          "questionText": "In this scenario my <b>situation awareness</b> was:",
-          "lowSliderText": "Very poor",
-          "highSliderText": "Very good",
-          "buttonLabel":"Answer",
-          "onclick": {"function": "SetTaskIndex"},
-          "minValue": 1,
-          "maxValue": 7,
-          "defaultValue": 4,
-          "step": 1,
-          "displayTickNumbers": true
-        }
-      }
-    ],
-    [  
-      {
-        "type": "COMPONENT",
-        "module": "SliderTask",
-        "props": { 
-          "questionLogKey": "Var4",
-          "questionText": "In this scenario my <b>workload</b> was:",
-          "lowSliderText": "Very poor",
-          "highSliderText": "Very good",
-          "buttonLabel":"Answer",
-          "onclick": {"function": "SetTaskIndex"},
-          "minValue": 1,
-          "maxValue": 7,
-          "defaultValue": 4,
-          "step": 1,
-          "displayTickNumbers": true
+          "displayTickNumbers": false
         }
       }
     ],
@@ -148,17 +112,58 @@
         "type": "COMPONENT",
         "module": "SliderTask",
         "props": { 
-          "questionLogKey": "Var5",
-          "questionText": "Please rate how <b>often you used the overview display</b> in this scenario:",
-          "lowSliderText": "Never",
-          "highSliderText": "Most of the time",
+          "questionLogKey": "Var3",
+          "questionText": "In this scenario my <b>performance</b> was",
+          "lowSliderText": "Very poor",
+          "highSliderText": "Very good",
           "buttonLabel":"Answer",
           "onclick": {"function": "SetTaskIndex"},
           "minValue": 1,
           "maxValue": 7,
           "defaultValue": 4,
+          "mb":"mb-5",
           "step": 1,
-          "displayTickNumbers": true
+          "displayTickNumbers": false
+        }
+      }
+    ],
+    [  
+      {
+        "type": "COMPONENT",
+        "module": "SliderTask",
+        "props": { 
+          "questionLogKey": "Var4",
+          "questionText": "In this scenario my <b>situation awareness</b> was",
+          "lowSliderText": "Very poor",
+          "highSliderText": "Very good",
+          "buttonLabel":"Answer",
+          "onclick": {"function": "SetTaskIndex"},
+          "minValue": 1,
+          "maxValue": 7,
+          "defaultValue": 4,
+          "mb":"mb-5",
+          "step": 1,
+          "displayTickNumbers": false
+        }
+      }
+    ],
+    [  
+      {
+        "type": "COMPONENT",
+        "module": "SliderTask",
+        "props": { 
+          "questionLogKey": "Var5",
+          "questionText": "In this scenario my <b>mental workload</b> was",
+          "lowSliderText": "Very low",
+          "highSliderText": "Very high",
+          "buttonLabel":"Answer",
+          "onclick": {"function": "SetTaskIndex"},
+          "minValue": 1,
+          "maxValue": 7,
+          "defaultValue": 4,
+          "mb":"mb-5",
+          "step": 1,
+          "displayTickNumbers": false
         }
       }
     ],
@@ -169,16 +174,101 @@
         "module": "SliderTask",
         "props": { 
           "questionLogKey": "Var6",
-          "questionText": "Please rate how <b>difficult this scenario</b> was:",
-          "lowSliderText": "Very easy",
-          "highSliderText": "Very difficult",
+          "questionText": "In this scenario the crew’s <b>performance</b> was",
+          "lowSliderText": "Very poor",
+          "highSliderText": "Very good",
           "buttonLabel":"Answer",
           "onclick": {"function": "SetTaskIndex"},
           "minValue": 1,
           "maxValue": 7,
           "defaultValue": 4,
+          "mb":"mb-5",
           "step": 1,
-          "displayTickNumbers": true
+          "displayTickNumbers": false
+        }
+      }
+    ],
+    [  
+      {
+        "type": "COMPONENT",
+        "module": "SliderTask",
+        "props": { 
+          "questionLogKey": "Var7",
+          "questionText": "In this scenario the crew’s <b>teamwork</b> was",
+          "lowSliderText": "Very poor",
+          "highSliderText": "Very good",
+          "buttonLabel":"Answer",
+          "onclick": {"function": "SetTaskIndex"},
+          "minValue": 1,
+          "maxValue": 7,
+          "defaultValue": 4,
+          "mb":"mb-5",
+          "step": 1,
+          "displayTickNumbers": false
+        }
+      }
+    ],
+
+    [  
+      {
+        "type": "COMPONENT",
+        "module": "SliderTask",
+        "props": { 
+          "questionLogKey": "Var8",
+          "questionText": "How <b>easy</b> was this scenario",
+          "lowSliderText": "Very difficult",
+          "highSliderText": "Very easy",
+          "buttonLabel":"Answer",
+          "onclick": {"function": "SetTaskIndex"},
+          "minValue": 1,
+          "maxValue": 7,
+          "defaultValue": 4,
+          "mb":"mb-5",
+          "step": 1,
+          "displayTickNumbers": false
+        }
+      }
+    ],
+
+    [  
+      {
+        "type": "COMPONENT",
+        "module": "SliderTask",
+        "props": { 
+          "questionLogKey": "Var9",
+          "skipValue": "skip",
+          "questionText": "To what extent did the loss of the overview display <b>disrupt</b> the crew’s work",
+          "lowSliderText": "Not at all",
+          "highSliderText": "Significantly",
+          "buttonLabel":"Answer",
+          "onclick": {"function": "SetTaskIndex"},
+          "minValue": 1,
+          "maxValue": 7,
+          "defaultValue": 4,
+          "mb":"mb-5",
+          "step": 1,
+          "displayTickNumbers": false
+        }
+      }
+    ],
+    [  
+      {
+        "type": "COMPONENT",
+        "module": "SliderTask",
+        "props": { 
+          "questionLogKey": "Var10",
+          "skipValue": "skip",
+          "questionText": "How was the crew’s <b>recovery</b> from losing the overview display",
+          "lowSliderText": "Very poor",
+          "highSliderText": "Very good",
+          "buttonLabel":"Answer",
+          "onclick": {"function": "SetTaskIndex"},
+          "minValue": 1,
+          "maxValue": 7,
+          "defaultValue": 4,
+          "mb":"mb-5",
+          "step": 1,
+          "displayTickNumbers": false
         }
       }
     ],

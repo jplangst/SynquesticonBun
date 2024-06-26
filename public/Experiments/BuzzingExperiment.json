@@ -3,7 +3,7 @@
   "taskListName": "BuzzResponse",
   "communicationMethod": {
     "type": "MQTT",
-    "host": "192.168.0.100",
+    "host": "127.0.0.1",
     "port": "8080",
     "mqttTopics": [
       "commands",
@@ -76,7 +76,7 @@
           "longVibrationDuration": 1500,
           "shortVibrationDuration": 500,
           "timeoutThreshold": 10,
-          "blackoutTime": 180,
+          "blackoutTime": 3,
           "mqttControlled": true
         }
       }

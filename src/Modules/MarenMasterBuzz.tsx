@@ -7,16 +7,13 @@ import { v4 as uuidv4 } from 'uuid';
 // Our imports
 import { experimentObjectSignal } from "../app";
 import { CommunicationsObject } from "../Communication/communicationModule";
-//import { handleMapFunctions } from "../Utils/Utils";
 
-
-//TODO create the master buzz controller
 type Props = {
     lazyProps : any,
 };
 
 let runNumber = "1"
-//TODO use the TextEntry module instead :P having three copies is silly, it is easy to send a onvalue 
+//TODO use the TextEntry module instead :P having three copies is silly, it is easy to send a on value 
 // change handler to get the value in the module that wants it.
 function TextEntry({lazyProps}: Props): ReactElement {
     //const defaultTextValue = lazyProps.DefaultValue;
@@ -43,7 +40,8 @@ function MarenMasterBuzz({lazyProps}: Props):ReactElement {
 
     const broadcastExperimentStartAndStop = () =>{
         const commsObject = CommunicationsObject.value
-        commsObject.publish(commsObject.commandsTopic, {runNumber:runNumber, experimentStarted:experimentStarted.value})
+        const startOfExperimentTimestamp = new Date()
+        commsObject.publish(commsObject.commandsTopic, {runNumber:runNumber, experimentStarted:experimentStarted.value, startTimestamp:startOfExperimentTimestamp.toString()})
     }
 
     // This button press will start and stop the experiment
@@ -58,12 +56,7 @@ function MarenMasterBuzz({lazyProps}: Props):ReactElement {
 
         //Update the metadate for the station
         const updateMetaData = scriptsMap.get(lazyProps.operatorMetaClick.function)
-        updateMetaData.default({runNumber:runNumber});
-
-        // If there is a on click prop call the corresponding function with the provided parameters
-        //if(lazyProps.onclick){ 
-        //    handleMapFunctions(scriptsMap, lazyProps.onclick)
-        //}     
+        updateMetaData.default({runNumber:runNumber});  
     } 
 
     let buttonClassString =  "bg-sky-500 hover:bg-sky-700 text-white font-bold py-2 px-4 rounded m-1"
@@ -76,7 +69,6 @@ function MarenMasterBuzz({lazyProps}: Props):ReactElement {
         <div className="grid grid-cols-3 grid-rows-3 gap-20">
             <p className="row-start-1">Run number: </p>
             <TextEntry lazyProps={{ClassName:"row-start-1 col-start-2 col-span-1 resize-none disabled:text-slate-500 disabled:bg-slate-200",DefaultValue:"1",EntryFieldOptions:[1,1], disabled:experimentStarted.value}}/>
-
 
             <button type="button" className={buttonClassString+"row-start-3 col-start-2"} 
                 onClick={buttonOnClick}>{lazyProps.label}

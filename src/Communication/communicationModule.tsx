@@ -25,20 +25,6 @@ export type CommunicationContextType = {
     commandsTopic:string;
 }
 
-function prepareCommsObject(communicationDetails:any){
-    if(!communicationDetails)
-        return
-    //Dynamically import the selected communication library
-    const communicationModulePath = './' + communicationDetails.type + '/Interface'
-    import(/* @vite-ignore */ communicationModulePath ).then((comModule) => {
-        console.log(comModule.default)
-        commsObject.value = comModule.default
-    }).catch(e => {
-        console.log("Unable to dynamically import the communications object")
-        console.log(e);
-    });
-}
-
 async function prepareCommsObjectSync(communicationDetails:any){
     if(!communicationDetails)
         return
@@ -91,7 +77,6 @@ function disconnect(){
 
 const signalObject = {
     "communicationDetails":communicationDetails,
-    "prepareCommsObject":prepareCommsObject,
     "connect":connect,
     "publish":publish,
     "subscribe":subscribe,

@@ -32,6 +32,11 @@ export default function Button({lazyProps}: Props): ReactElement {
         //const relativeTimestamp = absoluteTimestamp-startTimestamp
         //const event = {absoluteTimestamp:absoluteTimestamp,relativeTimestamp:relativeTimestamp ,taskIndex:lazyProps.taskIndex, eventType:"Button press", payload:lazyProps.label}
         //scriptsMap.get("WriteEvent").default(event)
+
+        //If there is a callback function provided call it
+        if(lazyProps.onClickCallback){
+            lazyProps.onClickCallback()
+        }
         
         // If there is a on click prop call the corresponding function with the provided parameters
         if(lazyProps.onclick){ 
@@ -45,8 +50,10 @@ export default function Button({lazyProps}: Props): ReactElement {
         classString = classString + " " + lazyProps.className
     }
 
+    const buttonDisabled = lazyProps.buttonDisabled ? lazyProps.buttonDisabled : false
+
     return(
-        <button type="button" className={classString} 
+        <button type="button" className={classString} disabled={buttonDisabled}
             onClick={buttonOnClick}>{lazyProps.label}</button>
     );
 }

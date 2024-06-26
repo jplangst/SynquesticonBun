@@ -1,5 +1,5 @@
 {
-  "taskListUID": "8e8c0fda-cd4d-11ed-afa1-0242ac120003",
+  "taskListUID": "8e8c0fda-cd4d-11ed-afa1-0242ac120005",
   "taskListName": "Default Experiment",
   "communicationMethod": {
     "type": "MQTT",
@@ -196,182 +196,302 @@
     [  
       {
         "type": "COMPONENT",
-        "module": "MarenMultipleSliderTask",
+        "module": "SliderTask",
         "props": { 
-          "title": "How easy or difficult did you experience this scenario with respect to…",
-          "questions":[
-              {"questionLogKey": "Var10", "questionText": "Monitoring the SMR units"},
-              {"questionLogKey": "Var11", "questionText": "Information processing demands"}
-          ],
-          "sliderProps": {
-            "minValue": 1,
-            "maxValue": 7,
-            "defaultValue": 4,
-            "step": 1,
-            "displayTickNumbers": true
-          },
-          "lowSliderText": "Very easy",
-          "highSliderText": "Very difficult",
+          "roleConditional":"SS",
+          "questionLogKey": "Var9",
+          "title": "Mental demand",
+          "questionText": "How mentally demanding was the scenario for the <u>shift supervisor</u>?",
+          "lowSliderText": "Very low",
+          "highSliderText": "Very high",
           "buttonLabel":"Answer",
           "onclick": 
             {"function": "SetTaskIndex"}
         }
       }
-    ],
+    ],  
+
     [  
       {
         "type": "COMPONENT",
-        "module": "MarenMultipleSliderTask",
+        "module": "SliderTask",
         "props": { 
+          "questionLogKey": "Var10",
           "title": "How easy or difficult did you experience this scenario with respect to…",
-          "questions":[
-              {"questionLogKey": "Var12", "questionText": "Time for planning, executing, and verifying the control tasks."},
-              {"questionLogKey": "Var13", "questionText": "Extent of performing parallel tasks"}
-          ],
-          "sliderProps": {
-            "minValue": 1,
-            "maxValue": 7,
-            "defaultValue": 4,
-            "step": 1,
-            "displayTickNumbers": true
-          },
+          "questionText": "Monitoring the SMR units",
           "lowSliderText": "Very easy",
           "highSliderText": "Very difficult",
           "buttonLabel":"Answer",
-          "onclick": 
-            {"function": "SetTaskIndex"}
+          "onclick": {"function": "SetTaskIndex"},
+          "minValue": 1,
+          "maxValue": 7,
+          "defaultValue": 4,
+          "step": 1,
+          "displayTickNumbers": true
         }
       }
-    ],
-    [
+    ],  
+    [  
       {
         "type": "COMPONENT",
-        "module": "MarenMultipleSliderTask",
+        "module": "SliderTask",
         "props": { 
-          "title": "How easy or difficult did you experience this scenario with respect to...",
-          "questions":[
-              
-              {"questionLogKey": "Var14", "questionText": "Extent of switching between tasks"},
-              {"questionLogKey": "Var15", "questionText": "Extent of managing disturbances in multiple units"}
-          ],
-          "sliderProps": {
-            "minValue": 1,
-            "maxValue": 7,
-            "defaultValue": 4,
-            "step": 1,
-            "displayTickNumbers": true
-          },
+          "questionLogKey": "Var11",
+          "title": "How easy or difficult did you experience this scenario with respect to…",
+          "questionText": "Information processing demands",
           "lowSliderText": "Very easy",
           "highSliderText": "Very difficult",
           "buttonLabel":"Answer",
-          "onclick": 
-            {"function": "SetTaskIndex"}
+          "onclick": {"function": "SetTaskIndex"},
+          "minValue": 1,
+          "maxValue": 7,
+          "defaultValue": 4,
+          "step": 1,
+          "displayTickNumbers": true
         }
       }
     ],  
+    [  
+      {
+        "type": "COMPONENT",
+        "module": "SliderTask",
+        "props": { 
+          "questionLogKey": "Var12",
+          "title": "How easy or difficult did you experience this scenario with respect to…",
+          "questionText": "Time for planning, executing, and verifying the control tasks",
+          "lowSliderText": "Very easy",
+          "highSliderText": "Very difficult",
+          "buttonLabel":"Answer",
+          "onclick": {"function": "SetTaskIndex"},
+          "minValue": 1,
+          "maxValue": 7,
+          "defaultValue": 4,
+          "step": 1,
+          "displayTickNumbers": true
+        }
+      }
+    ],  
+    [  
+      {
+        "type": "COMPONENT",
+        "module": "SliderTask",
+        "props": { 
+          "questionLogKey": "Var13",
+          "title": "How easy or difficult did you experience this scenario with respect to…",
+          "questionText": "Extent of performing parallel tasks",
+          "lowSliderText": "Very easy",
+          "highSliderText": "Very difficult",
+          "buttonLabel":"Answer",
+          "onclick": {"function": "SetTaskIndex"},
+          "minValue": 1,
+          "maxValue": 7,
+          "defaultValue": 4,
+          "step": 1,
+          "displayTickNumbers": true
+        }
+      }
+    ],  
+    [  
+      {
+        "type": "COMPONENT",
+        "module": "SliderTask",
+        "props": { 
+          "questionLogKey": "Var14",
+          "title": "How easy or difficult did you experience this scenario with respect to…",
+          "questionText": "Extent of switching between tasks",
+          "lowSliderText": "Very easy",
+          "highSliderText": "Very difficult",
+          "buttonLabel":"Answer",
+          "onclick": {"function": "SetTaskIndex"},
+          "minValue": 1,
+          "maxValue": 7,
+          "defaultValue": 4,
+          "step": 1,
+          "displayTickNumbers": true
+        }
+      }
+    ],  
+    [  
+      {
+        "type": "COMPONENT",
+        "module": "SliderTask",
+        "props": { 
+          "questionLogKey": "Var15",
+          "title": "How easy or difficult did you experience this scenario with respect to…",
+          "questionText": "Extent of managing disturbances in multiple units",
+          "lowSliderText": "Very easy",
+          "highSliderText": "Very difficult",
+          "buttonLabel":"Answer",
+          "onclick": {"function": "SetTaskIndex"},
+          "minValue": 1,
+          "maxValue": 7,
+          "defaultValue": 4,
+          "step": 1,
+          "displayTickNumbers": true
+        }
+      }
+    ], 
 
-    [
+    [  
       {
         "type": "COMPONENT",
-        "module": "MarenMultipleSliderTask",
+        "module": "SliderTask",
         "props": { 
+          "questionLogKey": "Var16",
           "title": "In this scenario,",
-          "questions":[
-              {"questionLogKey": "Var16", "questionText": "we maintained an overview of the SMR units"},
-              {"questionLogKey": "Var17", "questionText": "we became aware of process deviations at an early stage"}
-          ],
-          "sliderProps": {
-            "minValue": 1,
-            "maxValue": 7,
-            "defaultValue": 4,
-            "step": 1,
-            "displayTickNumbers": true
-          },
+          "questionText": "we maintained an overview of the SMR units",
           "lowSliderText": "Completely disagree",
           "highSliderText": "Completely agree",
           "buttonLabel":"Answer",
-          "onclick": 
-            {"function": "SetTaskIndex"}
+          "onclick": {"function": "SetTaskIndex"},
+          "minValue": 1,
+          "maxValue": 7,
+          "defaultValue": 4,
+          "step": 1,
+          "displayTickNumbers": true
         }
       }
-    ],  
-    [
+    ], 
+    [  
       {
         "type": "COMPONENT",
-        "module": "MarenMultipleSliderTask",
+        "module": "SliderTask",
         "props": { 
+          "questionLogKey": "Var17",
           "title": "In this scenario,",
-          "questions":[
-              {"questionLogKey": "Var18", "questionText": "we made correct diagnoses of the process situation"},
-              {"questionLogKey": "Var19", "questionText": "we determined appropriate strategies"}
-          ],
-          "sliderProps": {
-            "minValue": 1,
-            "maxValue": 7,
-            "defaultValue": 4,
-            "step": 1,
-            "displayTickNumbers": true
-          },
+          "questionText": "we became aware of process deviations at an early stage",
           "lowSliderText": "Completely disagree",
           "highSliderText": "Completely agree",
           "buttonLabel":"Answer",
-          "onclick": 
-            {"function": "SetTaskIndex"}
+          "onclick": {"function": "SetTaskIndex"},
+          "minValue": 1,
+          "maxValue": 7,
+          "defaultValue": 4,
+          "step": 1,
+          "displayTickNumbers": true
         }
       }
-    ],  
-    [
+    ], 
+    [  
       {
         "type": "COMPONENT",
-        "module": "MarenMultipleSliderTask",
+        "module": "SliderTask",
         "props": { 
+          "questionLogKey": "Var18",
           "title": "In this scenario,",
-          "questions":[
-
-              {"questionLogKey": "Var20", "questionText": "we communicated effectively"},
-              {"questionLogKey": "Var21", "questionText": "we performed peer checks and verifications when needed"}
-          ],
-          "sliderProps": {
-            "minValue": 1,
-            "maxValue": 7,
-            "defaultValue": 4,
-            "step": 1,
-            "displayTickNumbers": true
-          },
+          "questionText": "we made correct diagnoses of the process situation",
           "lowSliderText": "Completely disagree",
           "highSliderText": "Completely agree",
           "buttonLabel":"Answer",
-          "onclick": 
-            {"function": "SetTaskIndex"}
+          "onclick": {"function": "SetTaskIndex"},
+          "minValue": 1,
+          "maxValue": 7,
+          "defaultValue": 4,
+          "step": 1,
+          "displayTickNumbers": true
         }
       }
-    ],  
-    [
+    ], 
+    [  
       {
         "type": "COMPONENT",
-        "module": "MarenMultipleSliderTask",
+        "module": "SliderTask",
         "props": { 
+          "questionLogKey": "Var19",
           "title": "In this scenario,",
-          "questions":[
-              {"questionLogKey": "Var22", "questionText": "we provided support to each other when needed"},
-              {"questionLogKey": "Var23", "questionText": "we had the necessary resources to handle all tasks"}
-          ],
-          "sliderProps": {
-            "minValue": 1,
-            "maxValue": 7,
-            "defaultValue": 4,
-            "step": 1,
-            "displayTickNumbers": true
-          },
+          "questionText": "we determined appropriate strategies",
           "lowSliderText": "Completely disagree",
           "highSliderText": "Completely agree",
           "buttonLabel":"Answer",
-          "onclick": 
-            {"function": "SetTaskIndex"}
+          "onclick": {"function": "SetTaskIndex"},
+          "minValue": 1,
+          "maxValue": 7,
+          "defaultValue": 4,
+          "step": 1,
+          "displayTickNumbers": true
+        }
+      }
+    ], 
+    [  
+      {
+        "type": "COMPONENT",
+        "module": "SliderTask",
+        "props": { 
+          "questionLogKey": "Var20",
+          "title": "In this scenario,",
+          "questionText": "we communicated effectively",
+          "lowSliderText": "Completely disagree",
+          "highSliderText": "Completely agree",
+          "buttonLabel":"Answer",
+          "onclick": {"function": "SetTaskIndex"},
+          "minValue": 1,
+          "maxValue": 7,
+          "defaultValue": 4,
+          "step": 1,
+          "displayTickNumbers": true
+        }
+      }
+    ], 
+    [  
+      {
+        "type": "COMPONENT",
+        "module": "SliderTask",
+        "props": { 
+          "questionLogKey": "Var21",
+          "title": "In this scenario,",
+          "questionText": "we performed peer checks and verifications when needed",
+          "lowSliderText": "Completely disagree",
+          "highSliderText": "Completely agree",
+          "buttonLabel":"Answer",
+          "onclick": {"function": "SetTaskIndex"},
+          "minValue": 1,
+          "maxValue": 7,
+          "defaultValue": 4,
+          "step": 1,
+          "displayTickNumbers": true
+        }
+      }
+    ], 
+    [  
+      {
+        "type": "COMPONENT",
+        "module": "SliderTask",
+        "props": { 
+          "questionLogKey": "Var22",
+          "title": "In this scenario,",
+          "questionText": "we provided support to each other when needed",
+          "lowSliderText": "Completely disagree",
+          "highSliderText": "Completely agree",
+          "buttonLabel":"Answer",
+          "onclick": {"function": "SetTaskIndex"},
+          "minValue": 1,
+          "maxValue": 7,
+          "defaultValue": 4,
+          "step": 1,
+          "displayTickNumbers": true
+        }
+      }
+    ], 
+    [  
+      {
+        "type": "COMPONENT",
+        "module": "SliderTask",
+        "props": { 
+          "questionLogKey": "Var23",
+          "title": "In this scenario,",
+          "questionText": "we had the necessary resources to handle all tasks",
+          "lowSliderText": "Completely disagree",
+          "highSliderText": "Completely agree",
+          "buttonLabel":"Answer",
+          "onclick": {"function": "SetTaskIndex"},
+          "minValue": 1,
+          "maxValue": 7,
+          "defaultValue": 4,
+          "step": 1,
+          "displayTickNumbers": true
         }
       }
     ],  
-
 
     [  
       {
