@@ -36,7 +36,7 @@ const onStationButtonClick = (response:string) => {
     operatorStation.value = response
 }
 
-function MarenStartExperiment({lazyProps}: Props):ReactElement {
+function ExperimentMetaStart({lazyProps}: Props):ReactElement {
     let scriptsMap:null|Map<string, any> = null
     if(!experimentObjectSignal.value){
         return(<></>)
@@ -119,4 +119,4 @@ function MarenStartExperiment({lazyProps}: Props):ReactElement {
     )
 }
 
-export default MarenStartExperiment
+export default ExperimentMetaStart

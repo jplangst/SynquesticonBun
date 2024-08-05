@@ -12,6 +12,8 @@ type Props = {
     lazyProps : any,
 };
 
+// Used to determine if the participants should go thorugh a training run of the buzz stimuli before the proper data collection. 
+let performTraining = false
 let runNumber = "1"
 //TODO use the TextEntry module instead :P having three copies is silly, it is easy to send a on value 
 // change handler to get the value in the module that wants it.
@@ -41,7 +43,12 @@ function MarenMasterBuzz({lazyProps}: Props):ReactElement {
     const broadcastExperimentStartAndStop = () =>{
         const commsObject = CommunicationsObject.value
         const startOfExperimentTimestamp = new Date()
-        commsObject.publish(commsObject.commandsTopic, {runNumber:runNumber, experimentStarted:experimentStarted.value, startTimestamp:startOfExperimentTimestamp.toString()})
+        commsObject.publish(commsObject.commandsTopic, {runNumber:runNumber, experimentStarted:experimentStarted.value, performTraining:performTraining, startTimestamp:startOfExperimentTimestamp.toString()})
+    }
+
+    const trainingChecked = () => {
+        performTraining = !performTraining
+        console.log(performTraining)
     }
 
     // This button press will start and stop the experiment
@@ -67,8 +74,11 @@ function MarenMasterBuzz({lazyProps}: Props):ReactElement {
         <>
         <p className="text-3xl mb-20">Master Buzz Experiment Controller</p>
         <div className="grid grid-cols-3 grid-rows-3 gap-20">
-            <p className="row-start-1">Run number: </p>
+            <p className="row-start-1 text-xl">Run number: </p>
             <TextEntry lazyProps={{ClassName:"row-start-1 col-start-2 col-span-1 resize-none disabled:text-slate-500 disabled:bg-slate-200",DefaultValue:"1",EntryFieldOptions:[1,1], disabled:experimentStarted.value}}/>
+
+            <label className="text-xl row-start-2 col-start-1" for="trainingCheck">Administer Training</label>
+            <input className="m-s-2 w-8 h-8 row-start-2 col-start-2" checked={performTraining} type="checkbox" id="trainingCheck" onChange={trainingChecked}/>
 
             <button type="button" className={buttonClassString+"row-start-3 col-start-2"} 
                 onClick={buttonOnClick}>{lazyProps.label}

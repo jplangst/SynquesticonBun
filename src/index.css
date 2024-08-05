@@ -3,3 +3,9 @@
 @tailwind components;
 @tailwind utilities;
 @tailwind resize;
+
+body {
+    margin: 0px;
+    padding: 0px;
+    overflow: hidden;
+}

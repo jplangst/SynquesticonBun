@@ -3,7 +3,7 @@
     "taskListName": "MarenCombined",
     "communicationMethod": {
       "type": "MQTT",
-      "host": "127.0.0.1",
+      "host": "10.212.65.113",
       "port": "8080",
       "mqttTopics": [
         "commands",
@@ -28,12 +28,13 @@
           "props": { "functionInput": 1, "runType": "onLoad" }
         }
       ],
+
       [  
         {
           "type": "COMPONENT",
           "module": "WaitingScreen",
           "props": {
-            "instruction": "You will be presented with a short or long vibration cue. Please press the \"Short\" or \"Long\" button as quickly as possible after the vibration ends",
+            "instruction": "Your task is to detect the alerts and judge whether the vibration is <b>SLOW</b> or <b>FAST</b>. Please respond as quickly and accurately as possible.",
             "runNumberInput": false, 
             "operatorStationObjects":[
               {"label": "Operator 1", "metaKey": "Op1"},
@@ -47,19 +48,131 @@
           }
         }
       ],
+
+      [
+        {
+          "type": "COMPONENT",
+          "module": "TextItemTask",
+          "props": { 
+            "skipValue": true,
+            "label":"We will now demonstrate the vibration alert. First, you get three examples of a <b>FAST</b> vibration.",
+            "classString":"relative w-11/12 text-wrap mb-20",
+            "onclick": {"function": "SetTaskIndex", "value": 8}
+          }
+        },
+        {
+          "type": "COMPONENT",
+          "module": "Button",
+          "props": { 
+
+            "label":"Continue",
+            "onclick": {"function": "SetTaskIndex"}
+          }
+        }
+      ],
+      [
+        {
+          "type": "COMPONENT",
+          "module": "BuzzResponse",
+          "props": {
+            "conditionalTraining": true,
+            "onclick": { "function": "SetTaskIndex"},
+            "vibrationDuration": 1500,
+            "longVibrationPulseDuration": 50,
+            "shortVibrationPulseDuration": 50,
+            "timeoutThreshold": 3,
+            "blackoutTime": 5,
+            "mqttControlled": false,
+            "taskRepetitions": 2
+          }
+        }
+      ],
+
+      [
+        {
+          "type": "COMPONENT",
+          "module": "TextItemTask",
+          "props": { 
+            "label":"Then, you get three examples of a <b>SLOW</b> vibration. ",
+            "classString":"relative w-11/12 text-wrap mb-20"
+          }
+        },
+        {
+          "type": "COMPONENT",
+          "module": "Button",
+          "props": { 
+            "label":"Continue",
+            "onclick": {"function": "SetTaskIndex"}
+          }
+        }
+      ],
+      [
+        {
+          "type": "COMPONENT",
+          "module": "BuzzResponse",
+          "props": {
+            "conditionalTraining": true,
+            "onclick": { "function": "SetTaskIndex"},
+            "vibrationDuration": 1500,
+            "longVibrationPulseDuration": 250,
+            "shortVibrationPulseDuration": 250,
+            "timeoutThreshold": 3,
+            "blackoutTime": 5,
+            "mqttControlled": false,
+            "taskRepetitions": 2
+          }
+        }
+      ],
+
+      [
+        {
+          "type": "COMPONENT",
+          "module": "TextItemTask",
+          "props": { 
+            "label":"Now, <b>FAST</b> and <b>slow</b> vibrations will appear on your phone randomly. The time between each vibration will be longer during the scenarios. Respond as quickly and accurately as possible",
+            "classString":"relative w-11/12 text-wrap mb-20"
+          }
+        },
+        {
+          "type": "COMPONENT",
+          "module": "Button",
+          "props": { 
+            "label":"Continue",
+            "onclick": {"function": "SetTaskIndex"}
+          }
+        }
+      ],
+      [
+        {
+          "type": "COMPONENT",
+          "module": "BuzzResponse",
+          "props": {
+            "conditionalTraining": true,
+            "onclick": { "function": "SetTaskIndex", "value":1},
+            "vibrationDuration": 1500,
+            "longVibrationPulseDuration": 250,
+            "shortVibrationPulseDuration": 50,
+            "timeoutThreshold": 3,
+            "blackoutTime": 5,
+            "mqttControlled": false,
+            "taskRepetitions": 9
+          }
+        }
+      ],
+
       [
         {
           "type": "COMPONENT",
           "module": "BuzzResponse",
           "props": {
             "onclick": { "function": "SetTaskIndex"},
-            "vibrationDuration": 1000,
+            "vibrationDuration": 1500,
             "longVibrationPulseDuration": 250,
             "shortVibrationPulseDuration": 50,
-            "vibrationPulsePause": 50,
-            "timeoutThreshold": 10,
+            "timeoutThreshold": 5,
             "blackoutTime": 5,
-            "mqttControlled": true
+            "mqttControlled": true,
+            "showTimerInformation": false
           }
         }
       ],
@@ -84,7 +197,7 @@
           "type": "COMPONENT",
           "module": "TextItemTask",
           "props": { 
-            "label":"You will now be given a questionnaire",
+            "label":"You will now be given questionnaires",
             "classString":"relative w-11/12 text-wrap mb-20"
           }
         },
@@ -285,7 +398,7 @@
             "maxValue": 7,
             "defaultValue": 4,
             "step": 1,
-            "displayTickNumbers": true
+            "displayTickNumbers": false
           }
         }
       ],  
@@ -305,7 +418,7 @@
             "maxValue": 7,
             "defaultValue": 4,
             "step": 1,
-            "displayTickNumbers": true
+            "displayTickNumbers": false
           }
         }
       ],  
@@ -325,7 +438,7 @@
             "maxValue": 7,
             "defaultValue": 4,
             "step": 1,
-            "displayTickNumbers": true
+            "displayTickNumbers": false
           }
         }
       ],  
@@ -345,7 +458,7 @@
             "maxValue": 7,
             "defaultValue": 4,
             "step": 1,
-            "displayTickNumbers": true
+            "displayTickNumbers": false
           }
         }
       ],  
@@ -365,7 +478,7 @@
             "maxValue": 7,
             "defaultValue": 4,
             "step": 1,
-            "displayTickNumbers": true
+            "displayTickNumbers": false
           }
         }
       ],  
@@ -385,7 +498,7 @@
             "maxValue": 7,
             "defaultValue": 4,
             "step": 1,
-            "displayTickNumbers": true
+            "displayTickNumbers": false
           }
         }
       ], 
@@ -406,7 +519,7 @@
             "maxValue": 7,
             "defaultValue": 4,
             "step": 1,
-            "displayTickNumbers": true
+            "displayTickNumbers": false
           }
         }
       ], 
@@ -426,7 +539,7 @@
             "maxValue": 7,
             "defaultValue": 4,
             "step": 1,
-            "displayTickNumbers": true
+            "displayTickNumbers": false
           }
         }
       ], 
@@ -446,7 +559,7 @@
             "maxValue": 7,
             "defaultValue": 4,
             "step": 1,
-            "displayTickNumbers": true
+            "displayTickNumbers": false
           }
         }
       ], 
@@ -466,7 +579,7 @@
             "maxValue": 7,
             "defaultValue": 4,
             "step": 1,
-            "displayTickNumbers": true
+            "displayTickNumbers": false
           }
         }
       ], 
@@ -486,7 +599,7 @@
             "maxValue": 7,
             "defaultValue": 4,
             "step": 1,
-            "displayTickNumbers": true
+            "displayTickNumbers": false
           }
         }
       ], 
@@ -506,7 +619,7 @@
             "maxValue": 7,
             "defaultValue": 4,
             "step": 1,
-            "displayTickNumbers": true
+            "displayTickNumbers": false
           }
         }
       ], 
@@ -526,7 +639,7 @@
             "maxValue": 7,
             "defaultValue": 4,
             "step": 1,
-            "displayTickNumbers": true
+            "displayTickNumbers": false
           }
         }
       ], 
@@ -546,7 +659,7 @@
             "maxValue": 7,
             "defaultValue": 4,
             "step": 1,
-            "displayTickNumbers": true
+            "displayTickNumbers": false
           }
         }
       ],  
@@ -556,14 +669,14 @@
           "type": "COMPONENT",
           "module": "TextItemTask",
           "props": { 
-            "label":"The experiment is over, please hand the device back to Halden staff.\n"
+            "label":"The questionnaire is over, please press <b>continue</b> and wait for further instructions.\n"
           }
         },
         {
           "type": "COMPONENT",
           "module": "Button",
           "props": { 
-            "label":"Finish",
+            "label":"Continue",
             "onclick": {"function": "SetTaskIndex"}
           }
         }

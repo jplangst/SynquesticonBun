@@ -4,7 +4,7 @@ import type {ReactElement} from "react";
 // Our imports
 import {logEventSignal} from "../ModuleRenderComponent";
 
-import { experimentObjectSignal, roleSignal } from "../app";
+import { experimentObjectSignal, roleSignal, skipSignal } from "../app";
 import { handleMapFunctions } from "../Utils/Utils";
 import { commsMessageSignal } from "../Communication/communicationModule";
 import SetExperimentStartTimestampExternal from "../Scripts/SetExperimentTimestampExternal";
@@ -48,19 +48,27 @@ function WaitingScreen({lazyProps}: Props):ReactElement {
         runNumber = commsMessageSignal.value.message.runNumber
         SetExperimentStartTimestampExternal(commsMessageSignal.value.message.startTimestamp)
 
+        let performTraining = commsMessageSignal.value.message.performTraining
+        skipSignal.value = !performTraining
+
         if(commsMessageSignal.value.message.experimentStarted){
             buttonOnClick()
+        }
+
+        //Clear the comms message
+        if(performTraining){
+            commsMessageSignal.value = null
         }
     }
 
     return (
         <>
         <div className="flex text-wrap flex-col items-center justify-center w-full h-full">
-        <div class="w-11/12 h-full relative mt-10">
-            <p className="w-full text-wrap text-3xl mb-10">Your role is: {roleSignal.value}.</p>
-            <div className="w-full text-wrap text-3xl mb-10" dangerouslySetInnerHTML={{ __html: lazyProps.instruction}}/>
-            <p className="w-full text-3xl text-wrap">Please "Enter fullscreen" and wait for the experimenter to start the experiment.</p>
-        </div>
+            <div class="mx-5 relative mt-5">
+                <p className="w-full text-wrap text-3xl mb-10">Your role is: {roleSignal.value}.</p>
+                <div className="w-full text-wrap text-3xl mb-10" dangerouslySetInnerHTML={{ __html: lazyProps.instruction}}/>
+                <p className="w-full text-3xl text-wrap">Please "Enter fullscreen" and wait for the experimenter to start the experiment.</p>
+            </div>
         </div>
         </>
     )

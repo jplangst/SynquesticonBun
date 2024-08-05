@@ -35,6 +35,7 @@ export default function Button({lazyProps}: Props): ReactElement {
 
         //If there is a callback function provided call it
         if(lazyProps.onClickCallback){
+            console.log(buttonDisabled)
             lazyProps.onClickCallback()
         }
         
@@ -50,10 +51,11 @@ export default function Button({lazyProps}: Props): ReactElement {
         classString = classString + " " + lazyProps.className
     }
 
-    const buttonDisabled = lazyProps.buttonDisabled ? lazyProps.buttonDisabled : false
+    const buttonDisabled = lazyProps.buttonDisabled //? lazyProps.buttonDisabled : false
 
+    const touchClass = buttonDisabled ? "pointer-events-none " : ""
     return(
-        <button type="button" className={classString} disabled={buttonDisabled}
-            onClick={buttonOnClick}>{lazyProps.label}</button>
+        <button autoFocus={false} type="button" className={touchClass+classString} disabled={buttonDisabled}
+            onClick={buttonOnClick} onTouchStart={buttonOnClick}>{lazyProps.label}</button>
     );
 }

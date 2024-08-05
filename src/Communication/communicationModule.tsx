@@ -41,6 +41,7 @@ async function connect(communicationDetails:any){
     if(!commsObject.value){
         await prepareCommsObjectSync(communicationDetails)
     }
+
     commsClient = commsObject.value.connect(communicationDetails.clientUUID, communicationDetails.host, communicationDetails.port)
 }
 

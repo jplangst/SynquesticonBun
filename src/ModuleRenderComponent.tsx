@@ -7,7 +7,7 @@ export const experimentStartTimestampSignal = signal({masterTimestamp: new Date(
 console.log("Module Render :" + experimentStartTimestampSignal.value.masterTimestamp.toString())
 export const metaDataSignal = signal({runNumber:1,role:"Operator 1"})
 export const logEventSignal = signal({header:"",data:""})
-export const skipSignal = signal(false)
+//export const skipSignal = signal(false)
 
 export const taskIndexSignal = signal(0)
 const moduleToRenderSignal = signal(null)
@@ -43,6 +43,9 @@ function ModuleRenderComponent({experimentObject}:any) {
           msRequestFullscreen(): Promise<void>;
         };
 
+        //TODO fullscreen did not work on the ipad's chrome version.........
+        //TODO when in fullscreen in safari the next module is not loaded after a fiel is downloaded. When not in fullscreen it works...
+        //TODO test with chrome instead on the ipads...
         //TODO test fullscreen on computer, andorid phone and ios tablet
         if (docElmWithBrowsersFullScreenFunctions.requestFullscreen) {
           docElmWithBrowsersFullScreenFunctions.requestFullscreen();
@@ -75,7 +78,7 @@ function ModuleRenderComponent({experimentObject}:any) {
         if (!document.fullscreenElement) {
           enterFullscreen();
         } else {
-          exitFullscreen();
+          //exitFullscreen();
         }
       };
 
@@ -101,18 +104,23 @@ function ModuleRenderComponent({experimentObject}:any) {
 
     updateModuleToRender(experimentObject)
 
+    //Fullscreen in ios is not supported in ios. There is a user interaction in fullscreen warning popup that is very disruptive
+    const fullScreenButton = ((/iPad|iPhone|iPod/.test(navigator.userAgent))||(navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)) ? null 
+                              : <button ref={fullscreenRef} type="button" onClick={handleFullscreen} 
+                              className={"select-none bg-sky-500 hover:bg-sky-700 text-white py-2 px-4 rounded m-1 absolute bottom-5 right-5 text-lg"}>
+                                Enter fullscreen</button>  
+
     return (
         <>
-            <div className="h-screen w-screen overflow-y" ref={moduleRef}>
+            <div className="h-full w-full fixed overflow-hidden" ref={moduleRef}>
             <Suspense fallback={<></>}> 
-                <div  className="flex flex-col h-full w-full bg-sky-100 
-                items-center justify-center  overflow-y-auto">
+                <div  className="select-none flex flex-col h-full w-full bg-sky-100 
+                items-center justify-center">
                     {moduleToRenderSignal.value}   
                 </div>     
             </Suspense>
             </div>
-            <button ref={fullscreenRef} type="button" className={"bg-sky-500 hover:bg-sky-700 text-white py-2 px-4 rounded m-1 absolute bottom-0 right-0 text-lg"} 
-                    onClick={handleFullscreen}>Enter fullscreen</button>     
+            {fullScreenButton}  
         </>
     )
 }

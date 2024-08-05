@@ -1,5 +1,5 @@
 import type {ReactElement} from "react";
-import {useEffect} from 'react';
+import {useEffect, useRef} from 'react';
 import { useSignal } from "@preact/signals"
 import { v4 as uuidv4 } from 'uuid';
 
@@ -15,8 +15,9 @@ import { handleMapFunctions } from "../Utils/Utils";
 import Button from "./Button";
 
 let sliderValue = -1
-
 export default function Slider({lazyProps}: Props): ReactElement {
+    const rangeRef = useRef<HTMLInputElement>(null);
+
     const buttonDisabled = useSignal(true)
 
     let scriptsMap:null|Map<string, any> = null
@@ -28,7 +29,25 @@ export default function Slider({lazyProps}: Props): ReactElement {
 
     // Check if the role conditional is set and if the current role matches the conditional
     // If it does write to log and move to the next task
-    useEffect(() => { 
+    useEffect(() => {    
+        const handleTouchStart = (e: TouchEvent) => {
+            e.preventDefault(); // Prevents the default action to make sure it works on the first touch
+            if (rangeRef.current) {
+                const rect = rangeRef.current.getBoundingClientRect();
+                const touch = e.touches[0];
+                const touchX = touch.clientX - rect.left;
+                const value = (touchX / rect.width) * (parseFloat(rangeRef.current.max) - parseFloat(rangeRef.current.min)) + parseFloat(rangeRef.current.min);
+                rangeRef.current.value = value.toString();
+                const changeEvent = new Event('input', { bubbles: false });
+                rangeRef.current.dispatchEvent(changeEvent);
+                //rangeRef.current.focus();
+            }
+        };
+        const rangeElement = rangeRef.current;
+        if (rangeElement) {
+            rangeElement.addEventListener('touchstart', handleTouchStart);
+        }
+
         //Check if the current module should be skipped
         let shouldSkip = false
         if(lazyProps.roleConditional && lazyProps.roleConditional === metaDataSignal.value.role){
@@ -48,9 +67,15 @@ export default function Slider({lazyProps}: Props): ReactElement {
                 handleMapFunctions(scriptsMap, lazyProps.onclick)
             }  
         }
+
+        return () => {
+            if (rangeElement) {
+                rangeElement.removeEventListener('touchstart', handleTouchStart);
+            }
+        };
     },[])
     
-    //NB these values can be moved to the experiment config if more flexibility is needed
+    //Default to 0 -> 100 unless configured otherwise.
     const minValue = lazyProps.minValue ? lazyProps.minValue : 0
     const maxValue = lazyProps.maxValue ? lazyProps.maxValue : 100
     const step = lazyProps.step ? lazyProps.step : 5
@@ -81,15 +106,21 @@ export default function Slider({lazyProps}: Props): ReactElement {
     })
 
     const onSliderChange = (e: any) => {
+        e.preventDefault();
         if(lazyProps.onSliderChange){
             lazyProps.onSliderChange(e, lazyProps.questionLogKey)
         }    
 
-        sliderValue = e.target.value
+        if(e.target.value){
+            sliderValue = e.target.value
+            console.log(sliderValue)
+        } 
+    }
 
-        //if(sliderValue != -1){
-        buttonDisabled.value = false
-        //}
+    const onButtonActivate = (e: any) => {
+        if(e.target.value){
+            buttonDisabled.value = false
+        } 
     }
 
     const buttonOnClick = () => {    
@@ -109,15 +140,14 @@ export default function Slider({lazyProps}: Props): ReactElement {
         }     
     } 
 
-    const title = lazyProps.title ? <p class="text-wrap font-bold mb-6 text-2xl"> {lazyProps.title} </p> : null
+    const title = lazyProps.title ? <p class="select-none text-wrap font-bold mb-6 text-2xl"> {lazyProps.title} </p> : null
 
-    const disabledClass = "bg-gray-300 px-4 py-2 rounded-md cursor-not-allowed opacity-50"
+    const disabledClass = "bg-gray-300 px-4 py-2 rounded-md cursor-not-allowed opacity-50 m-1"
     const enabledClass = "bg-sky-500 hover:bg-sky-700 text-white font-bold py-2 px-4 rounded m-1"
     let buttonClass = buttonDisabled.value ? disabledClass : enabledClass
-
     const buttonProps = {
         onClickCallback: buttonOnClick,
-        className: "w-1/4 "+buttonClass,
+        className: " "+buttonClass,
         label: lazyProps.buttonLabel,
         buttonDisabled: buttonDisabled.value
     }
@@ -128,14 +158,15 @@ export default function Slider({lazyProps}: Props): ReactElement {
 
     return <>
     <div key={uuidv4()} class={"w-full flex flex-col items-center " + lazyProps.mb}>
-    <div class={"w-11/12 relative mb-6 "+sliderClass}>
+    <div class={"w-11/12 relative mb-10 "+sliderClass}>
         {title}
-        <label for="labels-range-input"  class="block mb-2 text-xl text-wrap font-medium text-gray-900 dark:text-black" 
-            dangerouslySetInnerHTML={{ __html: lazyProps.questionText}} />
-        <input id="labels-range-input"  type="range" value={sliderValue} min={minValue} max={maxValue} 
-            step={step} class="w-full h-3 bg-gray-200  appearance-none cursor-pointer dark:bg-gray-700" 
-            onClick={onSliderChange} onTouchEnd={onSliderChange}/>
-        <div class="px-1 flex justify-between mt-0 text-xs text-gray-600">{tickMarks}</div>
+            <label for="labels-range-input"  class="block mb-2 text-xl text-wrap font-medium text-gray-900 dark:text-black" 
+                dangerouslySetInnerHTML={{ __html: lazyProps.questionText}} disabled={true}/>
+            <input ref={rangeRef} onInput={onSliderChange} onTouchEnd={onButtonActivate} onMouseUp={onButtonActivate} 
+                id="labels-range-input"  type="range" defaultValue={String(sliderValue)} min={minValue} max={maxValue} 
+                step={step} class="w-full h-5 bg-gray-200 appearance-none dark:bg-gray-700 mb-0 mt-0 select-none" 
+                />
+        <div class="px-1 flex justify-between mt-0 text-xxs text-gray-600">{tickMarks}</div>
         <span class="text-sm text-gray-500 dark:text-gray-400 absolute start-0 -bottom-6">{lazyProps.lowSliderText}</span>
         <span class="text-sm text-gray-500 dark:text-gray-400 absolute end-0 -bottom-6">{lazyProps.highSliderText}</span>  
     </div>

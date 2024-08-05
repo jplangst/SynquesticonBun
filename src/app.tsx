@@ -9,13 +9,13 @@ import { CommunicationsObject } from "./Communication/communicationModule";
 
 //TODO make it so that you can create a set of experiments, e.g. 
 //    experiments:[MarenBuzz(from json), CodeModule:download and clear (from the file itself), 
-//    MarenQuestionnaire(fromjson), CodeModule:download and clear (from the file itself)]
+//                 MarenQuestionnaire(fromjson), CodeModule:download and clear (from the file itself)]
 
 // Get any parameters encoded in the url
 const queryParameters = new URLSearchParams(window.location.search)
 const experimentName = queryParameters.get("exp") //Extract the experiment name
-//TODO add mqtt ip address to the url parameters (We might use a stiatic IP to the raspberry pie instead)
-
+let host:string|null = queryParameters.get("host")
+let port:string|number|null = queryParameters.get("port")
 
 export const roleSignal = signal(queryParameters.get("role")) //Extract the role from the url if it exists
 export const skipSignal = signal(queryParameters.get("skip")) //Signal to skip the current module
@@ -30,6 +30,32 @@ if(experimentDataSignal.value){
   // Connect to the communication method given in the experiment data
   if(experimentDataSignal.value){
     let communicationMethod = (experimentDataSignal.value as { communicationMethod: any }).communicationMethod;
+
+    // If the host was not provided in the url
+    if(!host){
+      // Check the experiment file
+      if(!communicationMethod.host){
+        host = "10.212.65.113"
+      }
+      else{
+        host = communicationMethod.host
+      }
+    }
+
+    // If the host was not provided in the url
+    if(!port){
+      // Check the experiment file
+      if(!communicationMethod.port){
+        port = 8080
+      }
+      else{
+        port = communicationMethod.port
+      }
+    }
+
+    communicationMethod.port = port 
+    communicationMethod.host = host
+
     await CommunicationsObject.value.connect(communicationMethod)
 
     console.log(communicationMethod.mqttTopics)
@@ -43,7 +69,7 @@ if(experimentDataSignal.value){
 export function App() {
   return (
     <>
-      <div class="min-h-screen min-v-screen">
+      <div class="h-svh w-svw m-0 p-0 select-none fixed overflow-hidden bg-sky-500">
         <ModuleRenderComponent experimentObject={experimentObjectSignal.value}/>
       </div>
     </>
