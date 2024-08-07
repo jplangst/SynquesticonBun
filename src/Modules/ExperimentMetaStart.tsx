@@ -1,18 +1,19 @@
 //External imports
 import type {ReactElement} from "react";
 import {ChangeEvent} from 'react';
-import { signal } from "@preact/signals";
+import { signal, batch } from "@preact/signals";
 import { v4 as uuidv4 } from 'uuid';
 
 // Our imports
 import {logEventSignal} from "../ModuleRenderComponent";
 
-import { experimentObjectSignal } from "../app";
+import { experimentObjectSignal, roleSignal, skipSignal} from "../app";
 import { handleMapFunctions } from "../Utils/Utils";
 import { commsMessageSignal } from "../Communication/communicationModule";
 import SetExperimentStartTimestampExternal from "../Scripts/SetExperimentTimestampExternal";
 
-const operatorStation = signal("")
+const hideRoleButtons = roleSignal.value ? true : false
+const operatorStation = roleSignal.value ? signal(roleSignal.value) : signal("")
 
 type Props = {
     lazyProps : any,
@@ -36,7 +37,12 @@ const onStationButtonClick = (response:string) => {
     operatorStation.value = response
 }
 
+let overviewHidden = false
 function ExperimentMetaStart({lazyProps}: Props):ReactElement {
+    const overviewHiddenChecked = () => {
+        overviewHidden = !overviewHidden
+    }
+
     let scriptsMap:null|Map<string, any> = null
     if(!experimentObjectSignal.value){
         return(<></>)
@@ -52,11 +58,21 @@ function ExperimentMetaStart({lazyProps}: Props):ReactElement {
         const updateMetaData = scriptsMap.get(lazyProps.operatorMetaClick.function)
         updateMetaData.default({runNumber:runNumber, role:operatorStation.value});
 
+        let skipValueTmp = "skip"
+        if (overviewHidden){
+            skipValueTmp = ""
+        }
+                   
         // Add the run number and operator role to the log
         let logObject = logEventSignal.value
         logObject.header = logObject.header + "Run;Role;StartTime;"
         logObject.data = logObject.data + runNumber + ";" + operatorStation.value +";" + new Date().toLocaleString() + ";"
-        logEventSignal.value = logObject
+        
+
+        batch(() => {
+            skipSignal.value = skipValueTmp
+            logEventSignal.value = logObject
+        });
 
         // If there is a on click prop call the corresponding function with the provided parameters
         if(lazyProps.onclick){ 
@@ -81,17 +97,23 @@ function ExperimentMetaStart({lazyProps}: Props):ReactElement {
 
     let buttonClassString =  "bg-sky-500 hover:bg-sky-700 text-white font-bold py-2 px-4 rounded m-1"
     
-    const stationButtons = lazyProps.operatorStationObjects.map((stationObject:any, index:number) => {
-        let selectedClass = ""
-        if(stationObject.metaKey === operatorStation.value){
-            selectedClass = " ring-2 ring-blue-900"
-        }
-        return (
-            <button type="button" className={buttonClassString+selectedClass+" row-start-2 col-start-"+(index+1)} onClick={() => onStationButtonClick(stationObject.metaKey)}>
-                {stationObject.label}
-            </button>
-        )
-    })
+    let stationButtons = null
+    if(hideRoleButtons){
+        stationButtons = <p>Your role is: {operatorStation.value}</p>
+    }
+    else{
+        stationButtons = lazyProps.operatorStationObjects.map((stationObject:any, index:number) => {
+            let selectedClass = ""
+            if(stationObject.metaKey === operatorStation.value){
+                selectedClass = " ring-2 ring-blue-900"
+            }
+            return (
+                <button type="button" className={buttonClassString+selectedClass+" row-start-2 col-start-"+(index+1)} onClick={() => onStationButtonClick(stationObject.metaKey)}>
+                    {stationObject.label}
+                </button>
+            )
+        })
+    }
 
     let runNumberLabel:any = <p className="row-start-1">Run number: </p>
     let runNumberInput:any = <TextEntry lazyProps={{ClassName:"row-start-1 col-start-2 col-span-1 resize-none", 
@@ -107,12 +129,20 @@ function ExperimentMetaStart({lazyProps}: Props):ReactElement {
         startButton = null
     }
 
+
+    const overviewHiddenCheckbox = <div className="row-start-2 col-span-3">
+            <label className="text-xl mr-5" for="overviewHidden">Overview display hidden</label>
+            <input className="m-s-2 w-8 h-8" checked={overviewHidden} type="checkbox" id="overviewHidden" onChange={overviewHiddenChecked}/>
+        </div>
+
+
     return (
         <>
         <p className="text-3xl mb-20">Experiment landing page</p>
         <div className="grid grid-cols-3 grid-rows-3 gap-8">
             {runNumberLabel}{runNumberInput}
             {stationButtons}
+            {overviewHiddenCheckbox}
             {startButton}   
         </div>
         </>

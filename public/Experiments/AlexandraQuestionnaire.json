@@ -32,10 +32,10 @@
         "module": "ExperimentMetaStart",
         "props": { 
           "operatorStationObjects":[
-            {"label": "Operator 1", "metaKey": "RO"},
-            {"label": "Operator 2", "metaKey": "TO"},
-            {"label": "Supervisor", "metaKey": "SS"},
-            {"label": "Supervisor", "metaKey": "STA"}
+            {"label": "RO", "metaKey": "RO"},
+            {"label": "TO", "metaKey": "TO"},
+            {"label": "SS", "metaKey": "SS"},
+            {"label": "STA", "metaKey": "STA"}
           ],
           "operatorMetaClick": {"function": "SetMetaData"},
           "onclick": [
@@ -216,7 +216,7 @@
         "module": "SliderTask",
         "props": { 
           "questionLogKey": "Var8",
-          "questionText": "How <b>easy</b> was this scenario",
+          "questionText": "How do you <b>rate</b> this scenario",
           "lowSliderText": "Very difficult",
           "highSliderText": "Very easy",
           "buttonLabel":"Answer",

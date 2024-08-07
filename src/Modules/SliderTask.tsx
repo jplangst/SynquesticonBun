@@ -154,7 +154,7 @@ export default function Slider({lazyProps}: Props): ReactElement {
 
     const answerButton = lazyProps.buttonLabel ? <Button lazyProps={buttonProps}/> : null
 
-    const sliderClass = buttonDisabled.value ? "slider" : ""
+    const sliderClass = buttonDisabled.value==true? "slider" : ""
 
     return <>
     <div key={uuidv4()} class={"w-full flex flex-col items-center " + lazyProps.mb}>
