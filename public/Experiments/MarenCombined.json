@@ -3,7 +3,7 @@
     "taskListName": "MarenCombined",
     "communicationMethod": {
       "type": "MQTT",
-      "host": "10.212.65.113",
+      "host": "127.0.0.1",
       "port": "8080",
       "mqttTopics": [
         "commands",
@@ -663,6 +663,148 @@
           }
         }
       ],  
+
+      [  
+        {
+          "type": "COMPONENT",
+          "module": "SliderTask",
+          "props": { 
+            "questionLogKey": "rc1",
+            "title": "Role clarity",
+            "questionText": "In this scenario, I knew exactly what was expected of me in my work role",
+            "lowSliderText": "Strongly disagree",
+            "highSliderText": "Strongly agree",
+            "buttonLabel":"Answer",
+            "onclick": {"function": "SetTaskIndex"},
+            "minValue": 1,
+            "maxValue": 7,
+            "defaultValue": 4,
+            "step": 1,
+            "displayTickNumbers": false
+          }
+        }
+      ], 
+      [  
+        {
+          "type": "COMPONENT",
+          "module": "SliderTask",
+          "props": { 
+            "questionLogKey": "rc2",
+            "title": "Role clarity",
+            "questionText": "In this scenario, I knew how to do my work",
+            "lowSliderText": "Strongly disagree",
+            "highSliderText": "Strongly agree",
+            "buttonLabel":"Answer",
+            "onclick": {"function": "SetTaskIndex"},
+            "minValue": 1,
+            "maxValue": 7,
+            "defaultValue": 4,
+            "step": 1,
+            "displayTickNumbers": false
+          }
+        }
+      ], 
+      [  
+        {
+          "type": "COMPONENT",
+          "module": "SliderTask",
+          "props": { 
+            "questionLogKey": "rc3",
+            "title": "Role clarity",
+            "questionText": "In this scenario, I knew what my responsibilities were",
+            "lowSliderText": "Strongly disagree",
+            "highSliderText": "Strongly agree",
+            "buttonLabel":"Answer",
+            "onclick": {"function": "SetTaskIndex"},
+            "minValue": 1,
+            "maxValue": 7,
+            "defaultValue": 4,
+            "step": 1,
+            "displayTickNumbers": false
+          }
+        }
+      ], 
+      [  
+        {
+          "type": "COMPONENT",
+          "module": "SliderTask",
+          "props": { 
+            "questionLogKey": "rc4",
+            "title": "Role clarity",
+            "questionText": "In this scenario, clearly planned goals and objectives existed for my work",
+            "lowSliderText": "Strongly disagree",
+            "highSliderText": "Strongly agree",
+            "buttonLabel":"Answer",
+            "onclick": {"function": "SetTaskIndex"},
+            "minValue": 1,
+            "maxValue": 7,
+            "defaultValue": 4,
+            "step": 1,
+            "displayTickNumbers": false
+          }
+        }
+      ], 
+
+      [  
+        {
+          "type": "COMPONENT",
+          "module": "SliderTask",
+          "props": { 
+            "questionLogKey": "wes1",
+            "title": "Engagement",
+            "questionText": "In this scenario, I felt bursting with energy",
+            "lowSliderText": "Strongly disagree",
+            "highSliderText": "Strongly agree",
+            "buttonLabel":"Answer",
+            "onclick": {"function": "SetTaskIndex"},
+            "minValue": 1,
+            "maxValue": 7,
+            "defaultValue": 4,
+            "step": 1,
+            "displayTickNumbers": false
+          }
+        }
+      ], 
+      [  
+        {
+          "type": "COMPONENT",
+          "module": "SliderTask",
+          "props": { 
+            "questionLogKey": "wes2",
+            "title": "Engagement",
+            "questionText": "In this scenario, I was enthusiastic about my work",
+            "lowSliderText": "Strongly disagree",
+            "highSliderText": "Strongly agree",
+            "buttonLabel":"Answer",
+            "onclick": {"function": "SetTaskIndex"},
+            "minValue": 1,
+            "maxValue": 7,
+            "defaultValue": 4,
+            "step": 1,
+            "displayTickNumbers": false
+          }
+        }
+      ], 
+      [  
+        {
+          "type": "COMPONENT",
+          "module": "SliderTask",
+          "props": { 
+            "questionLogKey": "wes3",
+            "title": "Engagement",
+            "questionText": "In this scenario, I was immersed in my work",
+            "lowSliderText": "Strongly disagree",
+            "highSliderText": "Strongly agree",
+            "buttonLabel":"Answer",
+            "onclick": {"function": "SetTaskIndex"},
+            "minValue": 1,
+            "maxValue": 7,
+            "defaultValue": 4,
+            "step": 1,
+            "displayTickNumbers": false
+          }
+        }
+      ], 
   
       [  
         {
