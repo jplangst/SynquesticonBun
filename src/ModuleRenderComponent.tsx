@@ -12,8 +12,14 @@ export const logEventSignal = signal({header:"",data:""})
 export const taskIndexSignal = signal(0)
 const moduleToRenderSignal = signal(null)
 
-//TODO consider how a run plan can be used to automate the setup of the experiments
+//TODO add an MQTT listener that listens for questionnaire and buzz answers on the experiment control module. Write the events to the local storage and eventlogsignal respectively. 
+//    We can reuse the logic that already exist in write event and download event. If writing buzz use the LocalStorage, if writing questionnaire responses use the EventLogSignal. 
+//TODO add MQTT messages when writing to the log file to broadcast the answer to the experiment controller.
+//TODO add a button that downloads the mqtt answers as csv file and clears the local storage and eventlogsignal. Download 2csv files. one for the buzz and one for the quest. Use the run number and buzz/quest file prefix
+
 //TODO refactor modules so that they use existing modules instead of making their own if possible
+
+//TODO Filename . Add another parameter to the download function that specifies a prefix to the filename. E.g. buzz_ or quest_ 
 
 // Get the module to be rendered from the current taskIndex
 function updateModuleToRender(experimentObject:any){

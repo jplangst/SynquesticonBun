@@ -3,7 +3,7 @@
     "taskListName": "MarenCombined",
     "communicationMethod": {
       "type": "MQTT",
-      "host": "127.0.0.1",
+      "host": "192.168.0.111",
       "port": "8080",
       "mqttTopics": [
         "commands",
@@ -170,7 +170,7 @@
             "longVibrationPulseDuration": 250,
             "shortVibrationPulseDuration": 50,
             "timeoutThreshold": 5,
-            "blackoutTime": 5,
+            "blackoutTime": 120,
             "mqttControlled": true,
             "showTimerInformation": false
           }
@@ -363,25 +363,7 @@
           }
         }
       ],  
-  
-      [  
-        {
-          "type": "COMPONENT",
-          "module": "SliderTask",
-          "props": { 
-            "roleConditional":"SS",
-            "questionLogKey": "Var9",
-            "title": "Mental demand",
-            "questionText": "How mentally demanding was the scenario for the <u>shift supervisor</u>?",
-            "lowSliderText": "Very low",
-            "highSliderText": "Very high",
-            "buttonLabel":"Answer",
-            "onclick": 
-              {"function": "SetTaskIndex"}
-          }
-        }
-      ],  
-  
+   
       [  
         {
           "type": "COMPONENT",

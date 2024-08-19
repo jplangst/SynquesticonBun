@@ -1,5 +1,5 @@
 import { saveAs } from 'file-saver';
-import { getUUID } from '../Logging/loggingModule';
+//import { getUUID } from '../Logging/loggingModule';
 
 import { logEventSignal, metaDataSignal } from '../ModuleRenderComponent';
 import { v4 as uuidv4 } from 'uuid';
@@ -19,7 +19,8 @@ export default function DownloadLogEvents(logSource:string){
         if(test){
             const eventString = JSON.parse(test)
             //Download log as a file
-            var file = new File([eventString], getUUID(), {type: "text/csv;charset=utf-8"});
+            const filename = "buzz_role_"+metaDataSignal.value.role+"_run_"+metaDataSignal.value.runNumber+"_"+uuidv4()
+            var file = new File([eventString], filename, {type: "text/csv;charset=utf-8"});
             saveAs(file);
         }
     }
@@ -29,7 +30,7 @@ export default function DownloadLogEvents(logSource:string){
         const eventData = removeTrailingSeperator(logObject.data)
 
         const eventString = headerData + "\n" + eventData
-        const filename = "role_"+metaDataSignal.value.role+"_run_"+metaDataSignal.value.runNumber+"_"+uuidv4()
+        const filename = "quest_role_"+metaDataSignal.value.role+"_run_"+metaDataSignal.value.runNumber+"_"+uuidv4()
         //Download log as a file
         var file = new File([eventString], filename, {type: "text/csv;charset=utf-8"});
         saveAs(file);       

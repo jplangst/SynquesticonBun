@@ -173,8 +173,6 @@ function BuzzResponse({lazyProps}: Props):ReactElement {
             clearTimeout(timer)
         }
 
-        
-
         //Write the event to the log
         if(!lazyProps.conditionalTraining){
             writeBuzzEvent(lazyProps,response)
@@ -200,9 +198,7 @@ function BuzzResponse({lazyProps}: Props):ReactElement {
     }
 
     //Used for logging purposes
-    //let startTimestamp = new Date()
     let buzzTimestamp = new Date()
-
 
     const stopBuzzExperiment = (lazyProps:any) => {
         //Guard against potential null value
@@ -228,6 +224,12 @@ function BuzzResponse({lazyProps}: Props):ReactElement {
                 stopBuzzExperiment(lazyProps)
             }
         }
+    }
+
+    if(commsMessageSignal.value && commsMessageSignal.value.topic==="commands" && commsMessageSignal.value.message.experimentStarted===false){
+        console.log(commsMessageSignal.value)
+        const timeoutResponse = "INTERRUPTED"
+        onBuzzButtonClick(timeoutResponse, lazyProps)
     }
 
     //Get the correct render object based on the state of the component: blank screen or stimuli

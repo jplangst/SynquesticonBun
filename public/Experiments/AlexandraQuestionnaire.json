@@ -274,6 +274,24 @@
       }
     ],
 
+    [  
+      {
+        "type": "COMPONENT",
+        "module": "TextItemTask",
+        "props": { 
+          "label":"The questionnaire is over, please hand the device back to the Halden staff\n"
+        }
+      },
+      {
+        "type": "COMPONENT",
+        "module": "Button",
+        "props": { 
+          "label":"For Halden staff",
+          "onclick": {"function": "SetTaskIndex"}
+        }
+      }
+    ],  
+
     [
       {
         "type": "COMPONENT",
