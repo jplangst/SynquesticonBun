@@ -16,8 +16,8 @@ type Props = {
     lazyProps : any,
 };
 
-const shortResponse = "FAST"
-const longResponse = "SLOW"
+const fastResponse = "FAST"
+const slowResponse = "SLOW"
 
 let lastBuzzStimulusDuration = -1
 let timer:number = 0
@@ -73,11 +73,11 @@ function BuzzResponse({lazyProps}: Props):ReactElement {
             return (
                 <>
                 <div class="size-full flex">
-                    <button type="button" className={buttonClassString} onClick={() => onBuzzButtonClick(shortResponse, lazyProps)} onTouchStart={() => onBuzzButtonClick(shortResponse, lazyProps)}>
-                            {shortResponse}
+                    <button type="button" className={buttonClassString} onClick={() => onBuzzButtonClick(fastResponse, lazyProps)} onTouchStart={() => onBuzzButtonClick(fastResponse, lazyProps)}>
+                            {fastResponse}
                     </button>
-                    <button type="button" className={buttonClassString} onClick={() => onBuzzButtonClick(longResponse, lazyProps)} onTouchStart={() => onBuzzButtonClick(shortResponse, lazyProps)}>
-                            {longResponse}
+                    <button type="button" className={buttonClassString} onClick={() => onBuzzButtonClick(slowResponse, lazyProps)} onTouchStart={() => onBuzzButtonClick(slowResponse, lazyProps)}>
+                            {slowResponse}
                     </button>
                 </div>
                 </>
@@ -119,7 +119,10 @@ function BuzzResponse({lazyProps}: Props):ReactElement {
         const responseTimestamp = new Date()
         const relativeTimeDifference = getTimeDifference(experimentStartTimestampSignal.value.masterTimestamp,buzzTimestamp) //Time difference relative to experiment start
         //const timeDifference = getTimeDifference(startTimestamp,buzzTimestamp) //Time difference relative to module start timestamp
-        const accuracy = (lastBuzzStimulusDuration==lazyProps.shortVibrationPulseDuration && responseIn==shortResponse) || (lastBuzzStimulusDuration==lazyProps.longVibrationPulseDuration && responseIn==longResponse)
+        
+        const stimuliDurationCheck = (lastBuzzStimulusDuration===lazyProps.shortVibrationPulseDuration) ? fastResponse : slowResponse
+        const accuracy = (stimuliDurationCheck===responseIn) ? 1 : 0
+        //const accuracy = (lastBuzzStimulusDuration==lazyProps.shortVibrationPulseDuration && responseIn==fastResponse) || (lastBuzzStimulusDuration==lazyProps.longVibrationPulseDuration && responseIn==slowResponse)
 
         // Run Number | Role | Buzz Number | BuzzTimestamp-Abs | BuzzTimestamp-Rel | 
         // Response Time (relative to BuzzTimestamp-Abs) | Stimulus Duration | Response | Accuracy
@@ -136,7 +139,7 @@ function BuzzResponse({lazyProps}: Props):ReactElement {
             //onsetTimestamp:timeDifference,
             stimulusDuration:lastBuzzStimulusDuration,
             response:responseIn,
-            accuracy: accuracy ? 1 : 0,
+            accuracy: accuracy,
             trainingEvent: lazyProps.conditionalTraining ? true : false
         }
 
@@ -163,8 +166,8 @@ function BuzzResponse({lazyProps}: Props):ReactElement {
     }
 
     const presentBuzzStimuli = (lazyProps:any) => {
-        let vibrationType = Math.random() > .5 ? "short" : "long"
-        lastBuzzStimulusDuration = vibrationType === "long" ? lazyProps.longVibrationPulseDuration : lazyProps.shortVibrationPulseDuration
+        let vibrationType = Math.random() > .5 ? fastResponse : slowResponse
+        lastBuzzStimulusDuration = (vibrationType === slowResponse) ? lazyProps.longVibrationPulseDuration : lazyProps.shortVibrationPulseDuration
         buzzTimestamp = new Date()
 
         const nmbPulses = Math.floor(lazyProps.vibrationDuration/(lastBuzzStimulusDuration+lastBuzzStimulusDuration))

@@ -17,6 +17,7 @@ const experimentName = queryParameters.get("exp") //Extract the experiment name
 let host:string|null = queryParameters.get("host")
 let port:string|number|null = queryParameters.get("port")
 
+
 export const roleSignal = signal(queryParameters.get("role")) //Extract the role from the url if it exists
 export const skipSignal = signal(queryParameters.get("skip")) //Signal to skip the current module
 // Load the experiment json file on start

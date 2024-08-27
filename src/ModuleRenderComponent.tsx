@@ -3,11 +3,17 @@ import { signal} from "@preact/signals"
 import {useEffect, Suspense, useRef} from 'react';
 import { callScript } from './Utils/Utils';
 
+import { v4 as uuidv4 } from 'uuid';
+export const deviceLogUUID = uuidv4()
+
+
 export const experimentStartTimestampSignal = signal({masterTimestamp: new Date(), slaveTimestamp: new Date()})
 console.log("Module Render :" + experimentStartTimestampSignal.value.masterTimestamp.toString())
 export const metaDataSignal = signal({runNumber:1,role:"Operator 1"})
 export const logEventSignal = signal({header:"",data:""})
 //export const skipSignal = signal(false)
+
+
 
 export const taskIndexSignal = signal(0)
 export const toastMessageSignal = signal({text:"", display:"hidden"})
@@ -33,7 +39,7 @@ function updateModuleToRender(experimentObject:any){
 }
 
 export function toastMessage(message:string, duration:number){
-    toastMessageSignal.value = {text:message, display:"block"}
+    toastMessageSignal.value = {text:message, display:""} //Was "block"
     setTimeout(() => {
         toastMessageSignal.value = {text:"", display:"hidden"}
     }, duration*1000);
@@ -126,21 +132,23 @@ function ModuleRenderComponent({experimentObject}:any) {
                               className={"select-none bg-sky-500 hover:bg-sky-700 text-white py-2 px-4 rounded m-1 absolute bottom-5 right-5 text-lg"}>
                                 Enter fullscreen</button>  
 
+    //NB make sure everything that should be visible in fullscreen is inside the moduleRef div!!
     return (
         <>
             <div className="h-full w-full fixed overflow-hidden" ref={moduleRef}>
             <Suspense fallback={<></>}> 
-                <div  className="select-none flex flex-col h-full w-full bg-sky-100 
-                items-center justify-center">
-                    {moduleToRenderSignal.value}   
-                </div>     
-            </Suspense>
-            </div>
 
-            <div className={"fixed w-full bottom-20 flex place-content-center "+toastMessageSignal.value.display}>
-                <div className="bg-gray-900 relative text-white p-4 text-lg rounded-md ">
+              <div className={"z-40 absolute flex w-full h-full place-content-center items-center "+toastMessageSignal.value.display}>
+                <div className="flex bg-gray-900 text-white p-4 text-7xl rounded-md ">
                   <p>{toastMessageSignal.value.text}</p>
                 </div>
+              </div> 
+
+              <div  className="z-0 select-none flex flex-col h-full w-full bg-sky-100 
+              items-center justify-center">
+                  {moduleToRenderSignal.value}   
+              </div>  
+            </Suspense>          
             </div>
 
             {fullScreenButton}  

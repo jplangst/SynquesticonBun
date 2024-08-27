@@ -1,10 +1,12 @@
 // Write a log event to the browsers local storage
 // NB currently only used for the BuzzingExperiment
 
+import { deviceLogUUID } from "../ModuleRenderComponent";
+
 export default function writeEvent(eventData:any){
 
     // Get the stored log events
-    let eventLog = localStorage.getItem("eventLog")
+    let eventLog = localStorage.getItem("eventLog"+deviceLogUUID)
 
     //Parse the event into a csv line
     // Run Number | Role | Buzz Number | BuzzTimestamp-Abs | BuzzTimestamp-Rel | 
@@ -28,5 +30,5 @@ export default function writeEvent(eventData:any){
     }
 
     // Update the local storage
-    localStorage.setItem("eventLog", JSON.stringify(eventLog))
+    localStorage.setItem("eventLog"+deviceLogUUID, JSON.stringify(eventLog))
 }

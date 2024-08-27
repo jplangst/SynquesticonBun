@@ -117,7 +117,6 @@ function MarenMasterBuzz({lazyProps}: Props):ReactElement {
         ClearEventStorage()
     }
 
-
     let trainingStatus = null
 
     // Handle logging event messages
@@ -136,7 +135,7 @@ function MarenMasterBuzz({lazyProps}: Props):ReactElement {
                     scriptsMap.get("WriteEvent").default(logMessage.eventObject)
                 }
             }
-        } //Recieved a questionnair eevent
+        } //Recieved a questionnaire eevent
         else if(logMessage.eventType === "quest"){
             //The message will contain the header and one row of data
             const eventObject = logMessage.eventObject
