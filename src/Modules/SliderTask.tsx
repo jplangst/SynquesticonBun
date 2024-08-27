@@ -37,12 +37,16 @@ export default function Slider({lazyProps}: Props): ReactElement {
                 const touch = e.touches[0];
                 const touchX = touch.clientX - rect.left;
                 const value = (touchX / rect.width) * (parseFloat(rangeRef.current.max) - parseFloat(rangeRef.current.min)) + parseFloat(rangeRef.current.min);
+
+                console.log("Calculated value: " + value)
+
                 rangeRef.current.value = value.toString();
                 const changeEvent = new Event('input', { bubbles: false });
                 rangeRef.current.dispatchEvent(changeEvent);
                 //rangeRef.current.focus();
             }
         };
+
         const rangeElement = rangeRef.current;
         if (rangeElement) {
             rangeElement.addEventListener('touchstart', handleTouchStart);
@@ -113,7 +117,6 @@ export default function Slider({lazyProps}: Props): ReactElement {
 
         if(e.target.value){
             sliderValue = e.target.value
-            console.log(sliderValue)
         } 
     }
 
@@ -130,6 +133,12 @@ export default function Slider({lazyProps}: Props): ReactElement {
         }
 
         //Update the log object
+        if(rangeRef.current){
+            sliderValue = Number(rangeRef.current.value)
+        }
+
+        console.log("Recorded slider value: ", sliderValue)
+        
         let logObject = logEventSignal.value
         logObject.header = logObject.header + lazyProps.questionLogKey+";"
         logObject.data = logObject.data + sliderValue + ";"

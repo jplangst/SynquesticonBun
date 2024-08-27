@@ -10,7 +10,10 @@ export const logEventSignal = signal({header:"",data:""})
 //export const skipSignal = signal(false)
 
 export const taskIndexSignal = signal(0)
+export const toastMessageSignal = signal({text:"", display:"hidden"})
 const moduleToRenderSignal = signal(null)
+
+//TODO consider creating unique local storage objects so that multiple instances on a single device do not affect each other. Maybe just add some UIDD or something. 
 
 //TODO add an MQTT listener that listens for questionnaire and buzz answers on the experiment control module. Write the events to the local storage and eventlogsignal respectively. 
 //    We can reuse the logic that already exist in write event and download event. If writing buzz use the LocalStorage, if writing questionnaire responses use the EventLogSignal. 
@@ -29,10 +32,17 @@ function updateModuleToRender(experimentObject:any){
     moduleToRenderSignal.value = experimentObject.taskRenderObjects[taskIndexSignal.value]
 }
 
+export function toastMessage(message:string, duration:number){
+    toastMessageSignal.value = {text:message, display:"block"}
+    setTimeout(() => {
+        toastMessageSignal.value = {text:"", display:"hidden"}
+    }, duration*1000);
+}
+
 function ModuleRenderComponent({experimentObject}:any) {
     const moduleRef = useRef<HTMLDivElement | null>(null);
     const fullscreenRef = useRef<HTMLButtonElement | null>(null);
-    
+
     useEffect(() => {
         console.log(moduleRef.current);
       }, []);
@@ -126,6 +136,13 @@ function ModuleRenderComponent({experimentObject}:any) {
                 </div>     
             </Suspense>
             </div>
+
+            <div className={"fixed w-full bottom-20 flex place-content-center "+toastMessageSignal.value.display}>
+                <div className="bg-gray-900 relative text-white p-4 text-lg rounded-md ">
+                  <p>{toastMessageSignal.value.text}</p>
+                </div>
+            </div>
+
             {fullScreenButton}  
         </>
     )

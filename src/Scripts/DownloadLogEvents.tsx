@@ -3,6 +3,7 @@ import { saveAs } from 'file-saver';
 
 import { logEventSignal, metaDataSignal } from '../ModuleRenderComponent';
 import { v4 as uuidv4 } from 'uuid';
+import { CommunicationsObject } from '../Communication/communicationModule';
 
 function removeTrailingSeperator(csvString:string) {
     if (csvString[csvString.length-1] === ";") {
@@ -15,9 +16,9 @@ function removeTrailingSeperator(csvString:string) {
 // Should be triggered at the end of an experiment
 export default function DownloadLogEvents(logSource:string){
     if(logSource === "localStorage"){
-        let test = localStorage.getItem("eventLog")
-        if(test){
-            const eventString = JSON.parse(test)
+        let eventLog = localStorage.getItem("eventLog")
+        if(eventLog){
+            const eventString = JSON.parse(eventLog)
             //Download log as a file
             const filename = "buzz_role_"+metaDataSignal.value.role+"_run_"+metaDataSignal.value.runNumber+"_"+uuidv4()
             var file = new File([eventString], filename, {type: "text/csv;charset=utf-8"});
@@ -25,9 +26,22 @@ export default function DownloadLogEvents(logSource:string){
         }
     }
     else if (logSource === "eventLogSignal"){
+        console.log("Downloading from eventLogSignal")
         let logObject = logEventSignal.value
-        const headerData = removeTrailingSeperator(logObject.header)
-        const eventData = removeTrailingSeperator(logObject.data)
+        let headerData = removeTrailingSeperator(logObject.header)
+        let eventData = removeTrailingSeperator(logObject.data)
+              
+        //TODO testing broadcasting the csv data at this stage (seems to work, need to test on multiple devices)
+        // Check to see that the role is defined, otherwise it will be the master controller and we do not want to broadcast the data
+        if (metaDataSignal.value.role){
+            //Only update the header and data if role is defined, otherwise it will be the master controller and we do not want to update data as it is already done on the clients
+            headerData = "Run number;Role;"+headerData        
+            eventData =  metaDataSignal.value.runNumber+";"+metaDataSignal.value.role +";"+eventData
+
+            let logEvent = {header:headerData, data:eventData}
+            const commsObject = CommunicationsObject.value
+            commsObject.publish(commsObject.loggingTopic, {eventType:"quest", eventObject: logEvent, source:metaDataSignal.value.role})
+        }
 
         const eventString = headerData + "\n" + eventData
         const filename = "quest_role_"+metaDataSignal.value.role+"_run_"+metaDataSignal.value.runNumber+"_"+uuidv4()

@@ -5,16 +5,19 @@ import { useSignal, signal, batch } from "@preact/signals";
 
 // Our imports
 import { experimentObjectSignal } from "../app";
-import { experimentStartTimestampSignal } from "../ModuleRenderComponent";
+import { experimentStartTimestampSignal, toastMessage } from "../ModuleRenderComponent";
 import {metaDataSignal} from '../ModuleRenderComponent';
 import { getHHMMSSMSMS, getTimeDifference } from "../Utils/Utils";
-import {commsMessageSignal} from '../Communication/communicationModule';
+import {CommunicationsObject, commsMessageSignal} from '../Communication/communicationModule';
 
 const timeObject = signal({nextBuzzTimestampInMasterTime: new Date(), updatedMasterTimestamp: new Date(), timeUntilBuzzEvent: 0})
 
 type Props = {
     lazyProps : any,
 };
+
+const shortResponse = "FAST"
+const longResponse = "SLOW"
 
 let lastBuzzStimulusDuration = -1
 let timer:number = 0
@@ -65,8 +68,7 @@ function BuzzResponse({lazyProps}: Props):ReactElement {
             }, lazyProps.timeoutThreshold*1000));
     
             let buttonClassString = "w-1/2 h-11/12 bg-sky-500 hover:bg-sky-700 text-white font-bold text-7xl py-2 px-4 rounded m-1"
-            const shortResponse = "FAST"
-            const longResponse = "SLOW"
+
 
             return (
                 <>
@@ -111,18 +113,13 @@ function BuzzResponse({lazyProps}: Props):ReactElement {
         }
     }
 
-    //Write the buzz response event to the log
-    const writeBuzzEvent = (lazyProps:any, responseIn:string) => {
-        if(!experimentObjectSignal.value){
-            return
-        }
-
+    const createAnswerObject = (responseIn:string) => {
         const metaDataObject = metaDataSignal.value
 
         const responseTimestamp = new Date()
         const relativeTimeDifference = getTimeDifference(experimentStartTimestampSignal.value.masterTimestamp,buzzTimestamp) //Time difference relative to experiment start
         //const timeDifference = getTimeDifference(startTimestamp,buzzTimestamp) //Time difference relative to module start timestamp
-        const accuracy = (lastBuzzStimulusDuration==lazyProps.shortVibrationPulseDuration && responseIn=="SHORT") || (lastBuzzStimulusDuration==lazyProps.longVibrationPulseDuration && responseIn=="LONG")
+        const accuracy = (lastBuzzStimulusDuration==lazyProps.shortVibrationPulseDuration && responseIn==shortResponse) || (lastBuzzStimulusDuration==lazyProps.longVibrationPulseDuration && responseIn==longResponse)
 
         // Run Number | Role | Buzz Number | BuzzTimestamp-Abs | BuzzTimestamp-Rel | 
         // Response Time (relative to BuzzTimestamp-Abs) | Stimulus Duration | Response | Accuracy
@@ -139,7 +136,17 @@ function BuzzResponse({lazyProps}: Props):ReactElement {
             //onsetTimestamp:timeDifference,
             stimulusDuration:lastBuzzStimulusDuration,
             response:responseIn,
-            accuracy: accuracy ? 1 : 0
+            accuracy: accuracy ? 1 : 0,
+            trainingEvent: lazyProps.conditionalTraining ? true : false
+        }
+
+        return event
+    }
+
+    //Write the buzz response event to the log
+    const writeBuzzEvent = (event:any) => {
+        if(!experimentObjectSignal.value){
+            return
         }
 
         // Write the event to file
@@ -173,9 +180,19 @@ function BuzzResponse({lazyProps}: Props):ReactElement {
             clearTimeout(timer)
         }
 
-        //Write the event to the log
+        const answerObject = createAnswerObject(response)
+        //Write the answer to the log
         if(!lazyProps.conditionalTraining){
-            writeBuzzEvent(lazyProps,response)
+            writeBuzzEvent(answerObject)
+        }
+        else{
+            const toastText = answerObject.accuracy ? "Correct" : "Incorrect"
+            toastMessage(toastText, 2)
+        }
+        // Broadcast the answer over mqtt if configured to do so
+        if(lazyProps.broadcastAnswers){
+            const commsObject = CommunicationsObject.value
+            commsObject.publish(commsObject.loggingTopic, {eventType:"buzz", eventObject: answerObject})
         }
 
         // Increment the task count

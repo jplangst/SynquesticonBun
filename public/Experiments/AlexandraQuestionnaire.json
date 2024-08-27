@@ -3,7 +3,7 @@
   "taskListName": "Default Experiment",
   "communicationMethod": {
     "type": "MQTT",
-    "host": "192.168.0.102",
+    "host": "192.168.0.111",
     "port": "8080"
   },
   "loggingMethod": {

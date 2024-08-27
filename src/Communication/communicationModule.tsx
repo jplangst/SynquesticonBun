@@ -5,6 +5,7 @@ export const commsMessageSignal:null|any = signal(null)
 
 const eventLogTopic = "events"
 const commandsTopic = "commands"
+const loggingTopic = "logging"
 let communicationDetails = {
     type: "local",
     clientUUID: uuidv4(),
@@ -23,6 +24,7 @@ export type CommunicationContextType = {
     disconnect:() => void;
     eventLogTopic:string;
     commandsTopic:string;
+    loggingTopic:string;
 }
 
 async function prepareCommsObjectSync(communicationDetails:any){
@@ -83,6 +85,7 @@ const signalObject = {
     "subscribe":subscribe,
     "disconnect":disconnect,
     "eventLogTopic":eventLogTopic,
-    "commandsTopic":commandsTopic
+    "commandsTopic":commandsTopic,
+    "loggingTopic":loggingTopic
 }
 export const CommunicationsObject = signal(signalObject)

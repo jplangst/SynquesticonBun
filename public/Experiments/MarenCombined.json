@@ -155,7 +155,8 @@
             "timeoutThreshold": 3,
             "blackoutTime": 5,
             "mqttControlled": false,
-            "taskRepetitions": 9
+            "taskRepetitions": 9,
+            "broadcastAnswers": true
           }
         }
       ],
@@ -172,7 +173,8 @@
             "timeoutThreshold": 5,
             "blackoutTime": 120,
             "mqttControlled": true,
-            "showTimerInformation": false
+            "showTimerInformation": false,
+            "broadcastAnswers": true
           }
         }
       ],
@@ -197,7 +199,7 @@
           "type": "COMPONENT",
           "module": "TextItemTask",
           "props": { 
-            "label":"You will now be given questionnaires",
+            "label":"You will now be given questionnaires. When you are ready, press \"Continue\".",
             "classString":"relative w-11/12 text-wrap mb-20"
           }
         },
