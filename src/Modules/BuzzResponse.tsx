@@ -140,7 +140,8 @@ function BuzzResponse({lazyProps}: Props):ReactElement {
             stimulusDuration:lastBuzzStimulusDuration,
             response:responseIn,
             accuracy: accuracy,
-            trainingEvent: lazyProps.conditionalTraining ? true : false
+            trainingEvent: lazyProps.conditionalTraining ? true : false,
+            showFeedback: lazyProps.showFeedback
         }
 
         return event
@@ -188,7 +189,7 @@ function BuzzResponse({lazyProps}: Props):ReactElement {
         if(!lazyProps.conditionalTraining){
             writeBuzzEvent(answerObject)
         }
-        else{
+        else if (lazyProps.presentFeedback){
             const toastText = answerObject.accuracy ? "Correct" : "Incorrect"
             toastMessage(toastText, 2)
         }

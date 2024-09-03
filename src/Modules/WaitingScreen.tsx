@@ -24,7 +24,8 @@ function WaitingScreen({lazyProps}: Props):ReactElement {
 
     scriptsMap = (experimentObjectSignal.value as { scriptsMap: Map<string, any> }).scriptsMap;
     
-    const buttonOnClick = () => {    
+    //TODO should just set the index from the comms message here instead of going through the text item module!!!
+    const buttonOnClick = (commsMessage:any) => {    
         if (!scriptsMap) 
             return
     
@@ -38,10 +39,20 @@ function WaitingScreen({lazyProps}: Props):ReactElement {
         logObject.data = logObject.data + runNumber + ";" + roleSignal.value +";"
         logEventSignal.value = logObject
 
-        // If there is a on click prop call the corresponding function with the provided parameters
-        if(lazyProps.onclick){ 
-            handleMapFunctions(scriptsMap, lazyProps.onclick)
-        }     
+        //Check which message was sent and set task index accordingly
+        if(commsMessage.startBuzz){
+            if(commsMessage.performTraining){
+                handleMapFunctions(scriptsMap, lazyProps.buzzTrainingStart)
+            }
+            else if(lazyProps.buzzStart){ 
+                handleMapFunctions(scriptsMap, lazyProps.buzzStart)
+            }     
+        }
+        else if(commsMessage.startQuestionnaire){
+            if(lazyProps.questionnaireStart){ 
+                handleMapFunctions(scriptsMap, lazyProps.questionnaireStart)
+            }     
+        }
     } 
 
     if(commsMessageSignal.value && commsMessageSignal.value.topic==="commands"){
@@ -51,9 +62,9 @@ function WaitingScreen({lazyProps}: Props):ReactElement {
         let performTraining = commsMessageSignal.value.message.performTraining
         skipSignal.value = !performTraining
 
-        if(commsMessageSignal.value.message.experimentStarted){
-            buttonOnClick()
-        }
+        //if(commsMessageSignal.value.message.experimentStarted){
+        buttonOnClick(commsMessageSignal.value.message)
+        //}
 
         //Clear the comms message
         if(performTraining){

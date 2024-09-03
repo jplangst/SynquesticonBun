@@ -6,6 +6,7 @@ export const commsMessageSignal:null|any = signal(null)
 const eventLogTopic = "events"
 const commandsTopic = "commands"
 const loggingTopic = "logging"
+const commsStatus = "commsStatus"
 let communicationDetails = {
     type: "local",
     clientUUID: uuidv4(),
@@ -86,6 +87,7 @@ const signalObject = {
     "disconnect":disconnect,
     "eventLogTopic":eventLogTopic,
     "commandsTopic":commandsTopic,
-    "loggingTopic":loggingTopic
+    "loggingTopic":loggingTopic,
+    "commsStatusTopic": commsStatus
 }
 export const CommunicationsObject = signal(signalObject)

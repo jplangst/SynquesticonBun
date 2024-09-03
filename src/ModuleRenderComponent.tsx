@@ -4,6 +4,9 @@ import {useEffect, Suspense, useRef} from 'react';
 import { callScript } from './Utils/Utils';
 
 import { v4 as uuidv4 } from 'uuid';
+
+import {CommunicationsObject} from './Communication/communicationModule';
+
 export const deviceLogUUID = uuidv4()
 
 
@@ -53,7 +56,17 @@ function ModuleRenderComponent({experimentObject}:any) {
         console.log(moduleRef.current);
       }, []);
 
+    const requestScreenLock = async () => {
+      try{
+        await navigator.wakeLock.request()
+      }catch(e){
+        console.log(e)
+      }    
+    }
+
     const enterFullscreen = () => {
+        requestScreenLock()
+
         const elem = moduleRef.current;
         if(!elem){
           return
@@ -104,6 +117,13 @@ function ModuleRenderComponent({experimentObject}:any) {
         }
       };
 
+      const broadcastCommsStatus = () =>{
+        const commsObject = CommunicationsObject.value
+        if (metaDataSignal.value.role !== null && metaDataSignal.value.role !== undefined){
+        commsObject.publish(commsObject.commsStatusTopic, {role:metaDataSignal.value.role})
+     }
+
+
     // Call any scripts that are to be called on task mount and unmount
     useEffect(() => {
         const currentTaskIndex = taskIndexSignal.value
@@ -116,8 +136,15 @@ function ModuleRenderComponent({experimentObject}:any) {
         //  fullscreenRef.current.click()
         //}
 
+        //TODO send status message over MQTT on timer to indicate connection is ok!
+        const intervalCommsStatusSignal = setInterval(() => {
+            broadcastCommsStatus()
+        },1000*10)
+
         // Call script on task unmount
         return () => {
+            clearInterval(intervalCommsStatusSignal)
+
             if(experimentObject.codeModulesMap){
                 callScript(experimentObject, currentTaskIndex, "onUnload")
             }
