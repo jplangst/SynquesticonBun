@@ -23,8 +23,6 @@ let runNumber = "1"
 let trainingStatusMap = new Map<string, any>()
 let commsStatusMap = new Map<string, any>()
 
-//TODO split Maren Combined into buzz and questionnaire? Or set task index instead and keep combined...
-
 //TODO use the TextEntry module instead :P having three copies is silly, it is easy to send a on value 
 // change handler to get the value in the module that wants it.
 function TextEntry({lazyProps}: Props): ReactElement {
@@ -58,6 +56,8 @@ function MarenMasterBuzz({lazyProps}: Props):ReactElement {
     }
 
     const buzzStartClicked = () => {
+        clearTrainingStatus()
+
         const commsObject = CommunicationsObject.value
         const startOfExperimentTimestamp = new Date()
         commsObject.publish(commsObject.commandsTopic, {runNumber:runNumber, startBuzz:true, 
@@ -70,6 +70,8 @@ function MarenMasterBuzz({lazyProps}: Props):ReactElement {
         const startOfExperimentTimestamp = new Date()
         commsObject.publish(commsObject.commandsTopic, {runNumber:runNumber, startBuzz:false, 
             performTraining:performTraining, startTimestamp:startOfExperimentTimestamp.toString()})
+
+        clearTrainingStatus()
     }
 
     const broadcastQuestionnaireStart = () => {
@@ -107,7 +109,7 @@ function MarenMasterBuzz({lazyProps}: Props):ReactElement {
 
     let buttonClassString =  "bg-sky-500 hover:bg-sky-700 text-white font-bold py-2 px-4 rounded m-1"
     
-    const experimentButton = experimentStarted.value ? "Stop Experiment" : "Start Experiment"
+    //const experimentButton = experimentStarted.value ? "Stop Experiment" : "Start Experiment"
 
     //TODO update and display comms status 
     //TODO need to set status to offline again. Maybe create a function that 
@@ -128,36 +130,43 @@ function MarenMasterBuzz({lazyProps}: Props):ReactElement {
     }
 
     const addOrUpdateCommsStatus = (commsObject:any) => {
-        console.log("Adding comms status", commsObject)
-
-        const clearCommsTimer = Number(setTimeout((role:string) => {
-            setCommsStatusOff(role)
-        }, lazyProps.timeoutThreshold*12000));
+        const clearCommsTimer = Number(setTimeout(() => {
+            setCommsStatusOff(commsObject.role)
+        }, lazyProps.timeoutThreshold*1000));
 
         // The map already contains this role, so update the value
-        if(commsStatusMap.has(commsObject.eventObject.role)){
-            let updatedLogObject = commsStatusMap.get(commsObject.eventObject.role)
+        if(commsStatusMap.has(commsObject.role)){
+            let updatedLogObject = commsStatusMap.get(commsObject.role)
             updatedLogObject.status = "Ok"
-            updatedLogObject.clearTimeout.clear()
+            clearTimeout(updatedLogObject.clearTimeout)
             updatedLogObject.clearTimeout = clearCommsTimer
-            commsStatusMap.set(commsObject.eventObject.role, updatedLogObject)
+            commsStatusMap.set(commsObject.role, updatedLogObject)
         }
         else{
-            commsStatusMap.set(commsObject.eventObject.role, {status:"Ok", clearTimeout:clearCommsTimer})
-        }
+            commsStatusMap.set(commsObject.role, {status:"Ok", clearTimeout:clearCommsTimer})
+        } 
+    }
 
-        const commsStatusElements =
+    const getCommsStatusObjects = () => {
+        const commsStatusElements = 
             Array.from(commsStatusMap).map(([key, value]) => (
-            <p className="flex-auto text-2xl mr-5">{key}: {value.nmbCorrectAnswers}/{value.nmbAnswers}</p>
-            ))
+            <p className="flex-auto text-2xl mr-5">{key}: {value.status}</p>
+            )) 
 
         const commsStatus = <div className="flex flex-col mt-10"><p className="flex-auto text-2xl">Comms status:</p><div className="flex flex-row">{commsStatusElements}</div></div>
 
         return commsStatus
     }
 
+    const clearTrainingStatus = () => {
+        // Clear the map
+        trainingStatusMap = new Map<string, any>()
+        // Clear the comms signal
+        //commsMessageSignal.value.topic = ""
+    }
+
     const addOrUpdateTrainingStatus = (logObject:any) => {
-        console.log("Adding training status", logObject)
+        console.log(logObject)
         // The map already contains this role, so update the value
         if(trainingStatusMap.has(logObject.eventObject.role)){
             let updatedLogObject = trainingStatusMap.get(logObject.eventObject.role)
@@ -168,13 +177,18 @@ function MarenMasterBuzz({lazyProps}: Props):ReactElement {
         else{
             trainingStatusMap.set(logObject.eventObject.role, {nmbAnswers:1, nmbCorrectAnswers:logObject.eventObject.accuracy})
         }
+    }
 
+    const getTrainingStatusObjects = () => {
         const trainingStatusElements =
-            Array.from(trainingStatusMap).map(([key, value]) => (
-            <p className="flex-auto text-2xl mr-5">{key}: {value.nmbCorrectAnswers}/{value.nmbAnswers}</p>
-            ))
+        Array.from(trainingStatusMap).map(([key, value]) => (
+        <p className="flex-auto text-2xl mr-5">{key}: {value.nmbCorrectAnswers}/{value.nmbAnswers}</p>
+        ))
 
-        const trainingStatus = <div className="flex flex-col mt-10"><p className="flex-auto text-2xl">Training status:</p><div className="flex flex-row">{trainingStatusElements}</div></div>
+        let trainingStatus = null
+        if (trainingStatusElements.length > 0){
+            trainingStatus = <div className="flex flex-col mt-10"><p className="flex-auto text-2xl">Buzz status:</p><div className="flex flex-row">{trainingStatusElements}</div></div>
+        } 
 
         return trainingStatus
     }
@@ -200,15 +214,20 @@ function MarenMasterBuzz({lazyProps}: Props):ReactElement {
         if(logMessage.eventType === "buzz"){ //TODO should add these event types into the comms object as well so we only have to change the string once in there.
             // Training buzz event
             if(logMessage.eventObject.trainingEvent || logMessage.eventObject.showFeedback){
-                trainingStatus = addOrUpdateTrainingStatus(logMessage)
-            }
-            else{ // Proper buzz event - recordevent to the log
-                if(experimentObjectSignal.value){
-                    // Write the event to file
-                    const scriptsMap = (experimentObjectSignal.value as { scriptsMap: Map<string, any> }).scriptsMap;
-                    scriptsMap.get("WriteEvent").default(logMessage.eventObject)
+
+                if(logMessage.eventObject.response !== "INTERRUPTED"){
+                    addOrUpdateTrainingStatus(logMessage)
                 }
+                
             }
+            //else{ // Proper buzz event - recordevent to the log
+            // Check if the event should be logged
+            if(experimentObjectSignal.value && !logMessage.eventObject.trainingEvent){
+                // Write the event to file
+                const scriptsMap = (experimentObjectSignal.value as { scriptsMap: Map<string, any> }).scriptsMap;
+                scriptsMap.get("WriteEvent").default(logMessage.eventObject)
+            }
+            //}
         } //Recieved a questionnaire eevent
         else if(logMessage.eventType === "quest"){
             //The message will contain the header and one row of data
@@ -220,11 +239,14 @@ function MarenMasterBuzz({lazyProps}: Props):ReactElement {
         }     
     }
 
+    trainingStatus = getTrainingStatusObjects()
+
     // Comms status messages
-    if(commsMessageSignal.value && commsMessageSignal.value.topic===CommunicationsObject.value.loggingTopic) {
+    if(commsMessageSignal.value && commsMessageSignal.value.topic===CommunicationsObject.value.commsStatusTopic) {
         const logMessage = commsMessageSignal.value.message
         addOrUpdateCommsStatus(logMessage)
     }
+    commsStatus = getCommsStatusObjects()
 
     //TODO disable buttons when relevant
     return (
@@ -237,21 +259,16 @@ function MarenMasterBuzz({lazyProps}: Props):ReactElement {
             <label className="text-xl row-start-2 col-start-1" for="trainingCheck">Administer Training</label>
             <input className="m-s-2 w-8 h-8 row-start-2 col-start-2" checked={performTraining} type="checkbox" id="trainingCheck" onChange={trainingChecked}/>
 
-            <button type="button" className={buttonClassString+"row-start-3 col-start-2"} 
-                onClick={buttonOnClick}>{lazyProps.label}
-                {experimentButton}
-            </button>  
-
-            <button type="button" className={buttonClassString+"row-start-3 col-start-2"} 
-                onClick={buttonOnClick}>
+            <button type="button" className={buttonClassString+"row-start-3 col-start-1"} 
+                onClick={buzzStartClicked}>
                 Start Buzz
             </button>    
-            <button type="button" className={buttonClassString+"row-start-3 col-start-2"} 
-                onClick={buttonOnClick}>
+            <button type="button" className={buttonClassString+"row-start-4 col-start-2"} 
+                onClick={buzzStopClicked}>
                 Stop Buzz
             </button>    
-            <button type="button" className={buttonClassString+"row-start-3 col-start-2"} 
-                onClick={buttonOnClick}>
+            <button type="button" className={buttonClassString+"row-start-3 col-start-3"} 
+                onClick={broadcastQuestionnaireStart}>
                 Start Questionnaire
             </button>        
         </div>

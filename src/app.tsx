@@ -3,6 +3,7 @@ import { signal } from "@preact/signals"
 import ModuleRenderComponent from "./ModuleRenderComponent";
 import { fetchExperiment, fetchData } from "./Utils/Utils";
 import { CommunicationsObject } from "./Communication/communicationModule";
+import { roleSignal } from "./SignalStore";
 
 //TODO due to safety reasons it is not possible to auto enter fullscreen. Could add a module that only 
 //  has a fullscreen button that goes fullscreen and then moves to next task...
@@ -18,8 +19,10 @@ let host:string|null = queryParameters.get("host")
 let port:string|number|null = queryParameters.get("port")
 
 
-export const roleSignal = signal(queryParameters.get("role")) //Extract the role from the url if it exists
-export const skipSignal = signal(queryParameters.get("skip")) //Signal to skip the current module
+//export const roleSignal = signal(queryParameters.get("role")) //Extract the role from the url if it exists
+roleSignal.value = queryParameters.get("role")
+
+export const skipSignal = signal<string|boolean|null>(queryParameters.get("skip")) //Signal to skip the current module
 // Load the experiment json file on start
 export const experimentDataSignal = signal(null)
 await fetchExperiment(experimentDataSignal, experimentName)

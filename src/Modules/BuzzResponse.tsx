@@ -37,6 +37,7 @@ function BuzzResponse({lazyProps}: Props):ReactElement {
         //Clear the interval when the component is unmounted
         return () => {
             clearInterval(intervalDriverSignal)
+            clearTimeout(timer)
         }
     }, [])
 
@@ -61,7 +62,7 @@ function BuzzResponse({lazyProps}: Props):ReactElement {
         else{
             // From the rendering of the stimuli to the response there is a timeout threshold
             //Clear the timeout timer if it alreacy exist
-            //clearTimeout(timer) //NB testing. Thinking it should be cleared anyway???
+            clearTimeout(timer) //NB testing. Thinking it should be cleared anyway???
             timer = Number(setTimeout(() => {
                 const timeoutResponse = "TIMED OUT"
                 onBuzzButtonClick(timeoutResponse, lazyProps)
@@ -234,7 +235,17 @@ function BuzzResponse({lazyProps}: Props):ReactElement {
     }
 
     const mqttControlledExperiment = (lazyProps:any) => {
-        console.log(commsMessageSignal.value)
+        if(commsMessageSignal.value && commsMessageSignal.value.topic==="commands"){
+            const experimentStarted = commsMessageSignal.value.message.experimentStarted
+            if(!experimentStarted){
+                stopBuzzExperiment(lazyProps)
+            }
+        }
+
+        onRepetitionButtonClick()
+        
+        
+        /*console.log(commsMessageSignal.value)
         if(commsMessageSignal.value && commsMessageSignal.value.topic==="commands"){
             const experimentStarted = commsMessageSignal.value.message.experimentStarted
             if(experimentStarted){
@@ -244,11 +255,11 @@ function BuzzResponse({lazyProps}: Props):ReactElement {
             else{
                 stopBuzzExperiment(lazyProps)
             }
-        }
+        }*/
     }
-
-    if(commsMessageSignal.value && commsMessageSignal.value.topic==="commands" && commsMessageSignal.value.message.experimentStarted===false){
-        console.log(commsMessageSignal.value)
+    
+    //if(commsMessageSignal.value && commsMessageSignal.value.topic==="commands" && commsMessageSignal.value.message.experimentStarted===false){
+    if(commsMessageSignal.value && commsMessageSignal.value.topic==="commands" && commsMessageSignal.value.message.startBuzz===false){
         const timeoutResponse = "INTERRUPTED"
         onBuzzButtonClick(timeoutResponse, lazyProps)
     }

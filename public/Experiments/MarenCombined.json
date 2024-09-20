@@ -62,7 +62,7 @@
           "props": { 
             "skipValue": true,
             "label":"We will now demonstrate the vibration alert. First, you get three examples of a <b>FAST</b> vibration.",
-            "classString":"relative w-11/12 text-wrap mb-20",
+            "classString":"relative w-11/12 text-wrap mb-20"
           }
         },
         {
@@ -197,7 +197,7 @@
         {
           "type": "CODE",
           "module": "SetTaskIndex",
-          "props": {"runType": "onLoad" }
+          "props": {"runType": "onLoad", "functionInput": 1}
         }
       ],
     

@@ -4,7 +4,8 @@ import type {ReactElement} from "react";
 // Our imports
 import {logEventSignal} from "../ModuleRenderComponent";
 
-import { experimentObjectSignal, roleSignal, skipSignal } from "../app";
+import { experimentObjectSignal, skipSignal } from "../app";
+import {roleSignal} from "../SignalStore";
 import { handleMapFunctions } from "../Utils/Utils";
 import { commsMessageSignal } from "../Communication/communicationModule";
 import SetExperimentStartTimestampExternal from "../Scripts/SetExperimentTimestampExternal";
@@ -67,12 +68,16 @@ function WaitingScreen({lazyProps}: Props):ReactElement {
         //}
 
         //Clear the comms message
-        if(performTraining){
-            commsMessageSignal.value = null
-        }
+        //if(performTraining){
+        commsMessageSignal.value = null
+        //}
     }
 
-    let fullScreenInstruction = document.fullscreenElement ? null : <p className="w-full text-3xl text-wrap">Please "Enter fullscreen" and wait for the experimenter to start the experiment.</p>
+    console.log(document.fullscreenElement)
+    let fullScreenInstruction = document.fullscreenElement != null ? null : <p className="w-full text-3xl text-wrap">Please "Enter fullscreen" and wait for the experimenter to start the experiment.</p>
+
+    //TODO add event listener for fullscreen change and update the fullScreenInstruction accordingly. Just hide the instruction for now. 
+    fullScreenInstruction = null
 
     return (
         <>

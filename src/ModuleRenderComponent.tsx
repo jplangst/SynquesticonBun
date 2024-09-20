@@ -6,17 +6,16 @@ import { callScript } from './Utils/Utils';
 import { v4 as uuidv4 } from 'uuid';
 
 import {CommunicationsObject} from './Communication/communicationModule';
-
 export const deviceLogUUID = uuidv4()
 
 
 export const experimentStartTimestampSignal = signal({masterTimestamp: new Date(), slaveTimestamp: new Date()})
 console.log("Module Render :" + experimentStartTimestampSignal.value.masterTimestamp.toString())
-export const metaDataSignal = signal({runNumber:1,role:"Operator 1"})
+export const metaDataSignal = signal({runNumber:-1,role:""})
 export const logEventSignal = signal({header:"",data:""})
 //export const skipSignal = signal(false)
 
-
+import { roleSignal } from "./SignalStore";
 
 export const taskIndexSignal = signal(0)
 export const toastMessageSignal = signal({text:"", display:"hidden"})
@@ -48,6 +47,7 @@ export function toastMessage(message:string, duration:number){
     }, duration*1000);
 }
 
+let screenLock = null
 function ModuleRenderComponent({experimentObject}:any) {
     const moduleRef = useRef<HTMLDivElement | null>(null);
     const fullscreenRef = useRef<HTMLButtonElement | null>(null);
@@ -58,9 +58,24 @@ function ModuleRenderComponent({experimentObject}:any) {
 
     const requestScreenLock = async () => {
       try{
-        await navigator.wakeLock.request()
+        const anyNav:any = navigator
+        if('wakeLock' in anyNav){
+          anyNav.screenLock = await navigator.wakeLock.request('screen')
+
+          toastMessage("Screen lock acquired", 3)
+        }     
+        //else{
+          //toastMessage("No wakeLock avaliable", 3)
+        //}
       }catch(e){
         console.log(e)
+        let err_message = "Failed to aquire Screen lock "
+        if (typeof e === "string") {
+            err_message += e
+        } else if (e instanceof Error) {
+            err_message += e.message // works, `e` narrowed to Error
+        }
+        toastMessage(err_message, 3)
       }    
     }
 
@@ -119,10 +134,27 @@ function ModuleRenderComponent({experimentObject}:any) {
 
       const broadcastCommsStatus = () =>{
         const commsObject = CommunicationsObject.value
-        if (metaDataSignal.value.role !== null && metaDataSignal.value.role !== undefined){
-        commsObject.publish(commsObject.commsStatusTopic, {role:metaDataSignal.value.role})
-     }
+          commsObject.publish(commsObject.commsStatusTopic, {role:roleSignal.value})
+      };
 
+
+    // Handle things that should be done at start and end of the ModuleRender components lifetime
+    //TODO send status message over MQTT on timer to indicate connection is ok!
+    useEffect(() => {
+      var intervalCommsStatusSignal:any = null
+      console.log("ROLE: ", roleSignal.value)
+      if(roleSignal.value){
+        intervalCommsStatusSignal = setInterval(() => {
+            broadcastCommsStatus()
+        },1000*10)
+      }
+
+      return () => {
+      if(intervalCommsStatusSignal !== null){
+        clearInterval(intervalCommsStatusSignal)
+      }
+    } 
+    },[])
 
     // Call any scripts that are to be called on task mount and unmount
     useEffect(() => {
@@ -136,15 +168,8 @@ function ModuleRenderComponent({experimentObject}:any) {
         //  fullscreenRef.current.click()
         //}
 
-        //TODO send status message over MQTT on timer to indicate connection is ok!
-        const intervalCommsStatusSignal = setInterval(() => {
-            broadcastCommsStatus()
-        },1000*10)
-
         // Call script on task unmount
         return () => {
-            clearInterval(intervalCommsStatusSignal)
-
             if(experimentObject.codeModulesMap){
                 callScript(experimentObject, currentTaskIndex, "onUnload")
             }
