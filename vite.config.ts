@@ -16,7 +16,7 @@ export default defineConfig({
       //cert: readFileSync('./cert.pem')
     //},
     host: true, 
-    port: 5138,
+    port: 5137,
     //proxy: {}
   },
   plugins: [preact()],

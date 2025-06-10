@@ -13,6 +13,8 @@ function removeTrailingSeperator(csvString:string) {
     return csvString
 }
 
+//TODO the metadata signal is missing data regarding the run number now. Probably because i switched signals?
+
 // Downloads the logged events from the browsers local storage
 // Should be triggered at the end of an experiment
 export default function DownloadLogEvents(logSource:string){

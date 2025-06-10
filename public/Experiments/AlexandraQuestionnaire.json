@@ -51,7 +51,7 @@
         "type": "COMPONENT",
         "module": "TextItemTask",
         "props": { 
-            "label": "You will be asked to answer several items. Please choose the number that fits best with your experience according to each scale.",
+            "label": "You will be asked to answer several questions. Please choose the number that fits best with your experience according to each scale.",
             "classString":"relative w-11/12 text-wrap mb-20"
         }
       },

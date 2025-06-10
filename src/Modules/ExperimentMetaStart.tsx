@@ -7,7 +7,8 @@ import { v4 as uuidv4 } from 'uuid';
 // Our imports
 import {logEventSignal} from "../ModuleRenderComponent";
 
-import { experimentObjectSignal, roleSignal, skipSignal} from "../app";
+import {roleSignal} from "../SignalStore";
+import { experimentObjectSignal, skipSignal} from "../app";
 import { handleMapFunctions } from "../Utils/Utils";
 import { commsMessageSignal } from "../Communication/communicationModule";
 import SetExperimentStartTimestampExternal from "../Scripts/SetExperimentTimestampExternal";
