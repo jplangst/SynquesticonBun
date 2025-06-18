@@ -39,9 +39,11 @@ export default function DownloadLogEvents(logSource:string){
         console.log("Role value: ", metaDataSignal.value.role)
         if (metaDataSignal.value.role !== null && metaDataSignal.value.role !== undefined && metaDataSignal.value.role !== ""){
             console.log("BROADCASTING EVENT LOG")
+            
+            //TODO check the reasoning behind this. It does not seem neccessary? The master and the waiting screen will already take care of this
             //Only update the header and data if role is defined, otherwise it will be the master controller and we do not want to update data as it is already done on the clients
-            headerData = "Run number;Role;"+headerData        
-            eventData =  metaDataSignal.value.runNumber+";"+metaDataSignal.value.role +";"+eventData
+            //headerData = "Run number;Role;"+headerData        
+            //eventData =  metaDataSignal.value.runNumber+";"+metaDataSignal.value.role +";"+eventData
 
             let logEvent = {header:headerData, data:eventData}
             const commsObject = CommunicationsObject.value

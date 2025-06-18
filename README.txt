@@ -5,3 +5,7 @@ listener 1883
 listener 8080
 protocol websockets
 allow_anonymous true
+
+## Synquesticon
+run command "npm install" in the root directory in CMD
+run command "npm run dev" to start in CMD

@@ -1,0 +1,70 @@
+{
+  "taskListUID": "8e8c0fda-cd4d-11ed-afa1-0242ac120004",
+  "taskListName": "HTO73-master",
+  "communicationMethod": {
+    "type": "MQTT",
+    "host": "192.168.0.111",
+    "port": "8080",
+    "mqttTopics": [
+      "logging",
+      "commsStatus"
+    ]
+  },
+  "loggingMethod": {
+    "type": "local",
+    "logFormater": "default",
+    "logInOneLine": true
+  },
+  "stylingFile": "sadas.css",
+  "taskStack": [
+    [
+      {
+        "type": "CODE",
+        "module": "ClearEventStorage",
+        "props": { "functionInput": null, "runType": "onUnload" }
+      },
+      {
+        "type": "CODE",
+        "module": "SetTaskIndex",
+        "props": { "functionInput": 1, "runType": "onLoad" }
+      }
+    ],
+
+    [  
+      {
+        "type": "COMPONENT",
+        "module": "HTO73_master",
+        "props": { 
+          "operatorStationObjects":[
+            {"label": "Operator 1", "metaKey": "Op1"},
+            {"label": "Operator 2", "metaKey": "Op2"},
+            {"label": "Supervisor", "metaKey": "SS"}
+          ],
+          "operatorMetaClick": {"function": "SetMetaData"},
+          "onclick": [
+            {"function": "SetTaskIndex"}
+          ],
+          "timeoutThreshold" : 15
+        }
+      }
+    ],
+        
+    [
+      {
+        "type": "COMPONENT",
+        "module": "TextItemTask",
+        "props": { 
+          "label":"Data file downloaded, refresh to start again."
+        }
+      },
+      {
+        "type": "CODE",
+        "module": "DownloadLogEvents",
+        "props": { 
+          "runType": "onLoad",
+          "functionInput": "eventLogSignal"
+        }
+      }
+    ]
+  ]
+}
