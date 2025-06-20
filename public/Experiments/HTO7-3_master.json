@@ -4,7 +4,7 @@
   "communicationMethod": {
     "type": "MQTT",
     "host": "192.168.0.111",
-    "port": "9001",
+    "port": "9002",
     "mqttTopics": [
       "logging",
       "commsStatus"
