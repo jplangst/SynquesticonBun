@@ -9,12 +9,12 @@ export default defineConfig({
     outDir: 'dist'
   },
   server: {
-    //https: {
+    https: {
       //key: readFileSync('./selfsigned.key'),
       //cert: readFileSync('./selfsigned.crt')
-      //key: readFileSync('./privkey.pem'),
-      //cert: readFileSync('./cert.pem')
-    //},
+      key: readFileSync('./SSA_certificate/key.pem'),
+      cert: readFileSync('./SSA_certificate/cert.pem')
+    },
     host: true, 
     port: 5137,
     //proxy: {}

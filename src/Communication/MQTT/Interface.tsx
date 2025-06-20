@@ -12,8 +12,8 @@ export default {
       const clientId = clientUUID;
       const username = "";
       const password = "";
-      const url = `mqtt://${host}:${port}/mqtt`;
-      //const url = `wss://${host}:${port}`;
+      //const url = `mqtt://${host}:${port}/mqtt`;
+      const url = `wss://${host}:${port}`;
       const options:any = {
           keepalive: 30,
           protocolId: 'MQTT',
@@ -21,8 +21,8 @@ export default {
           clean: true,
           reconnectPeriod: 1000,
           connectTimeout: 30 * 1000,
-          rejectUnauthorized: false
-          //secureProtocol: 'TLSv1_2_method'
+          rejectUnauthorized: false,
+          secureProtocol: 'TLSv1_2_method'
       };
       options.clientId = clientId;
       options.username = username;
