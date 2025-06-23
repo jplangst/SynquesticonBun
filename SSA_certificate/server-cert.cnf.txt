@@ -1,0 +1,22 @@
+[ req ]
+default_bits       = 2048
+prompt             = no
+distinguished_name = req_distinguished_name
+req_extensions     = v3_req
+
+[ req_distinguished_name ]
+C  = US
+ST = State
+L  = City
+O  = Example Org
+CN = 192.168.0.111
+
+[ v3_req ]
+subjectAltName = @alt_names
+basicConstraints = CA:FALSE
+keyUsage = digitalSignature, keyEncipherment
+extendedKeyUsage = serverAuth
+
+[ alt_names ]
+IP.1 = 192.168.0.111
+DNS.1 = localhost
