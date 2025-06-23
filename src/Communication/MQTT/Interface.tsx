@@ -21,8 +21,8 @@ export default {
           clean: true,
           reconnectPeriod: 1000,
           connectTimeout: 30 * 1000,
-          rejectUnauthorized: false,
-          secureProtocol: 'TLSv1_2_method'
+          rejectUnauthorized: true,
+          //secureProtocol: 'TLSv1_3_method'
       };
       options.clientId = clientId;
       options.username = username;
