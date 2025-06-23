@@ -17,8 +17,10 @@ type Props = {
     lazyProps : any,
 };
 
+const audio = new Audio('Sounds/notificationAlert.mp3'); // Replace with correct path
+audio.load(); // preload it
+
 function notifyUser() {
-    const audio = new Audio('Sounds/notificationAlert.mp3'); // Replace with correct path
     audio.play().catch(e => console.error('Audio playback failed:', e));
 }
 
