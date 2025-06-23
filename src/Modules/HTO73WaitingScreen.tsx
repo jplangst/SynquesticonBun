@@ -1,10 +1,11 @@
 //External imports
 import type {ReactElement} from "react";
+import { useEffect } from "react";
 
 // Our imports
 import {logEventSignal} from "../ModuleRenderComponent";
 
-import { experimentObjectSignal, skipSignal } from "../app";
+import { experimentObjectSignal } from "../app";
 import {roleSignal} from "../SignalStore";
 import { handleMapFunctions } from "../Utils/Utils";
 import { commsMessageSignal } from "../Communication/communicationModule";
@@ -19,12 +20,31 @@ type Props = {
 
 const audio = new Audio('Sounds/notificationAlert.mp3'); // Replace with correct path
 audio.load(); // preload it
+let audioUnlocked = false;
+
+function unlockAudioOnFirstTap() {
+    if (audioUnlocked) return;
+
+    audio.play().then(() => {
+        audio.pause(); // Pause immediately
+        audioUnlocked = true;
+        console.log("✅ Audio unlocked by user tap");
+    }).catch(err => {
+        console.warn("⚠️ Audio unlock failed:", err);
+    });
+}
 
 function notifyUser() {
     audio.play().catch(e => console.error('Audio playback failed:', e));
 }
 
 function HTO73WaitingScreen({lazyProps}: Props):ReactElement {
+    useEffect(() => {
+        // Attach a one-time listener to unlock audio
+        document.addEventListener("touchstart", unlockAudioOnFirstTap, { once: true });
+        document.addEventListener("click", unlockAudioOnFirstTap, { once: true });
+    }, []);
+
     let scriptsMap:null|Map<string, any> = null
 
     if(!experimentObjectSignal.value){
@@ -49,24 +69,28 @@ function HTO73WaitingScreen({lazyProps}: Props):ReactElement {
         logEventSignal.value = logObject
 
         //Check which message was sent and set task index accordingly
-        console.log(commsMessage)
+        let shouldNotify = true
         if(commsMessage.startInScenario){
-            notifyUser()
             if(lazyProps.inScenario){ 
                 handleMapFunctions(scriptsMap, lazyProps.inScenario)
             }       
         }
         else if(commsMessage.startEndOfScenario){
-            notifyUser()
             if(lazyProps.endOfScenario){ 
                 handleMapFunctions(scriptsMap, lazyProps.endOfScenario)
             }     
         }
         else if(commsMessage.startEndOfStudy){
-            notifyUser()
             if(lazyProps.endOfStudy){ 
                 handleMapFunctions(scriptsMap, lazyProps.endOfStudy)
             }     
+        }
+        else{
+            shouldNotify = false;
+        }
+
+        if (shouldNotify){
+            notifyUser();
         }
     } 
 
@@ -75,24 +99,10 @@ function HTO73WaitingScreen({lazyProps}: Props):ReactElement {
         runNumber = commsMessageSignal.value.message.runNumber
         SetExperimentStartTimestampExternal(commsMessageSignal.value.message.startTimestamp)
 
-        //let performTraining = commsMessageSignal.value.message.performTraining
-        //skipSignal.value = !performTraining
-
-        //if(commsMessageSignal.value.message.experimentStarted){
         buttonOnClick(commsMessageSignal.value.message)
-        //}
 
-        //Clear the comms message
-        //if(performTraining){
         commsMessageSignal.value = null
-        //}
     }
-
-    console.log(document.fullscreenElement)
-    let fullScreenInstruction = document.fullscreenElement != null ? null : <p className="w-full text-3xl text-wrap">Please "Enter fullscreen" and wait for the experimenter to start the experiment.</p>
-
-    //TODO add event listener for fullscreen change and update the fullScreenInstruction accordingly. Just hide the instruction for now. 
-    fullScreenInstruction = null
 
     return (
         <>
@@ -100,7 +110,6 @@ function HTO73WaitingScreen({lazyProps}: Props):ReactElement {
             <div class="mx-5 relative mt-5">
                 <p className="w-full text-wrap text-3xl mb-10">Your role is: {roleSignal.value}.</p>
                 <div className="w-full text-wrap text-3xl mb-10" dangerouslySetInnerHTML={{ __html: lazyProps.instruction}}/>
-                {fullScreenInstruction}
             </div>
         </div>
         </>
