@@ -88,12 +88,32 @@ export default function MultipleQuestionWrapper({lazyProps}: Props): ReactElemen
             if(lazyProps.onclick){ 
                 //Update the log object with the data from all the child questions
                 let logObject = logEventSignal.value[lazyProps.questionnaireKey]
-                answers.forEach((value, key) => {
-                    logObject.header = logObject.header + key+";" 
-                    logObject.data = logObject.data + -1 + ";"
-                    logObject.questionnaireKey = lazyProps.questionnaireKey
-                });
-                logEventSignal.value[lazyProps.questionnaireKey] = logObject
+
+                if (logObject) {
+                    // Key exists, update the data
+                    answers.forEach((value, key) => {
+                        logObject.header = logObject.header + key+";" 
+                        logObject.data = logObject.data + -1 + ";"
+                        logObject.questionnaireKey = lazyProps.questionnaireKey
+                    });
+                    logEventSignal.value[lazyProps.questionnaireKey] = logObject
+                } else {
+                    let newLogObject = {
+                        header:"",
+                        data:"",
+                        questionnaireKey: lazyProps.questionnaireKey
+                    }
+                    answers.forEach((value, key) => {
+                        newLogObject.header = newLogObject.header + key+";" 
+                        newLogObject.data = newLogObject.data + -1 + ";"
+                        newLogObject.questionnaireKey = lazyProps.questionnaireKey
+                    });
+
+                    logEventSignal.value = {
+                        ...logEventSignal.value,
+                        [newLogObject.questionnaireKey]: newLogObject
+                    };
+                }
 
                 handleMapFunctions(scriptsMap, lazyProps.onclick)
             }  
@@ -113,14 +133,35 @@ export default function MultipleQuestionWrapper({lazyProps}: Props): ReactElemen
             return
         }
 
+
         //Update the log object with the data from all the child questions
         let logObject = logEventSignal.value[lazyProps.questionnaireKey]
-        answers.forEach((value, key) => {
-            logObject.header = logObject.header + key+";" 
-            logObject.data = logObject.data + value + ";"
-            logObject.questionnaireKey = lazyProps.questionnaireKey
-        });
-        logEventSignal.value[lazyProps.questionnaireKey] = logObject
+
+        if (logObject) {
+            // Key exists, update the data
+            answers.forEach((value, key) => {
+                logObject.header = logObject.header + key+";" 
+                logObject.data = logObject.data + value + ";"
+                logObject.questionnaireKey = lazyProps.questionnaireKey
+            });
+            logEventSignal.value[lazyProps.questionnaireKey] = logObject
+        } else {
+            let newLogObject = {
+                header:"",
+                data:"",
+                questionnaireKey: lazyProps.questionnaireKey
+            }
+            answers.forEach((value, key) => {
+                newLogObject.header = newLogObject.header + key+";" 
+                newLogObject.data = newLogObject.data + value + ";"
+                newLogObject.questionnaireKey = lazyProps.questionnaireKey
+            });
+
+            logEventSignal.value = {
+                ...logEventSignal.value,
+                [newLogObject.questionnaireKey]: newLogObject
+            };
+        }
 
         // Reset the map just in case
         setAnswers(new Map())
