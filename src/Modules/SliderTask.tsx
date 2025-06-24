@@ -64,10 +64,11 @@ export default function Slider({lazyProps}: Props): ReactElement {
 
         if(shouldSkip){
             if(lazyProps.onclick){ 
-                //Update the log object
-                let logObject = logEventSignal.value
+                let logObject = logEventSignal.value[lazyProps.questionnaireKey]
                 logObject.header = logObject.header + lazyProps.questionLogKey+";"
                 logObject.data = logObject.data + -1 + ";"
+                logObject.questionnaireKey = lazyProps.questionnaireKey
+                logEventSignal.value[lazyProps.questionnaireKey] = logObject
 
                 handleMapFunctions(scriptsMap, lazyProps.onclick)
             }  
@@ -154,9 +155,11 @@ export default function Slider({lazyProps}: Props): ReactElement {
 
         console.log("Recorded slider value: ", sliderValue)
         
-        let logObject = logEventSignal.value
+        let logObject = logEventSignal.value[lazyProps.questionnaireKey]
         logObject.header = logObject.header + lazyProps.questionLogKey+";"
         logObject.data = logObject.data + sliderValue + ";"
+        logObject.questionnaireKey = lazyProps.questionnaireKey
+        logEventSignal.value[lazyProps.questionnaireKey] = logObject
     
         // If there is a on click prop call the corresponding function with the provided parameters
         if(lazyProps.onclick){ 

@@ -123,22 +123,41 @@ function HTO73_master({lazyProps}: Props):ReactElement {
     // Handle logging event messages
     if(commsMessageSignal.value && commsMessageSignal.value.topic===CommunicationsObject.value.loggingTopic){
         const logMessage = commsMessageSignal.value.message
-        //Received a buzz event
-        if(logMessage.eventType === "buzz"){ //TODO should add these event types into the comms object as well so we only have to change the string once in there.
-            // Check if the event should be logged
-            if(experimentObjectSignal.value && !logMessage.eventObject.trainingEvent){
-                // Write the event to file
-                const scriptsMap = (experimentObjectSignal.value as { scriptsMap: Map<string, any> }).scriptsMap;
-                scriptsMap.get("WriteEvent").default(logMessage.eventObject)
-            }
-        } //Recieved a questionnaire eevent
-        else if(logMessage.eventType === "quest"){
+
+        if(logMessage.eventType === "quest"){
             //The message will contain the header and one row of data
             const eventObject = logMessage.eventObject
+
+            //Get the current log data for the questionnaire key
+            const questLogData = logEventSignal.value[eventObject.questionnaireKey];
+            if (questLogData) {
+                // Key exists, do something with questLogData
+                console.log(questLogData.header);
+                questLogData.header = eventObject.header
+                questLogData.data = questLogData.data + eventObject.data + "\n" 
+                questLogData.questionnaireKey = eventObject.questionnaireKey
+
+                logEventSignal.value = {
+                    ...logEventSignal.value,
+                    [questLogData.questionnaireKey]: questLogData,
+                };
+            } else {
+                // Key does not exist — maybe initialize it?
+                logEventSignal.value = {
+                    ...logEventSignal.value,
+                    [eventObject.questionnaireKey]: {
+                        header: eventObject.header,
+                        data: eventObject.data + "\n",
+                        questionnaireKey: eventObject.questionnaireKey,
+                    }
+                };
+            }
+
             //Update the log object
-            let logObject = logEventSignal.value
-            logObject.header = eventObject.header
-            logObject.data = logObject.data + eventObject.data + "\n"  //Append a new row of data
+            //let logObject = logEventSignal.value
+            //logObject.header = eventObject.header
+            //logObject.data = logObject.data + eventObject.data + "\n"  //Append a new row of data
+            //logObject.questionnaireKey = eventObject.questionnaireKey
         }     
     }
 

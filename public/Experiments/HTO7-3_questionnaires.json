@@ -61,6 +61,7 @@
           "type": "COMPONENT",
           "module": "MultipleQuestionWrapper",
           "props": { 
+            "questionnaireKey": "InScenario",
             "childQuestions":       
             [  
               {
@@ -147,6 +148,7 @@
           "type": "COMPONENT",
           "module": "MultipleQuestionWrapper",
           "props": { 
+            "questionnaireKey": "EndOfScenario",
             "childQuestions":       
             [  
               {
@@ -212,6 +214,7 @@
         {
           "type": "COMPONENT",
           "module": "SliderTask",
+          "questionnaireKey": "EndOfScenario",
           "props": { 
             "questionLogKey": "Trust",
             "questionText": "Please rate the degree to which you trusted the information coming from the cyber engineer",
@@ -254,6 +257,7 @@
           "type": "COMPONENT",
           "module": "MultipleQuestionWrapper",
           "props": { 
+            "questionnaireKey": "EndOfStudy",
             "childQuestions":       
             [  
               {
@@ -346,87 +350,88 @@
           "type": "COMPONENT",
           "module": "MultipleQuestionWrapper",
           "props": { 
+            "questionnaireKey": "EndOfStudy",
             "childQuestions":       
             [  
               {
-          "type": "COMPONENT",
-          "module": "SliderTask",
-          "props": { 
-            "questionLogKey": "uncert7",
-            "title": "Please consider your personal life outside of the work context. Rate the degree to which these statements apply to you.",
-            "questionText": "I easily adapt to novelty.  ",
-            "lowSliderText": "Never",
-            "highSliderText": "Always",
-            "minValue": 1,
-            "maxValue": 7,
-            "step": 1
-          }
-        },
-        {
-          "type": "COMPONENT",
-          "module": "SliderTask",
-          "props": { 
-            "questionLogKey": "uncert8",
-            "questionText": "When uncertain about what to do next, I tend to feel lost.",
-            "lowSliderText": "Never",
-            "highSliderText": "Always",
-            "minValue": 1,
-            "maxValue": 7,
-            "step": 1
-          }
-        },
-        {
-          "type": "COMPONENT",
-          "module": "SliderTask",
-          "props": { 
-            "questionLogKey": "uncert9",
-            "questionText": "When facing an uncertain situation, I tend to prepare as much as possible, and then hope for the best.",
-            "lowSliderText": "Never",
-            "highSliderText": "Always",
-            "minValue": 1,
-            "maxValue": 7,
-            "step": 1
-          }
-        },
-        {
-          "type": "COMPONENT",
-          "module": "SliderTask",
-          "props": { 
-            "questionLogKey": "uncert10",
-            "questionText": "I find the prospect of change exciting and stimulating.",
-            "lowSliderText": "Never",
-            "highSliderText": "Always",
-            "minValue": 1,
-            "maxValue": 7,
-            "step": 1
-          }
-        },
-        {
-          "type": "COMPONENT",
-          "module": "SliderTask",
-          "props": { 
-            "questionLogKey": "uncert11",
-            "questionText": "Taking chances is part of life.  ",
-            "lowSliderText": "Never",
-            "highSliderText": "Always",
-            "minValue": 1,
-            "maxValue": 7,
-            "step": 1
-          }
-        },
-        {
-          "type": "COMPONENT",
-          "module": "SliderTask",
-          "props": { 
-            "questionLogKey": "uncert12",
-            "questionText": "I like to have things under control.  ",
-            "lowSliderText": "Never",
-            "highSliderText": "Always",
-            "minValue": 1,
-            "maxValue": 7,
-            "step": 1
-          }
-        }
+                "type": "COMPONENT",
+                "module": "SliderTask",
+                "props": { 
+                  "questionLogKey": "uncert7",
+                  "title": "Please consider your personal life outside of the work context. Rate the degree to which these statements apply to you.",
+                  "questionText": "I easily adapt to novelty.  ",
+                  "lowSliderText": "Never",
+                  "highSliderText": "Always",
+                  "minValue": 1,
+                  "maxValue": 7,
+                  "step": 1
+                }
+              },
+              {
+                "type": "COMPONENT",
+                "module": "SliderTask",
+                "props": { 
+                  "questionLogKey": "uncert8",
+                  "questionText": "When uncertain about what to do next, I tend to feel lost.",
+                  "lowSliderText": "Never",
+                  "highSliderText": "Always",
+                  "minValue": 1,
+                  "maxValue": 7,
+                  "step": 1
+                }
+              },
+              {
+                "type": "COMPONENT",
+                "module": "SliderTask",
+                "props": { 
+                  "questionLogKey": "uncert9",
+                  "questionText": "When facing an uncertain situation, I tend to prepare as much as possible, and then hope for the best.",
+                  "lowSliderText": "Never",
+                  "highSliderText": "Always",
+                  "minValue": 1,
+                  "maxValue": 7,
+                  "step": 1
+                }
+              },
+              {
+                "type": "COMPONENT",
+                "module": "SliderTask",
+                "props": { 
+                  "questionLogKey": "uncert10",
+                  "questionText": "I find the prospect of change exciting and stimulating.",
+                  "lowSliderText": "Never",
+                  "highSliderText": "Always",
+                  "minValue": 1,
+                  "maxValue": 7,
+                  "step": 1
+                }
+              },
+              {
+                "type": "COMPONENT",
+                "module": "SliderTask",
+                "props": { 
+                  "questionLogKey": "uncert11",
+                  "questionText": "Taking chances is part of life.  ",
+                  "lowSliderText": "Never",
+                  "highSliderText": "Always",
+                  "minValue": 1,
+                  "maxValue": 7,
+                  "step": 1
+                }
+              },
+              {
+                "type": "COMPONENT",
+                "module": "SliderTask",
+                "props": { 
+                  "questionLogKey": "uncert12",
+                  "questionText": "I like to have things under control.  ",
+                  "lowSliderText": "Never",
+                  "highSliderText": "Always",
+                  "minValue": 1,
+                  "maxValue": 7,
+                  "step": 1
+                }
+              }
             ],
             "buttonLabel":"Answer",
             "onclick": {"function": "SetTaskIndex"}

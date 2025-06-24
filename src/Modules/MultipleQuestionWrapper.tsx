@@ -86,10 +86,14 @@ export default function MultipleQuestionWrapper({lazyProps}: Props): ReactElemen
 
         if(shouldSkip){
             if(lazyProps.onclick){ 
-                //Update the log object
-                let logObject = logEventSignal.value
-                logObject.header = logObject.header + lazyProps.questionLogKey+";"
-                logObject.data = logObject.data + -1 + ";"
+                //Update the log object with the data from all the child questions
+                let logObject = logEventSignal.value[lazyProps.questionnaireKey]
+                answers.forEach((value, key) => {
+                    logObject.header = logObject.header + key+";" 
+                    logObject.data = logObject.data + -1 + ";"
+                    logObject.questionnaireKey = lazyProps.questionnaireKey
+                });
+                logEventSignal.value[lazyProps.questionnaireKey] = logObject
 
                 handleMapFunctions(scriptsMap, lazyProps.onclick)
             }  
@@ -110,11 +114,13 @@ export default function MultipleQuestionWrapper({lazyProps}: Props): ReactElemen
         }
 
         //Update the log object with the data from all the child questions
-        let logObject = logEventSignal.value
+        let logObject = logEventSignal.value[lazyProps.questionnaireKey]
         answers.forEach((value, key) => {
             logObject.header = logObject.header + key+";" 
             logObject.data = logObject.data + value + ";"
+            logObject.questionnaireKey = lazyProps.questionnaireKey
         });
+        logEventSignal.value[lazyProps.questionnaireKey] = logObject
 
         // Reset the map just in case
         setAnswers(new Map())

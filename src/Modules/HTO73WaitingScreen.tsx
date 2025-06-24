@@ -104,12 +104,15 @@ function HTO73WaitingScreen({lazyProps}: Props):ReactElement {
         commsMessageSignal.value = null
     }
 
+    const enableSoundInstruction = audioUnlocked ? null : <p className="w-full text-wrap text-3xl mb-10">Please tap the screen to enable sound</p>
+
     return (
         <>
         <div className="flex text-wrap flex-col items-center justify-center w-full h-full">
             <div class="mx-5 relative mt-5">
                 <p className="w-full text-wrap text-3xl mb-10">Your role is: {roleSignal.value}.</p>
                 <div className="w-full text-wrap text-3xl mb-10" dangerouslySetInnerHTML={{ __html: lazyProps.instruction}}/>
+                {enableSoundInstruction}
             </div>
         </div>
         </>

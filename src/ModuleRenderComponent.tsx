@@ -12,7 +12,8 @@ export const deviceLogUUID = uuidv4()
 export const experimentStartTimestampSignal = signal({masterTimestamp: new Date(), slaveTimestamp: new Date()})
 console.log("Module Render :" + experimentStartTimestampSignal.value.masterTimestamp.toString())
 export const metaDataSignal = signal({runNumber:-1,role:""})
-export const logEventSignal = signal({header:"",data:""})
+//export const logEventSignal = signal({header:"",data:"",questionnaireKey:""})
+export const logEventSignal = signal<Record<string, { header: string; data: string; questionnaireKey: string }>>({});
 //export const skipSignal = signal(false)
 
 import { roleSignal } from "./SignalStore";
@@ -47,7 +48,6 @@ export function toastMessage(message:string, duration:number){
     }, duration*1000);
 }
 
-let screenLock = null
 function ModuleRenderComponent({experimentObject}:any) {
     const moduleRef = useRef<HTMLDivElement | null>(null);
     const fullscreenRef = useRef<HTMLButtonElement | null>(null);
