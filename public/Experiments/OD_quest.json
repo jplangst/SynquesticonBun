@@ -4,7 +4,7 @@
   "communicationMethod": {
     "type": "MQTT",
     "host": "192.168.0.111",
-    "port": "8080"
+    "port": "9002"
   },
   "loggingMethod": {
     "type": "local",

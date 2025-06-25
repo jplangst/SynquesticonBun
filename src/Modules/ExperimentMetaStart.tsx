@@ -63,16 +63,23 @@ function ExperimentMetaStart({lazyProps}: Props):ReactElement {
         if (overviewHidden){
             skipValueTmp = ""
         }
-                   
-        // Add the run number and operator role to the log
-        let logObject = logEventSignal.value
-        logObject.header = logObject.header + "Run;Role;StartTime;"
-        logObject.data = logObject.data + runNumber + ";" + operatorStation.value +";" + new Date().toLocaleString() + ";"
         
+        let logObject = {
+            metaHeader: "Run;Role;StartTime;",
+            metaData:  runNumber + ";" + operatorStation.value +";"+ new Date().toLocaleString() + ";",
+            header: "",
+            data: "",
+            questionnaireKey: "",
+        }
+
+        logObject.questionnaireKey = "OD_Quest"
+        logEventSignal.value = {
+            ...logEventSignal.value,
+            [logObject.questionnaireKey]: logObject
+        };
 
         batch(() => {
             skipSignal.value = skipValueTmp
-            logEventSignal.value = logObject
         });
 
         // If there is a on click prop call the corresponding function with the provided parameters
