@@ -29,10 +29,13 @@ export default function DownloadLogEvents(logSource:string){
         }
     }
     else if (logSource === "eventLogSignal"){
+        console.log(logEventSignal.value)
         for (const [key, log] of Object.entries(logEventSignal.value)) {
             console.log("Key:", key);
-            console.log("Header:", log.header);
+            console.log("Header:", log);
 
+            let metaHeader = removeTrailingSeperator(log.metaHeader)
+            let metaData = removeTrailingSeperator(log.metaData)
             let headerData = removeTrailingSeperator(log.header)
             let eventData = removeTrailingSeperator(log.data)
             let questionnaireKey = log.questionnaireKey
@@ -48,13 +51,13 @@ export default function DownloadLogEvents(logSource:string){
                 //headerData = "Run number;Role;"+headerData        
                 //eventData =  metaDataSignal.value.runNumber+";"+metaDataSignal.value.role +";"+eventData
 
-                let logEvent = {header:headerData, data:eventData, questionnaireKey:questionnaireKey}
+                let logEvent = {metaHeader:metaHeader, metaData:metaData,header:headerData, data:eventData, questionnaireKey:questionnaireKey}
                 const commsObject = CommunicationsObject.value
                 commsObject.publish(commsObject.loggingTopic, {eventType:"quest", eventObject: logEvent, source:metaDataSignal.value.role})
             }
 
             //Download log as a file
-            const eventString = headerData + "\n" + eventData
+            const eventString = metaHeader + ";" + headerData + "\n" + metaData +";"+ eventData
             const filename = questionnaireKey+"_role_"+metaDataSignal.value.role+"_run_"+metaDataSignal.value.runNumber+"_"+uuidv4()          
             var file = new File([eventString], filename, {type: "text/csv;charset=utf-8"});
             saveAs(file);   

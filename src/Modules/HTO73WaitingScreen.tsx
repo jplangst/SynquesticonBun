@@ -63,25 +63,44 @@ function HTO73WaitingScreen({lazyProps}: Props):ReactElement {
         updateMetaData.default({runNumber:runNumber, role:roleSignal.value});
 
         // Add the run number and operator role to the log
-        let logObject = logEventSignal.value
-        logObject.header = logObject.header + "Crew;Run;Role;"
-        logObject.data = logObject.data + crew + ";" + runNumber + ";" + roleSignal.value +";"
-        logEventSignal.value = logObject
+        let logObject = {
+            metaHeader: "Crew;Run;Role;",
+            metaData: crew + ";" + runNumber + ";" + roleSignal.value +";",
+            header: "",
+            data: "",
+            questionnaireKey: "",
+        }
 
         //Check which message was sent and set task index accordingly
         let shouldNotify = true
+        console.log(logEventSignal.value)
         if(commsMessage.startInScenario){
             if(lazyProps.inScenario){ 
+                logObject.questionnaireKey = "InScenario"
+                logEventSignal.value = {
+                    ...logEventSignal.value,
+                    [logObject.questionnaireKey]: logObject
+                };
                 handleMapFunctions(scriptsMap, lazyProps.inScenario)
             }       
         }
         else if(commsMessage.startEndOfScenario){
             if(lazyProps.endOfScenario){ 
+                logObject.questionnaireKey = "EndOfScenario"
+                logEventSignal.value = {
+                    ...logEventSignal.value,
+                    [logObject.questionnaireKey]: logObject
+                };
                 handleMapFunctions(scriptsMap, lazyProps.endOfScenario)
             }     
         }
         else if(commsMessage.startEndOfStudy){
             if(lazyProps.endOfStudy){ 
+                logObject.questionnaireKey = "EndOfStudy"
+                logEventSignal.value = {
+                    ...logEventSignal.value,
+                    [logObject.questionnaireKey]: logObject
+                };
                 handleMapFunctions(scriptsMap, lazyProps.endOfStudy)
             }     
         }
