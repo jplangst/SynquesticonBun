@@ -72,17 +72,6 @@ export default function Slider({lazyProps}: Props): ReactElement {
                     logObject.questionnaireKey = lazyProps.questionnaireKey
                     logEventSignal.value[lazyProps.questionnaireKey] = logObject
                 }
-                else{
-                    let newLogObject = {
-                        header:"",
-                        data:"",
-                        questionnaireKey: lazyProps.questionnaireKey
-                    }
-                    newLogObject.header = newLogObject.header + lazyProps.questionLogKey+";"
-                    newLogObject.data = newLogObject.data + -1 + ";"
-                    newLogObject.questionnaireKey = newLogObject.questionnaireKey
-                    logEventSignal.value[lazyProps.questionnaireKey] = newLogObject
-                }
 
                 handleMapFunctions(scriptsMap, lazyProps.onclick)
             }  
@@ -133,12 +122,6 @@ export default function Slider({lazyProps}: Props): ReactElement {
             lazyProps.onSliderChange(e, lazyProps.questionLogKey)
         }    
 
-        //console.log(e.target)
-        //if(e.target.value){
-        //    setSliderValue(e.target.value)
-        //    console.log("Slider value: " + e.target.value)
-        //} 
-
         if(lazyProps.onAnswer){
             lazyProps.onAnswer({QuestionKey:lazyProps.questionLogKey,Value: val})
         }
@@ -167,8 +150,6 @@ export default function Slider({lazyProps}: Props): ReactElement {
         //     setSliderValue(Number(rangeRef.current.value))
         // }
 
-        console.log("Recorded slider value: ", sliderValue)
-        
         let logObject = logEventSignal.value[lazyProps.questionnaireKey]
 
         if (logObject){
@@ -177,18 +158,7 @@ export default function Slider({lazyProps}: Props): ReactElement {
             logObject.questionnaireKey = lazyProps.questionnaireKey
             logEventSignal.value[lazyProps.questionnaireKey] = logObject
         }
-        else{
-            let newLogObject = {
-                header:"",
-                data:"",
-                questionnaireKey: lazyProps.questionnaireKey
-            }
-            newLogObject.header = newLogObject.header + lazyProps.questionLogKey+";"
-            newLogObject.data = newLogObject.data + sliderValue + ";"
-            newLogObject.questionnaireKey = newLogObject.questionnaireKey
-            logEventSignal.value[lazyProps.questionnaireKey] = newLogObject
-        }
-    
+
         // If there is a on click prop call the corresponding function with the provided parameters
         if(lazyProps.onclick){ 
             handleMapFunctions(scriptsMap, lazyProps.onclick)

@@ -90,6 +90,7 @@ export default function MultipleQuestionWrapper({lazyProps}: Props): ReactElemen
                 let logObject = logEventSignal.value[lazyProps.questionnaireKey]
 
                 if (logObject) {
+                    console.log("Object exists!")
                     // Key exists, update the data
                     answers.forEach((value, key) => {
                         logObject.header = logObject.header + key+";" 
@@ -97,23 +98,24 @@ export default function MultipleQuestionWrapper({lazyProps}: Props): ReactElemen
                         logObject.questionnaireKey = lazyProps.questionnaireKey
                     });
                     logEventSignal.value[lazyProps.questionnaireKey] = logObject
-                } else {
-                    let newLogObject = {
-                        header:"",
-                        data:"",
-                        questionnaireKey: lazyProps.questionnaireKey
-                    }
-                    answers.forEach((value, key) => {
-                        newLogObject.header = newLogObject.header + key+";" 
-                        newLogObject.data = newLogObject.data + -1 + ";"
-                        newLogObject.questionnaireKey = lazyProps.questionnaireKey
-                    });
+                } 
+                //else {
+                //     let newLogObject = {
+                //         header:"",
+                //         data:"",
+                //         questionnaireKey: lazyProps.questionnaireKey
+                //     }
+                //     answers.forEach((value, key) => {
+                //         newLogObject.header = newLogObject.header + key+";" 
+                //         newLogObject.data = newLogObject.data + -1 + ";"
+                //         newLogObject.questionnaireKey = lazyProps.questionnaireKey
+                //     });
 
-                    logEventSignal.value = {
-                        ...logEventSignal.value,
-                        [newLogObject.questionnaireKey]: newLogObject
-                    };
-                }
+                //     logEventSignal.value = {
+                //         ...logEventSignal.value,
+                //         [newLogObject.questionnaireKey]: newLogObject
+                //     };
+                // }
 
                 handleMapFunctions(scriptsMap, lazyProps.onclick)
             }  
@@ -133,11 +135,13 @@ export default function MultipleQuestionWrapper({lazyProps}: Props): ReactElemen
             return
         }
 
-
         //Update the log object with the data from all the child questions
+        console.log(logEventSignal.value)
         let logObject = logEventSignal.value[lazyProps.questionnaireKey]
 
         if (logObject) {
+            console.log("Object exists!")
+            console.log(logObject)
             // Key exists, update the data
             answers.forEach((value, key) => {
                 logObject.header = logObject.header + key+";" 
@@ -145,23 +149,25 @@ export default function MultipleQuestionWrapper({lazyProps}: Props): ReactElemen
                 logObject.questionnaireKey = lazyProps.questionnaireKey
             });
             logEventSignal.value[lazyProps.questionnaireKey] = logObject
-        } else {
-            let newLogObject = {
-                header:"",
-                data:"",
-                questionnaireKey: lazyProps.questionnaireKey
-            }
-            answers.forEach((value, key) => {
-                newLogObject.header = newLogObject.header + key+";" 
-                newLogObject.data = newLogObject.data + value + ";"
-                newLogObject.questionnaireKey = lazyProps.questionnaireKey
-            });
+        } 
+        //else {
+        //     console.log("Object DOES NOT exists!")
+        //     let newLogObject = {
+        //         header:"",
+        //         data:"",
+        //         questionnaireKey: lazyProps.questionnaireKey
+        //     }
+        //     answers.forEach((value, key) => {
+        //         newLogObject.header = newLogObject.header + key+";" 
+        //         newLogObject.data = newLogObject.data + value + ";"
+        //         newLogObject.questionnaireKey = lazyProps.questionnaireKey
+        //     });
 
-            logEventSignal.value = {
-                ...logEventSignal.value,
-                [newLogObject.questionnaireKey]: newLogObject
-            };
-        }
+        //     logEventSignal.value = {
+        //         ...logEventSignal.value,
+        //         [newLogObject.questionnaireKey]: newLogObject
+        //     };
+        // }
 
         // Reset the map just in case
         setAnswers(new Map())
@@ -185,7 +191,6 @@ export default function MultipleQuestionWrapper({lazyProps}: Props): ReactElemen
     const answerButton = lazyProps.buttonLabel ? <Button lazyProps={buttonProps}/> : null
 
     //TODO create a list of the child questions to render here
-    console.log(lazyProps.childQuestions)
     const childQuestions = lazyProps.childQuestions.map((item:ComponentSpec, index:number) => {
         const Component = componentMap[item.module];
 

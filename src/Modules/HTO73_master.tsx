@@ -133,7 +133,9 @@ function HTO73_master({lazyProps}: Props):ReactElement {
             if (questLogData) {
                 // Key exists, do something with questLogData
                 console.log(questLogData.header);
-                questLogData.header = eventObject.header
+                questLogData.metaHeader = eventObject.metaHeader
+                questLogData.metaData = eventObject.metaData
+                questLogData.header = questLogData.header + eventObject.header
                 questLogData.data = questLogData.data + eventObject.data + "\n" 
                 questLogData.questionnaireKey = eventObject.questionnaireKey
 
@@ -146,12 +148,16 @@ function HTO73_master({lazyProps}: Props):ReactElement {
                 logEventSignal.value = {
                     ...logEventSignal.value,
                     [eventObject.questionnaireKey]: {
+                        metaHeader: eventObject.metaHeader,
+                        metaData: eventObject.metaData,
                         header: eventObject.header,
                         data: eventObject.data + "\n",
                         questionnaireKey: eventObject.questionnaireKey,
                     }
                 };
             }
+
+            commsMessageSignal.value = null
 
             //Update the log object
             //let logObject = logEventSignal.value

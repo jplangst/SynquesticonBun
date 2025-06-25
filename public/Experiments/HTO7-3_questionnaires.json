@@ -214,8 +214,8 @@
         {
           "type": "COMPONENT",
           "module": "SliderTask",
-          "questionnaireKey": "EndOfScenario",
           "props": { 
+            "questionnaireKey": "EndOfScenario",
             "questionLogKey": "Trust",
             "questionText": "Please rate the degree to which you trusted the information coming from the cyber engineer",
             "lowSliderText": "Never",

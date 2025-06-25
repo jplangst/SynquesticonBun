@@ -12,8 +12,7 @@ export const deviceLogUUID = uuidv4()
 export const experimentStartTimestampSignal = signal({masterTimestamp: new Date(), slaveTimestamp: new Date()})
 console.log("Module Render :" + experimentStartTimestampSignal.value.masterTimestamp.toString())
 export const metaDataSignal = signal({runNumber:-1,role:""})
-//export const logEventSignal = signal({header:"",data:"",questionnaireKey:""})
-export const logEventSignal = signal<Record<string, { header: string; data: string; questionnaireKey: string }>>({});
+export const logEventSignal = signal<Record<string, { metaHeader: string, metaData: string, header: string; data: string; questionnaireKey: string }>>({});
 //export const skipSignal = signal(false)
 
 import { roleSignal } from "./SignalStore";
