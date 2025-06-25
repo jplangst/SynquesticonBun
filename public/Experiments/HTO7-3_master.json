@@ -36,9 +36,10 @@
         "module": "HTO73_master",
         "props": { 
           "operatorStationObjects":[
-            {"label": "Operator 1", "metaKey": "Op1"},
-            {"label": "Operator 2", "metaKey": "Op2"},
-            {"label": "Supervisor", "metaKey": "SS"}
+            {"label": "Operator 1", "metaKey": "RO"},
+            {"label": "Operator 2", "metaKey": "BoP"},
+            {"label": "Supervisor", "metaKey": "SS"},
+            {"label": "Supervisor", "metaKey": "STA"}
           ],
           "operatorMetaClick": {"function": "SetMetaData"},
           "onclick": [
