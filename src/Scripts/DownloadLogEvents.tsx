@@ -45,11 +45,6 @@ export default function DownloadLogEvents(logSource:string){
             console.log("Role value: ", metaDataSignal.value.role)
             if (metaDataSignal.value.role !== null && metaDataSignal.value.role !== undefined && metaDataSignal.value.role !== ""){
                 console.log("BROADCASTING EVENT LOG")
-                
-                //TODO check the reasoning behind this. It does not seem neccessary? The master and the waiting screen will already take care of this
-                //Only update the header and data if role is defined, otherwise it will be the master controller and we do not want to update data as it is already done on the clients
-                //headerData = "Run number;Role;"+headerData        
-                //eventData =  metaDataSignal.value.runNumber+";"+metaDataSignal.value.role +";"+eventData
 
                 let logEvent = {metaHeader:metaHeader, metaData:metaData,header:headerData, data:eventData, questionnaireKey:questionnaireKey}
                 const commsObject = CommunicationsObject.value
@@ -57,7 +52,18 @@ export default function DownloadLogEvents(logSource:string){
             }
 
             //Download log as a file
-            const eventString = metaHeader + ";" + headerData + "\n" + metaData +";"+ eventData
+            const lineData = eventData.trim().split("\n");
+            const metaDatas =  metaData.trim().split("\n");
+
+            let updatedLineData = []
+            for(let i = 0; i < lineData.length; i++){
+                updatedLineData.push(`${metaDatas[i]};${lineData[i]}`)
+            } 
+            //const updatedLineData = lineData.map(line => `${metaData};${line}`);
+            const preparedCSVData = updatedLineData.join("\n");
+
+            const eventString = metaHeader + ";" + headerData + "\n" + preparedCSVData
+            //const eventString = metaHeader + ";" + headerData + "\n" + metaData +";"+ eventData
             const filename = questionnaireKey+"_role_"+metaDataSignal.value.role+"_run_"+metaDataSignal.value.runNumber+"_"+uuidv4()          
             var file = new File([eventString], filename, {type: "text/csv;charset=utf-8"});
             saveAs(file);   

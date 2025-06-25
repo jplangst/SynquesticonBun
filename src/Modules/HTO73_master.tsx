@@ -134,8 +134,8 @@ function HTO73_master({lazyProps}: Props):ReactElement {
                 // Key exists, do something with questLogData
                 console.log(questLogData.header);
                 questLogData.metaHeader = eventObject.metaHeader
-                questLogData.metaData = eventObject.metaData
-                questLogData.header = questLogData.header + eventObject.header
+                questLogData.metaData = questLogData.metaData + eventObject.metaData + "\n"
+                questLogData.header = eventObject.header
                 questLogData.data = questLogData.data + eventObject.data + "\n" 
                 questLogData.questionnaireKey = eventObject.questionnaireKey
 
@@ -149,7 +149,7 @@ function HTO73_master({lazyProps}: Props):ReactElement {
                     ...logEventSignal.value,
                     [eventObject.questionnaireKey]: {
                         metaHeader: eventObject.metaHeader,
-                        metaData: eventObject.metaData,
+                        metaData: eventObject.metaData + "\n",
                         header: eventObject.header,
                         data: eventObject.data + "\n",
                         questionnaireKey: eventObject.questionnaireKey,
