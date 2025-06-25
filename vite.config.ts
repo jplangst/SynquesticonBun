@@ -12,9 +12,9 @@ export default defineConfig({
     https: {
       //key: readFileSync('./selfsigned.key'),
       //cert: readFileSync('./selfsigned.crt')
-      key: readFileSync('./SSA_certificate/server.key'),
-      cert: readFileSync('./SSA_certificate/server.crt'),
-      ca: readFileSync('./SSA_certificate/my-root-ca.crt'),
+      key: readFileSync('./SSA_certificate/synq-server.key'),
+      cert: readFileSync('./SSA_certificate/synq-server.crt'),
+      ca: readFileSync('./SSA_certificate/synq-root-ca.crt'),
     },
     host: true, 
     port: 5137,
