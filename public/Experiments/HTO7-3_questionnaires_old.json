@@ -68,6 +68,32 @@
                 "type": "COMPONENT",
                 "module": "SliderTask",
                 "props": { 
+                  "questionLogKey": "aware",
+                  "questionText": "Please rate your current level of awareness of plant status and ongoing abnormalities (if any)",
+                  "lowSliderText": "Low",
+                  "highSliderText": "High",
+                  "minValue": 1,
+                  "maxValue": 7,
+                  "step": 1
+                }
+              },
+              {
+                "type": "COMPONENT",
+                "module": "SliderTask",
+                "props": { 
+                  "questionLogKey": "severe",
+                  "questionText": "Please rate how severe you think the ongoing abnormalities are (if any)",
+                  "lowSliderText": "Low (No system effect)",
+                  "highSliderText": "High (Core safety compromised)",
+                  "minValue": 1,
+                  "maxValue": 7,
+                  "step": 1
+                }
+              },
+              {
+                "type": "COMPONENT",
+                "module": "SliderTask",
+                "props": { 
                   "questionLogKey": "workload",
                   "questionText": "Please rate your mental workload over the previous 5 minutes",
                   "lowSliderText": "Low",
@@ -85,32 +111,6 @@
                   "questionText": "Please rate your level of unease over the previous 5 minutes",
                   "lowSliderText": "Low",
                   "highSliderText": "High",
-                  "minValue": 1,
-                  "maxValue": 7,
-                  "step": 1
-                }
-              },
-              {
-                "type": "COMPONENT",
-                "module": "SliderTask",
-                "props": { 
-                  "questionLogKey": "aware",
-                  "questionText": "Please rate your current level of awareness of ongoing abnormalities (if any) and their impact on the plant",
-                  "lowSliderText": "Low",
-                  "highSliderText": "High",
-                  "minValue": 1,
-                  "maxValue": 7,
-                  "step": 1
-                }
-              },
-              {
-                "type": "COMPONENT",
-                "module": "SliderTask",
-                "props": { 
-                  "questionLogKey": "severe",
-                  "questionText": "Please rate how severe you think the ongoing abnormalities are (if any) in terms of impact on plant safety",
-                  "lowSliderText": "Low (No system effect)",
-                  "highSliderText": "High (Core safety compromised)",
                   "minValue": 1,
                   "maxValue": 7,
                   "step": 1
@@ -183,7 +183,7 @@
                 "module": "SliderTask",
                 "props": { 
                   "questionLogKey": "perf3",
-                  "questionText": "I cooperated well with the rest of the crew",
+                  "questionText": "My actions steered the process in the correct direction",
                   "lowSliderText": "Disagree",
                   "highSliderText": "Agree",
                   "minValue": 1,
@@ -196,20 +196,7 @@
                 "module": "SliderTask",
                 "props": { 
                   "questionLogKey": "perf4",
-                  "questionText": "There was much uncertainty about the status of the plant",
-                  "lowSliderText": "Disagree",
-                  "highSliderText": "Agree",
-                  "minValue": 1,
-                  "maxValue": 7,
-                  "step": 1
-                }
-              },
-              {
-                "type": "COMPONENT",
-                "module": "SliderTask",
-                "props": { 
-                  "questionLogKey": "perf5",
-                  "questionText": "I felt that the crew had control of the plant",
+                  "questionText": "I cooperated well with the rest of the crew",
                   "lowSliderText": "Disagree",
                   "highSliderText": "Agree",
                   "minValue": 1,
@@ -223,44 +210,22 @@
           }
         }
       ],
-            [  
+      [  
         {
           "type": "COMPONENT",
-          "module": "MultipleQuestionWrapper",
+          "module": "SliderTask",
           "props": { 
             "questionnaireKey": "EndOfScenario",
-            "childQuestions":       
-            [  
-              {
-                "type": "COMPONENT",
-                "module": "SliderTask",
-                "props": { 
-                  "questionLogKey": "Help",
-                  "title": "Please rate the information coming from cybersecurity",
-                  "questionText": "The information coming from cybersecurity was helpful for dealing with the situation",
-                  "lowSliderText": "Disagree",
-                  "highSliderText": "Agree",
-                  "minValue": 1,
-                  "maxValue": 7,
-                  "step": 1
-                }
-              },
-              {
-                "type": "COMPONENT",
-                "module": "SliderTask",
-                "props": { 
-                  "questionLogKey": "Trust",
-                  "questionText": "I trusted the information coming from cybersecurity",
-                  "lowSliderText": "Disagree",
-                  "highSliderText": "Agree",
-                  "minValue": 1,
-                  "maxValue": 7,
-                  "step": 1
-                }
-              }           
-            ],
+            "questionLogKey": "Trust",
+            "questionText": "Please rate the degree to which you trusted the information coming from the cyber engineer",
+            "lowSliderText": "Never",
+            "highSliderText": "Always",
             "buttonLabel":"Answer",
-            "onclick": {"function": "SetTaskIndex"}
+            "minValue": 1,
+            "maxValue": 7,
+            "step": 1,
+            "onclick": 
+              {"function": "SetTaskIndex"}
           }
         }
       ],
